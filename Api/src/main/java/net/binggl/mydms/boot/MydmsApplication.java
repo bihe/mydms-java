@@ -11,9 +11,9 @@ import net.binggl.mydms.Example.ExampleHealthCheck;
 import net.binggl.mydms.Example.ExampleResource;
 import net.binggl.mydms.Example.FooDao;
 import net.binggl.mydms.Example.PersonDAO;
+import net.binggl.mydms.tags.TagConfiguration;
 
 public class MydmsApplication extends Application<MydmsConfiguration> {
-	
 	
 	private final MydmsHibernateBundle hibernateBundle =
 	    new MydmsHibernateBundle(Database.MappedEntities) {
@@ -22,7 +22,6 @@ public class MydmsApplication extends Application<MydmsConfiguration> {
 	            return configuration.getDataSourceFactory();
 	        }
 	    };
-	
 	
 	public static void main(String[] args) throws Exception {
 		new MydmsApplication().run(args);
@@ -60,11 +59,12 @@ public class MydmsApplication extends Application<MydmsConfiguration> {
 		final ExampleHealthCheck healthCheck = new ExampleHealthCheck(configuration.getTemplate());
 		environment.healthChecks().register("template", healthCheck);
 		
+		
+		
 		final SessionFactoryHealthCheck databaseHealthCheck = new SessionFactoryHealthCheck(hibernateBundle.getSessionFactory(), "SELECT 1");
 		environment.healthChecks().register("database", databaseHealthCheck);
 		
 		
-
+		TagConfiguration.setup(configuration, environment, hibernateBundle);
 	}
-
 }
