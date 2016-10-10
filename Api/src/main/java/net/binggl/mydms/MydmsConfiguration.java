@@ -1,4 +1,4 @@
-package net.binggl.mydms.boot;
+package net.binggl.mydms;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,13 +16,6 @@ public class MydmsConfiguration extends Configuration {
 
     @NotEmpty
     private String defaultName = "Stranger";
-
-    @Valid
-    @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
-    
-    
-    
     
     @JsonProperty
     public String getTemplate() {
@@ -44,13 +37,13 @@ public class MydmsConfiguration extends Configuration {
         this.defaultName = name;
     }
     
-    @JsonProperty("database")
+    
+    @Valid
+    @NotNull
+    @JsonProperty
+    private DataSourceFactory database = new DataSourceFactory();
+
     public DataSourceFactory getDataSourceFactory() {
         return database;
-    }
-
-    @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
-        this.database = dataSourceFactory;
     }
 }

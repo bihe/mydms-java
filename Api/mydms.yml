@@ -21,6 +21,31 @@ database:
 
   # the JDBC URL
   url: jdbc:h2:./target/example
+  
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.H2Dialect
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* Mydms Health Check */ SELECT 1"
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+  
+  
+  
+  
+  
 
   
   # Logging settings.
@@ -35,9 +60,15 @@ logging:
     # Sets the level for ' net.binggl.mydms' to DEBUG.
     net.binggl.mydms: DEBUG
 
-    # Redirects SQL logs to a separate file
-    org.hibernate.SQL:
+    "io.dropwizard": INFO
+    "org.hibernate.SQL":
       level: DEBUG
+      additive: false
+      appenders:
+        - type: file
+          currentLogFilename: ./target/mydms-sql.log
+          archivedLogFilenamePattern: ./target/mydms-sql-%d.log.gz
+          archivedFileCount: 5
 
 # Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log.gz
 # Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz

@@ -8,10 +8,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import com.google.inject.Inject;
+
 import io.dropwizard.hibernate.AbstractDAO;
 
 public class TagDao extends AbstractDAO<Tag> {
-    public TagDao(SessionFactory factory) {
+    
+	@Inject
+	public TagDao(final SessionFactory factory) {
         super(factory);
     }
 

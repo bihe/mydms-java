@@ -11,6 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.inject.Inject;
 
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -18,12 +19,9 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
     
-    private final TagDao tagDao;
-
-    public TagResource(TagDao dao) {
-        this.tagDao = dao;
-    }
-
+	@Inject
+    private TagDao tagDao;
+	
     
     @GET
     @UnitOfWork
