@@ -6,12 +6,16 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 
-import com.codahale.metrics.health.HealthCheck;
+import com.google.inject.Inject;
 
-public class TagHealthCheck extends HealthCheck {
+import ru.vyarus.dropwizard.guice.module.installer.feature.health.NamedHealthCheck;
+
+public class TagHealthCheck extends NamedHealthCheck {
 
 	private final SessionFactory sessionFactory;
+	private static final String HealthCheckName = "tags_availability";
 
+	@Inject
 	public TagHealthCheck(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -41,5 +45,10 @@ public class TagHealthCheck extends HealthCheck {
 		Long count = (Long) criteria.uniqueResult();
 		anyTagAvailable = (count != null && count > 0);
 		return anyTagAvailable;
+	}
+
+	@Override
+	public String getName() {
+		return HealthCheckName;
 	}
 }

@@ -54,13 +54,7 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 	}
 
 	@Override
-	public void run(MydmsConfiguration configuration, Environment environment) {
-
-//		final SessionFactoryHealthCheck databaseHealthCheck = new SessionFactoryHealthCheck(hibernateBundle.getSessionFactory(), "SELECT 1");
-//		environment.healthChecks().register("database", databaseHealthCheck);
-//		
-//		
-		TagConfig.setup(configuration, environment, this.hibernate);
+	public void run(MydmsConfiguration configuration, Environment environment) {	
 	}
 	
 	
