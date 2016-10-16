@@ -19,9 +19,12 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
     
-	@Inject
-    private TagDao tagDao;
-	
+    private TagStore tagDao;
+    
+    @Inject
+	public TagResource(TagStore dao) {
+		this.tagDao = dao;
+	}
     
     @GET
     @UnitOfWork

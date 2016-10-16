@@ -12,10 +12,10 @@ import com.google.inject.Inject;
 
 import io.dropwizard.hibernate.AbstractDAO;
 
-public class TagDao extends AbstractDAO<Tag> {
+public class TagStore extends AbstractDAO<Tag> {
     
 	@Inject
-	public TagDao(final SessionFactory factory) {
+	public TagStore(final SessionFactory factory) {
         super(factory);
     }
 

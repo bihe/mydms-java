@@ -18,6 +18,16 @@ public class Tag {
 
     @Column(name = "name", nullable = false)
     private String name;
+    
+    public Tag() {
+		super();
+	}
+    
+    public Tag(long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 	public long getId() {
 		return id;
