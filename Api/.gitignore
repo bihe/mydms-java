@@ -9,7 +9,7 @@ buildNumber.properties
 .mvn/timing.properties
 
 
-# integration database artefacts
+# integration database artifacts
 integration.*
 
 .classpath
