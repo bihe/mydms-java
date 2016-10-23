@@ -1,5 +1,7 @@
 package net.binggl.mydms.cmd;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,8 +14,12 @@ import io.dropwizard.Application;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.MydmsConfiguration;
+import net.binggl.mydms.bootstrap.ManagedSessionTransactionProvider;
+import net.binggl.mydms.bootstrap.TransactionProvider;
 import net.binggl.mydms.senders.Sender;
+import net.binggl.mydms.senders.SenderStore;
 import net.binggl.mydms.tags.Tag;
+import net.binggl.mydms.tags.TagStore;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
@@ -26,7 +32,6 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public InitialDataCommand(Application application) {
 		super(application, "initialData", "Create initial entries in the given database!");
-		
 	}
 
 	@Override
@@ -36,6 +41,8 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 
 		if(configuration.getApplication().isInitialData()) {
 			LOGGER.info("Will create initial data to play with.");
+			
+			
 			
 			try (Session session = sessionFactory.openSession()) {
 				final Transaction txn = session.beginTransaction();
@@ -67,6 +74,25 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 					throw e;
 				}
 			}
+			
+			TransactionProvider transactionProvider = new ManagedSessionTransactionProvider(sessionFactory);
+			TagStore tagStore = new TagStore(sessionFactory);
+			SenderStore senderStore = new SenderStore(sessionFactory);
+			
+			transactionProvider.transactional(session -> {
+				List<Tag> tags = tagStore.findAll();
+				List<Sender> senders = senderStore.findAll();
+				
+				if(tags != null) {
+					LOGGER.info(String.format("Created %d tags.", tags.size()));
+				}
+				if(senders != null) {
+					LOGGER.info(String.format("Created %d senders.", senders.size()));
+				}
+				
+				return null;
+			});
+			
 		} else {
 			LOGGER.warn("Won't create data, configuration setting 'application.initialData' not set!");
 		}
