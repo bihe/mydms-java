@@ -25,38 +25,63 @@ import net.binggl.mydms.tags.TagStore;
 
 public class TagResourceTest {
 
-	private static final TagStore dao = mock(TagStore.class);
+	private static final TagStore store = mock(TagStore.class);
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new TagResource(dao))
+            .addResource(new TagResource(store))
             .build();
-
-	private final Tag[] tags = new Tag[] { new Tag(1, "tag1") };
 
     @Before
     public void setup() {
-        when(dao.searchTags(eq("tag1"))).thenReturn(Arrays.asList(tags));
+    	Tag[] searchTag = new Tag[] { new Tag(1, "tag1") };
+    	Tag[] all = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
+    	
+    	
+    	when(store.searchTags(eq(null))).thenReturn(Arrays.asList(all));
+    	when(store.searchTags(eq(""))).thenReturn(Arrays.asList(all));
+    	when(store.searchTags(eq("tag1"))).thenReturn(Arrays.asList(searchTag));
+        when(store.findAll()).thenReturn(Arrays.asList(all));
     }
 
     @After
     public void tearDown(){
         // we have to reset the mock after each test because of the
         // @ClassRule, or use a @Rule as mentioned below.
-        reset(dao);
+        reset(store);
     }
 
-	@Test
-    public void testGetPerson() throws Exception {
+    @Test
+    public void testSearchAll() throws Exception {
     	
-    	Object result = resources.client().target("/tags/search?name=tag1").request().get(ArrayList.class);
-    	
+    	Object result = resources.client().target("/tags/").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
-    	String expected = MAPPER.writeValueAsString(tags);
+    	
+    	Tag[] allTags = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
+    	String expected = MAPPER.writeValueAsString(Arrays.asList(allTags));
     	
         assertThat(json).isEqualTo(expected);
-        verify(dao).searchTags("tag1");
+        verify(store).findAll();
+    }
+    
+	@Test
+    public void testSearchTags() throws Exception {
+    	
+    	Object result = resources.client().target("/tags/search?name=tag1").request().get(ArrayList.class);
+    	String json = MAPPER.writeValueAsString(result);
+    	Tag[] tags = new Tag[] { new Tag(1, "tag1") };
+    	String expected = MAPPER.writeValueAsString(Arrays.asList(tags));
+        assertThat(json).isEqualTo(expected);
+        verify(store).searchTags("tag1");
+        
+        result = resources.client().target("/tags/search?name=").request().get(ArrayList.class);
+    	json = MAPPER.writeValueAsString(result);
+    	Tag[] allTags = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
+    	expected = MAPPER.writeValueAsString(Arrays.asList(allTags));
+        assertThat(json).isEqualTo(expected);
+        verify(store).findAll();
+        
     }
 }

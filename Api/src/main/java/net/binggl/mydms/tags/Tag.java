@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "tag")
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "name", nullable = false)
@@ -21,6 +21,11 @@ public class Tag {
     
     public Tag() {
 		super();
+	}
+    
+    public Tag(String name) {
+		super();
+		this.name = name;
 	}
     
     public Tag(long id, String name) {

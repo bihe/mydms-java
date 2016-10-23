@@ -7,17 +7,8 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="1" author="henrik">
-        <createTable tableName="people">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="fullName" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="jobTitle" type="varchar(255)"/>
-        </createTable>
-        <createTable tableName="foo">
-            <column name="id" type="bigint" autoIncrement="true">
+        <createTable tableName="tag">
+            <column name="id" type="BIGINT" autoIncrement="false">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -25,13 +16,12 @@
             </column>
         </createTable>
         
-        <createTable tableName="tag">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+        <addAutoIncrement
+            columnDataType="BIGINT"
+            columnName="id"
+            incrementBy="1"
+            startWith="1"
+            tableName="tag"/>
+        
     </changeSet>
 </databaseChangeLog>

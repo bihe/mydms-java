@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
 import net.binggl.mydms.tags.Tag;
 
-public class TagTest {
+public class TagModelTest {
 
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 

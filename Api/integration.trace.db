@@ -1,0 +1,6 @@
+2016-10-23 11:41:32 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Table "TAG" not found; SQL statement:
+/* criteria query */ select this_.id as id1_0_0_, this_.name as name2_0_0_ from tag this_ order by this_.name asc [42102-192]
+2016-10-23 11:55:30 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Table "TAG" not found; SQL statement:
+/* criteria query */ select this_.id as id1_0_0_, this_.name as name2_0_0_ from tag this_ order by this_.name asc [42102-192]

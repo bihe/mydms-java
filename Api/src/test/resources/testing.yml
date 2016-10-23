@@ -1,11 +1,8 @@
 template: Hello, %s!
 defaultName: Stranger
 
-
-
 server:
   rootPath: /api/
-
 
 # Database settings.
 database:
@@ -20,7 +17,7 @@ database:
   password: sa
 
   # the JDBC URL
-  url: jdbc:h2:./integration
+  url: jdbc:h2:./target/integration
   
   # any properties specific to your JDBC driver:
   properties:
