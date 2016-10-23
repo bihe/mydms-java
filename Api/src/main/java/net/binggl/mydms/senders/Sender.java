@@ -1,4 +1,4 @@
-package net.binggl.mydms.tags;
+package net.binggl.mydms.senders;
 
 import java.util.Objects;
 
@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tag")
-public class Tag {
+@Table(name = "sender")
+public class Sender {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -19,16 +19,16 @@ public class Tag {
     @Column(name = "name", nullable = false)
     private String name;
     
-    public Tag() {
+    public Sender() {
 		super();
 	}
     
-    public Tag(String name) {
+    public Sender(String name) {
 		super();
 		this.name = name;
 	}
     
-    public Tag(long id, String name) {
+    public Sender(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -56,11 +56,11 @@ public class Tag {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Tag)) {
+        if (!(o instanceof Sender)) {
             return false;
         }
 
-        final Tag that = (Tag) o;
+        final Sender that = (Sender) o;
 
         return Objects.equals(this.id, that.id) &&
                 Objects.equals(this.name, that.name);

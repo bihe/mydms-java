@@ -94,16 +94,16 @@ public class TagStoreTest {
     	assertNotNull(tags);
     	assertEquals(10, tags.size());
     	
-    	tags = tagStore.searchTags("tag");
+    	tags = tagStore.searchByName("tag");
     	assertNotNull(tags);
     	assertEquals(10, tags.size());
     	
-    	tags = tagStore.searchTags("tag0");
+    	tags = tagStore.searchByName("tag0");
     	assertNotNull(tags);
     	assertEquals(1, tags.size());
     	assertEquals("tag0", tags.get(0).getName());
     	
-    	tags = tagStore.searchTags("abc");
+    	tags = tagStore.searchByName("abc");
     	assertNotNull(tags);
     	assertEquals(0, tags.size());
     }

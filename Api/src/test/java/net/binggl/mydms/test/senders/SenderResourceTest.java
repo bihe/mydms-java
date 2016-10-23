@@ -1,4 +1,4 @@
-package net.binggl.mydms.test.tags;
+package net.binggl.mydms.test.senders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
@@ -19,30 +19,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import net.binggl.mydms.tags.Tag;
-import net.binggl.mydms.tags.TagResource;
-import net.binggl.mydms.tags.TagStore;
+import net.binggl.mydms.senders.Sender;
+import net.binggl.mydms.senders.SenderResource;
+import net.binggl.mydms.senders.SenderStore;
 
-public class TagResourceTest {
+public class SenderResourceTest {
 
-	private static final TagStore store = mock(TagStore.class);
+	private static final SenderStore store = mock(SenderStore.class);
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 	
 	
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new TagResource(store))
+            .addResource(new SenderResource(store))
             .build();
 
     @Before
     public void setup() {
-    	Tag[] searchTag = new Tag[] { new Tag(1, "tag1") };
-    	Tag[] all = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
+    	Sender[] searchSender = new Sender[] { new Sender(1, "sender1") };
+    	Sender[] all = new Sender[] { new Sender(1, "sender1"), new Sender(2, "sender2") };
     	
     	
     	when(store.searchByName(eq(null))).thenReturn(Arrays.asList(all));
     	when(store.searchByName(eq(""))).thenReturn(Arrays.asList(all));
-    	when(store.searchByName(eq("tag1"))).thenReturn(Arrays.asList(searchTag));
+    	when(store.searchByName(eq("sender1"))).thenReturn(Arrays.asList(searchSender));
         when(store.findAll()).thenReturn(Arrays.asList(all));
     }
 
@@ -56,30 +56,30 @@ public class TagResourceTest {
     @Test
     public void testSearchAll() throws Exception {
     	
-    	Object result = resources.client().target("/tags/").request().get(ArrayList.class);
+    	Object result = resources.client().target("/senders/").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
     	
-    	Tag[] allTags = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
-    	String expected = MAPPER.writeValueAsString(Arrays.asList(allTags));
+    	Sender[] allSenders = new Sender[] { new Sender(1, "sender1"), new Sender(2, "sender2") };
+    	String expected = MAPPER.writeValueAsString(Arrays.asList(allSenders));
     	
         assertThat(json).isEqualTo(expected);
         verify(store).findAll();
     }
     
 	@Test
-    public void testSearchTags() throws Exception {
+    public void testSearchSenders() throws Exception {
     	
-    	Object result = resources.client().target("/tags/search?name=tag1").request().get(ArrayList.class);
+    	Object result = resources.client().target("/senders/search?name=sender1").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
-    	Tag[] tags = new Tag[] { new Tag(1, "tag1") };
-    	String expected = MAPPER.writeValueAsString(Arrays.asList(tags));
+    	Sender[] senders = new Sender[] { new Sender(1, "sender1") };
+    	String expected = MAPPER.writeValueAsString(Arrays.asList(senders));
         assertThat(json).isEqualTo(expected);
-        verify(store).searchByName("tag1");
+        verify(store).searchByName("sender1");
         
-        result = resources.client().target("/tags/search?name=").request().get(ArrayList.class);
+        result = resources.client().target("/senders/search?name=").request().get(ArrayList.class);
     	json = MAPPER.writeValueAsString(result);
-    	Tag[] allTags = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
-    	expected = MAPPER.writeValueAsString(Arrays.asList(allTags));
+    	Sender[] allSenders = new Sender[] { new Sender(1, "sender1"), new Sender(2, "sender2") };
+    	expected = MAPPER.writeValueAsString(Arrays.asList(allSenders));
         assertThat(json).isEqualTo(expected);
         verify(store).findAll();
         

@@ -23,7 +23,7 @@ import net.binggl.mydms.MydmsApplication;
 import net.binggl.mydms.MydmsConfiguration;
 import net.binggl.mydms.tags.Tag;
 
-public class TagIntegrationTest {
+public class EndToEndTest {
 	
 	
 	private static final String TMP_FILE = createTempFile();
@@ -60,7 +60,7 @@ public class TagIntegrationTest {
     }
 	
     @Test
-    public void testHelloWorld() throws Exception {
+    public void testSearchTags() throws Exception {
         final Optional<String> name = Optional.of("tag");
         @SuppressWarnings("unchecked")
 		final List<Tag> tags = client.target("http://localhost:" + RULE.getLocalPort() + "/api/tags/search")

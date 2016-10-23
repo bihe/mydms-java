@@ -1,6 +1,5 @@
-template: Hello, %s!
-defaultName: Stranger
-
+application:
+  initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
 
 
 server:

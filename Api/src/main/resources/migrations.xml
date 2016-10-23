@@ -8,7 +8,7 @@
 
     <changeSet id="1" author="henrik">
         <createTable tableName="tag">
-            <column name="id" type="BIGINT" autoIncrement="false">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -16,12 +16,14 @@
             </column>
         </createTable>
         
-        <addAutoIncrement
-            columnDataType="BIGINT"
-            columnName="id"
-            incrementBy="1"
-            startWith="1"
-            tableName="tag"/>
+        <createTable tableName="sender">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
         
     </changeSet>
 </databaseChangeLog>
