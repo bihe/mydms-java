@@ -9,6 +9,9 @@ buildNumber.properties
 .mvn/timing.properties
 
 
+# integration database artefacts
+integration.*
+
 .classpath
 .project
 .settings/
