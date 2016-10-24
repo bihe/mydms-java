@@ -1,4 +1,4 @@
-package net.binggl.mydms.bootstrap;
+package net.binggl.mydms.hibernate;
 
 import java.util.function.Function;
 
@@ -8,6 +8,8 @@ import org.hibernate.Transaction;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
 
 
 // https://gist.github.com/vvondra/1dbcd62306e40fa47294
@@ -26,6 +28,7 @@ public class ManagedSessionTransactionProvider implements TransactionProvider {
 
     private final SessionFactory sessionFactory;
 
+    @Inject
     public ManagedSessionTransactionProvider(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

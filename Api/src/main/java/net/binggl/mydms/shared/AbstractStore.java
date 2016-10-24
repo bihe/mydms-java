@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import io.dropwizard.hibernate.AbstractDAO;
@@ -42,4 +43,13 @@ public abstract class AbstractStore<T> extends AbstractDAO<T> {
      			.createCriteria(this.classType).add(Restrictions.like(FIELD_NAME, search + "%").ignoreCase());
         return list(criteria.addOrder(Order.asc(FIELD_NAME)));
     }
+    
+    public boolean any() {
+    	Criteria crit = this.currentSession().createCriteria(this.classType);
+		boolean anyItemAvailable = false;
+		Criteria criteria = crit.setProjection(Projections.rowCount());
+		Long count = (Long) criteria.uniqueResult();
+		anyItemAvailable = (count != null && count > 0);
+		return anyItemAvailable;
+	}
 }

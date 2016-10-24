@@ -1,4 +1,4 @@
-package net.binggl.mydms.bootstrap;
+package net.binggl.mydms.hibernate;
 
 import com.google.common.collect.ImmutableList;
 

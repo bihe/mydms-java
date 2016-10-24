@@ -1,4 +1,4 @@
-package net.binggl.mydms.bootstrap;
+package net.binggl.mydms.hibernate;
 
 import org.hibernate.SessionFactory;
 
@@ -23,5 +23,6 @@ public class MydmsHibernateModule extends AbstractModule {
         // if hibernate bundle was registered before guice, then at this point it's run method
         // will be already called and so its safe to get session factory instance
         bind(SessionFactory.class).toInstance(hbnBundle.getSessionFactory());
+        bind(TransactionProvider.class).to(ManagedSessionTransactionProvider.class);
     }
 }

@@ -1,4 +1,4 @@
-package net.binggl.mydms.bootstrap;
+package net.binggl.mydms.hibernate;
 
 import java.util.function.Function;
 
