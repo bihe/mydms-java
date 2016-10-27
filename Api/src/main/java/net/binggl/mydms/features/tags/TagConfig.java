@@ -1,4 +1,4 @@
-package net.binggl.mydms.tags;
+package net.binggl.mydms.features.tags;
 
 public class TagConfig {
 	

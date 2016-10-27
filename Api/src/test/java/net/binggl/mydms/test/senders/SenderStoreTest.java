@@ -18,8 +18,8 @@ import org.junit.Test;
 // change the test once the 1.1.0 release is available
 // https://github.com/dropwizard/dropwizard/pull/1594/files
 import io.dropwizard.testing.junit.DAOTestRule;
-import net.binggl.mydms.senders.Sender;
-import net.binggl.mydms.senders.SenderStore;
+import net.binggl.mydms.features.senders.Sender;
+import net.binggl.mydms.features.senders.SenderStore;
 
 public class SenderStoreTest {
 

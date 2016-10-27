@@ -1,4 +1,4 @@
-package net.binggl.mydms.shared;
+package net.binggl.mydms.features.shared;
 
 import java.util.List;
 import java.util.Optional;

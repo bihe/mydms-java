@@ -1,4 +1,4 @@
-package net.binggl.mydms.cmd;
+package net.binggl.mydms.features.cmd;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ import com.google.inject.Inject;
 import io.dropwizard.Application;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Environment;
-import net.binggl.mydms.MydmsConfiguration;
+import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.senders.Sender;
+import net.binggl.mydms.features.senders.SenderStore;
+import net.binggl.mydms.features.tags.Tag;
+import net.binggl.mydms.features.tags.TagStore;
 import net.binggl.mydms.hibernate.TransactionProvider;
-import net.binggl.mydms.senders.Sender;
-import net.binggl.mydms.senders.SenderStore;
-import net.binggl.mydms.tags.Tag;
-import net.binggl.mydms.tags.TagStore;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {

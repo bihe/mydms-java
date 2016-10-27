@@ -12,10 +12,11 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.senders.SenderConfig;
+import net.binggl.mydms.features.tags.TagConfig;
 import net.binggl.mydms.hibernate.MydmsHibernateBundle;
 import net.binggl.mydms.hibernate.MydmsHibernateModule;
-import net.binggl.mydms.senders.SenderConfig;
-import net.binggl.mydms.tags.TagConfig;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 public final class MydmsApplication extends Application<MydmsConfiguration> {

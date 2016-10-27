@@ -1,4 +1,4 @@
-package net.binggl.mydms.senders;
+package net.binggl.mydms.features.tags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +15,38 @@ import com.google.inject.Inject;
 
 import io.dropwizard.hibernate.UnitOfWork;
 
-@Path("/senders")
+@Path("/tags")
 @Produces(MediaType.APPLICATION_JSON)
-public class SenderResource {
+public class TagResource {
     
-    private SenderStore store;
+    private TagStore tagDao;
     
     @Inject
-	public SenderResource(SenderStore store) {
-		this.store = store;
+	public TagResource(TagStore dao) {
+		this.tagDao = dao;
 	}
     
     @GET
     @UnitOfWork
     @Timed
-    public List<Sender> getAll() {
-        List<Sender> allSenders = this.store.findAll();
-        return allSenders;
+    public List<Tag> getAll() {
+        List<Tag> allTags = this.tagDao.findAll();
+        return allTags;
     }
     
     @GET
     @Path("search")
     @UnitOfWork
     @Timed
-    public List<Sender> searchSenders(@QueryParam("name") Optional<String> search) {
+    public List<Tag> searchTags(@QueryParam("name") Optional<String> search) {
     	String searchFor = search.orElse("");
-        List<Sender> senders = new ArrayList<Sender>();
+        List<Tag> tags = new ArrayList<Tag>();
         if(!"".equals(searchFor)) {
-        	senders = this.store.searchByName(searchFor);
+        	tags = this.tagDao.searchByName(searchFor);
         } else {
-        	senders = this.store.findAll();
+        	tags = this.tagDao.findAll();
         }
         
-        return senders;
+        return tags;
     }
 }

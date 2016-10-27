@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.SessionFactoryFactory;
-import net.binggl.mydms.MydmsConfiguration;
+import net.binggl.mydms.config.MydmsConfiguration;
 
 public class MydmsHibernateBundle extends HibernateBundle<MydmsConfiguration> {
 

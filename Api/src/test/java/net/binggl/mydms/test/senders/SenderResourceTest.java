@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import net.binggl.mydms.senders.Sender;
-import net.binggl.mydms.senders.SenderResource;
-import net.binggl.mydms.senders.SenderStore;
+import net.binggl.mydms.features.senders.Sender;
+import net.binggl.mydms.features.senders.SenderResource;
+import net.binggl.mydms.features.senders.SenderStore;
 
 public class SenderResourceTest {
 

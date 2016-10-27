@@ -1,4 +1,4 @@
-package net.binggl.mydms;
+package net.binggl.mydms.config;
 
 import javax.validation.constraints.NotNull;
 

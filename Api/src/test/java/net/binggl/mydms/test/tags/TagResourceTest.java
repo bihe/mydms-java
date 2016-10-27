@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import net.binggl.mydms.tags.Tag;
-import net.binggl.mydms.tags.TagResource;
-import net.binggl.mydms.tags.TagStore;
+import net.binggl.mydms.features.tags.Tag;
+import net.binggl.mydms.features.tags.TagResource;
+import net.binggl.mydms.features.tags.TagStore;
 
 public class TagResourceTest {
 

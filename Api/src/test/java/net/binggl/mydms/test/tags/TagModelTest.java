@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
-import net.binggl.mydms.tags.Tag;
+import net.binggl.mydms.features.tags.Tag;
 
 public class TagModelTest {
 

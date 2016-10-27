@@ -1,18 +1,18 @@
-package net.binggl.mydms.senders;
+package net.binggl.mydms.features.tags;
 
 import com.google.inject.Inject;
 
 import net.binggl.mydms.hibernate.TransactionProvider;
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.NamedHealthCheck;
 
-public class SenderHealthCheck extends NamedHealthCheck {
+public class TagHealthCheck extends NamedHealthCheck {
 
-	private static final String HealthCheckName = "any_senders";
-	private SenderStore store;
+	private TagStore store;
 	private TransactionProvider txProvider;
-	
+	private static final String HealthCheckName = "any_tags";
+
 	@Inject
-	public SenderHealthCheck(SenderStore store, TransactionProvider txProvider) {
+	public TagHealthCheck(TagStore store, TransactionProvider txProvider) {
 		this.store = store;
 		this.txProvider = txProvider;
 	}
@@ -25,11 +25,10 @@ public class SenderHealthCheck extends NamedHealthCheck {
 		});
 		
 		if(!any) {
-			return Result.unhealthy("No senders available!");
+			return Result.unhealthy("No tags available!");
 		}
 		return Result.healthy();
 	}
-
 
 	@Override
 	public String getName() {

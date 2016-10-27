@@ -20,8 +20,8 @@ import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import net.binggl.mydms.MydmsApplication;
-import net.binggl.mydms.MydmsConfiguration;
-import net.binggl.mydms.tags.Tag;
+import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.tags.Tag;
 
 public class EndToEndTest {
 	

@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
-import net.binggl.mydms.senders.Sender;
+import net.binggl.mydms.features.senders.Sender;
 
 public class SenderModelTest {
 

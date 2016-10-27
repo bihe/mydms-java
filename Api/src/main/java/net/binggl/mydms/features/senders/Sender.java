@@ -1,4 +1,4 @@
-package net.binggl.mydms.senders;
+package net.binggl.mydms.features.senders;
 
 import java.util.Objects;
 
