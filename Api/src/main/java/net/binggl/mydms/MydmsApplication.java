@@ -13,6 +13,7 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.documents.DocumentConfig;
 import net.binggl.mydms.features.senders.SenderConfig;
 import net.binggl.mydms.features.tags.TagConfig;
 import net.binggl.mydms.hibernate.MydmsHibernateBundle;
@@ -75,6 +76,7 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 		// specify the available entities of the different modules/features
 		Collections.addAll(persistenceEntities, TagConfig.MappedEntities);
 		Collections.addAll(persistenceEntities, SenderConfig.MappedEntities);
+		Collections.addAll(persistenceEntities, DocumentConfig.MappedEntities);
 
 		Class<?>[] entities = persistenceEntities.toArray(new Class<?>[0]);
 		return entities;

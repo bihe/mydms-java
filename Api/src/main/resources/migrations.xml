@@ -6,6 +6,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+
+    <property name="now" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="now" value="now()" dbms="postgresql"/>
+
     <changeSet id="1" author="henrik">
         <createTable tableName="tag">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -24,6 +29,43 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        
+        <createTable tableName="document">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fileName" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="alternativeId" type="varchar(128)">
+            </column>
+            <column name="previewLink" type="varchar(128)">
+            </column> 
+            <column name="amount" type="number">
+            </column>           
+            <column name="created" type="DATETIME" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="DATETIME">
+            </column>
+        </createTable>
+        
+        <createTable tableName="documents_to_tags">
+            <column name="DOCUMENT_ID" type="UUID">
+                <constraints nullable="false" references="document(id)" foreignKeyName="fk_document_tag_id"/>
+            </column>
+            <column name="TAG_ID" type="BIGINT">
+                <constraints nullable="false" references="tag(id)" foreignKeyName="fk_tag_document_id"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="DOCUMENT_ID, TAG_ID"
+            constraintName="pk_document_tag_id"
+            tableName="documents_to_tags"
+            />
         
     </changeSet>
 </databaseChangeLog>

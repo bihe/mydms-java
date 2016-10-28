@@ -2,26 +2,29 @@ package net.binggl.mydms.features.shared;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 import io.dropwizard.hibernate.AbstractDAO;
 
 public abstract class AbstractStore<T> extends AbstractDAO<T> {
     
 	private final Class<T> classType;
-	private static final String FIELD_NAME = "name";
-	
+		
 	public AbstractStore(final Class<T> classType, final SessionFactory factory) {
         super(factory);
         this.classType = classType;
     }
 
     public Optional<T> findById(Long id) {
+        return Optional.ofNullable(get(id));
+    }
+    
+    public Optional<T> findById(UUID id) {
         return Optional.ofNullable(get(id));
     }
 
@@ -32,16 +35,22 @@ public abstract class AbstractStore<T> extends AbstractDAO<T> {
     public void delete(T entity) {
     	this.currentSession().delete(entity);
     }
+    
+    public void delete(Long id) {
+    	Optional<T> entity = this.findById(id);
+    	if(entity.isPresent())
+    		this.currentSession().delete(entity.get());
+    }
+    
+    public void delete(UUID id) {
+    	Optional<T> entity = this.findById(id);
+    	if(entity.isPresent())
+    		this.currentSession().delete(entity.get());
+    }
 
     public List<T> findAll() {
      	Criteria criteria = this.currentSession().createCriteria(this.classType);
         return list(criteria.addOrder(Order.asc("name")));
-    }
-    
-    public List<T> searchByName(String search) {
-     	Criteria criteria = this.currentSession()
-     			.createCriteria(this.classType).add(Restrictions.like(FIELD_NAME, search + "%").ignoreCase());
-        return list(criteria.addOrder(Order.asc(FIELD_NAME)));
     }
     
     public boolean any() {

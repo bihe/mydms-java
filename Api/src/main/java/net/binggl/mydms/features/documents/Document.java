@@ -1,25 +1,22 @@
 package net.binggl.mydms.features.documents;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import net.binggl.mydms.features.senders.Sender;
-import net.binggl.mydms.features.shared.JsonJodaDateTimeSerializer;
 import net.binggl.mydms.features.tags.Tag;
 
 @Entity
@@ -27,19 +24,18 @@ import net.binggl.mydms.features.tags.Tag;
 public class Document {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private UUID id;
 	@Column(name = "title", nullable = false)
+	@NotEmpty
 	private String title;
 	@Column(name = "fileName", nullable = false)
+	@NotEmpty
 	private String fileName;
 	private String alternativeId;
 	private String previewLink;
 	private double amount;
-	@JsonSerialize(using = JsonJodaDateTimeSerializer.class)
-	private DateTime created;
-	@JsonSerialize(using = JsonJodaDateTimeSerializer.class)
-	private DateTime modified;
+	private Date created;
+	private Date modified;
 
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "documents_to_tags", joinColumns = {
@@ -57,8 +53,8 @@ public class Document {
 		super();
 	}
 
-	public Document(long id, String title, String fileName, String alternativeId, String previewLink, double amount,
-			DateTime created, DateTime modified) {
+	public Document(UUID id, String title, String fileName, String alternativeId, String previewLink, double amount,
+			Date created, Date modified) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -69,12 +65,23 @@ public class Document {
 		this.created = created;
 		this.modified = modified;
 	}
+	
+	public Document(String title, String fileName, String alternativeId, String previewLink, double amount) {
+		super();
+		this.id = UUID.randomUUID();
+		this.title = title;
+		this.fileName = fileName;
+		this.alternativeId = alternativeId;
+		this.previewLink = previewLink;
+		this.amount = amount;
+		this.created = new Date();
+	}
 
-	public long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -118,19 +125,19 @@ public class Document {
 		this.amount = amount;
 	}
 
-	public DateTime getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
-	public void setCreated(DateTime created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
-	public DateTime getModified() {
+	public Date getModified() {
 		return modified;
 	}
 
-	public void setModified(DateTime modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
