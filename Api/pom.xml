@@ -16,9 +16,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-
-		<dropwizard.version>1.0.2</dropwizard.version>
-		<hibernate.version>5.2.3.Final</hibernate.version>
+		<dropwizard.version>1.0.3</dropwizard.version>
 	</properties>
 
 	<build>

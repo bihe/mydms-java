@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.cmd;
+package net.binggl.mydms.features.initialdata;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ import io.dropwizard.Application;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.documents.Document;
+import net.binggl.mydms.features.documents.DocumentStore;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
 import net.binggl.mydms.features.tags.Tag;
@@ -24,6 +26,7 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 
 	private TagStore tagStore;
 	private SenderStore senderStore;
+	private DocumentStore documentStore;
 	private TransactionProvider txProvider;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -43,8 +46,11 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 				
 				LOGGER.info("Will delete database entries.");
 				
-				session.createSQLQuery("DELETE FROM TAG").executeUpdate();
-				session.createSQLQuery("DELETE FROM SENDER").executeUpdate();
+				session.createSQLQuery("DELETE FROM DOCUMENTS_TO_TAGS").executeUpdate();
+				session.createSQLQuery("DELETE FROM DOCUMENTS_TO_SENDERS").executeUpdate();
+				session.createSQLQuery("DELETE FROM TAGS").executeUpdate();
+				session.createSQLQuery("DELETE FROM SENDERS").executeUpdate();
+				session.createSQLQuery("DELETE FROM DOCUMENTS").executeUpdate();
 
 				for (int i = 1; i < 11; i++) {
 					tagStore.save(new Tag(String.format("tag%d", i)));
@@ -54,14 +60,29 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 					senderStore.save(new Sender(String.format("sender%d", i)));
 				}
 				
+				List<Tag> tag1 = tagStore.searchByName("tag1");
+				List<Sender> sender2 = senderStore.searchByName("sender2");
+				
+				for (int i = 1; i < 11; i++) {
+					Document document = new Document(String.format("document%d", i), "filename", "alternativeId", "previewLink", 1.0);
+					document.getTags().addAll(tag1);
+					document.getSenders().addAll(sender2);
+					documentStore.save(document);
+				}
+				
+				
 				List<Tag> tags = tagStore.findAll();
 				List<Sender> senders = senderStore.findAll();
+				List<Document> documents = documentStore.findAll();
 
 				if (tags != null) {
 					LOGGER.info(String.format("Created %d tags.", tags.size()));
 				}
 				if (senders != null) {
 					LOGGER.info(String.format("Created %d senders.", senders.size()));
+				}
+				if (documents != null) {
+					LOGGER.info(String.format("Created %d documents.", documents.size()));
 				}
 
 				return null;
@@ -94,5 +115,13 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 	@Inject
 	public void setTxProvider(TransactionProvider txProvider) {
 		this.txProvider = txProvider;
+	}
+
+	public DocumentStore getDocumentStore() {
+		return documentStore;
+	}
+	@Inject
+	public void setDocumentStore(DocumentStore documentStore) {
+		this.documentStore = documentStore;
 	}
 }

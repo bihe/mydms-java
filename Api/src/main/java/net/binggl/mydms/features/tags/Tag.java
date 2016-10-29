@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tag")
+@Table(name = "TAGS")
 public class Tag {
-    @Id
+    
+	@Id
+	@Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

@@ -48,9 +48,15 @@ public abstract class AbstractStore<T> extends AbstractDAO<T> {
     		this.currentSession().delete(entity.get());
     }
 
-    public List<T> findAll() {
+    public List<T> findAll(OrderBy ... order) {
      	Criteria criteria = this.currentSession().createCriteria(this.classType);
-        return list(criteria.addOrder(Order.asc("name")));
+        for(OrderBy o : order) {
+        	if(o.getSort() == SortOrder.Ascending)
+        		criteria = criteria.addOrder(Order.asc(o.getField()));
+        	else
+        		criteria = criteria.addOrder(Order.desc(o.getField()));
+        }
+     	return list(criteria);
     }
     
     public boolean any() {

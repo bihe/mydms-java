@@ -1,6 +1,7 @@
 package net.binggl.mydms.features.senders;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -23,6 +24,17 @@ public class SenderStore extends AbstractStore<Sender> {
 	public List<Sender> searchByName(String search) {
      	Criteria criteria = this.currentSession()
      			.createCriteria(Sender.class).add(Restrictions.like(FIELD_NAME, search + "%").ignoreCase());
+        return list(criteria.addOrder(Order.asc(FIELD_NAME)));
+    }
+	
+	public Optional<Sender> senderByName(String tagName) {
+     	Criteria criteria = this.currentSession()
+     			.createCriteria(Sender.class).add(Restrictions.eq(FIELD_NAME, tagName).ignoreCase());
+     	return Optional.ofNullable(uniqueResult(criteria));
+    }
+	
+	public List<Sender> findAll() {
+     	Criteria criteria = this.currentSession().createCriteria(Sender.class);
         return list(criteria.addOrder(Order.asc(FIELD_NAME)));
     }
 }

@@ -19,18 +19,18 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
     
-    private TagStore tagDao;
+    private TagStore store;
     
     @Inject
 	public TagResource(TagStore dao) {
-		this.tagDao = dao;
+		this.store = dao;
 	}
     
     @GET
     @UnitOfWork
     @Timed
     public List<Tag> getAll() {
-        List<Tag> allTags = this.tagDao.findAll();
+        List<Tag> allTags = this.store.findAll();
         return allTags;
     }
     
@@ -42,9 +42,9 @@ public class TagResource {
     	String searchFor = search.orElse("");
         List<Tag> tags = new ArrayList<Tag>();
         if(!"".equals(searchFor)) {
-        	tags = this.tagDao.searchByName(searchFor);
+        	tags = this.store.searchByName(searchFor);
         } else {
-        	tags = this.tagDao.findAll();
+        	tags = this.store.findAll();
         }
         
         return tags;

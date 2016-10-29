@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "sender")
+@Table(name = "SENDERS")
 public class Sender {
-    @Id
+    
+	@Id
+	@Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

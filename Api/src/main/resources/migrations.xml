@@ -12,7 +12,7 @@
     <property name="now" value="now()" dbms="postgresql"/>
 
     <changeSet id="1" author="henrik">
-        <createTable tableName="tag">
+        <createTable tableName="TAGS">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -21,7 +21,7 @@
             </column>
         </createTable>
         
-        <createTable tableName="sender">
+        <createTable tableName="SENDERS">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -30,19 +30,19 @@
             </column>
         </createTable>
         
-        <createTable tableName="document">
+        <createTable tableName="DOCUMENTS">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="nvarchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="fileName" type="nvarchar(255)">
+            <column name="filename" type="nvarchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="alternativeId" type="varchar(128)">
+            <column name="alternativeid" type="varchar(128)">
             </column>
-            <column name="previewLink" type="varchar(128)">
+            <column name="previewlink" type="varchar(128)">
             </column> 
             <column name="amount" type="number">
             </column>           
@@ -53,19 +53,34 @@
             </column>
         </createTable>
         
-        <createTable tableName="documents_to_tags">
-            <column name="DOCUMENT_ID" type="UUID">
-                <constraints nullable="false" references="document(id)" foreignKeyName="fk_document_tag_id"/>
+        <createTable tableName="DOCUMENTS_TO_TAGS">
+            <column name="document_id" type="UUID">
+                <constraints nullable="false" references="documents(id)" foreignKeyName="fk_document_tag_id"/>
             </column>
-            <column name="TAG_ID" type="BIGINT">
-                <constraints nullable="false" references="tag(id)" foreignKeyName="fk_tag_document_id"/>
+            <column name="tag_id" type="BIGINT">
+                <constraints nullable="false" references="tags(id)" foreignKeyName="fk_tag_document_id"/>
             </column>
         </createTable>
         <addPrimaryKey 
-            columnNames="DOCUMENT_ID, TAG_ID"
+            columnNames="document_id, tag_id"
             constraintName="pk_document_tag_id"
-            tableName="documents_to_tags"
+            tableName="DOCUMENTS_TO_TAGS"
             />
+            
+        <createTable tableName="DOCUMENTS_TO_SENDERS">
+            <column name="document_id" type="UUID">
+                <constraints nullable="false" references="documents(id)" foreignKeyName="fk_document_sender_id"/>
+            </column>
+            <column name="sender_id" type="BIGINT">
+                <constraints nullable="false" references="senders(id)" foreignKeyName="fk_sender_document_id"/>
+            </column>
+        </createTable>
+        <addPrimaryKey 
+            columnNames="document_id, sender_id"
+            constraintName="pk_document_sender_id"
+            tableName="DOCUMENTS_TO_SENDERS"
+            />
+            
         
     </changeSet>
 </databaseChangeLog>

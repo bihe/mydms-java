@@ -16,38 +16,49 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import net.binggl.mydms.features.senders.Sender;
+import net.binggl.mydms.features.shared.JsonDateSerializer;
 import net.binggl.mydms.features.tags.Tag;
 
 @Entity
-@Table(name = "document")
+@Table(name = "DOCUMENTS")
 public class Document {
 
 	@Id
+	@Column(name = "id")
 	private UUID id;
 	@Column(name = "title", nullable = false)
 	@NotEmpty
 	private String title;
-	@Column(name = "fileName", nullable = false)
+	@Column(name = "filename", nullable = false)
 	@NotEmpty
 	private String fileName;
+	@Column(name = "alternativeid")
 	private String alternativeId;
+	@Column(name = "previewlink")
 	private String previewLink;
+	@Column(name = "amount")
 	private double amount;
+	@Column(name = "created")
+	@JsonSerialize(using = JsonDateSerializer.class)
 	private Date created;
+	@Column(name = "modified")
+	@JsonSerialize(using = JsonDateSerializer.class)
 	private Date modified;
 
 	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable(name = "documents_to_tags", joinColumns = {
-			@JoinColumn(name = "DOCUMENT_ID", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
-					@JoinColumn(name = "TAG_ID", referencedColumnName = "id", nullable = true) })
-	public List<Tag> tags = new ArrayList<>();
+	@JoinTable(name = "DOCUMENTS_TO_TAGS", joinColumns = {
+			@JoinColumn(name = "document_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
+					@JoinColumn(name = "tag_id", referencedColumnName = "id", nullable = true) })
+	private List<Tag> tags = new ArrayList<>();
 
 	@ManyToMany(cascade = { CascadeType.ALL })
-	@JoinTable(name = "documents_to_senders", joinColumns = {
-			@JoinColumn(name = "DOCUMENT_ID", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
-					@JoinColumn(name = "SENDER_ID", referencedColumnName = "id", nullable = true) })
-	public List<Sender> senders = new ArrayList<>();
+	@JoinTable(name = "DOCUMENTS_TO_SENDERS", joinColumns = {
+			@JoinColumn(name = "document_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
+					@JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = true) })
+	private List<Sender> senders = new ArrayList<>();
 
 	public Document() {
 		super();
