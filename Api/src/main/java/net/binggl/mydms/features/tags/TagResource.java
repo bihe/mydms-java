@@ -18,35 +18,35 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Path("/tags")
 @Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
-    
-    private TagStore store;
-    
-    @Inject
+
+	private TagStore store;
+
+	@Inject
 	public TagResource(TagStore dao) {
 		this.store = dao;
 	}
-    
-    @GET
-    @UnitOfWork
-    @Timed
-    public List<Tag> getAll() {
-        List<Tag> allTags = this.store.findAll();
-        return allTags;
-    }
-    
-    @GET
-    @Path("search")
-    @UnitOfWork
-    @Timed
-    public List<Tag> searchTags(@QueryParam("name") Optional<String> search) {
-    	String searchFor = search.orElse("");
-        List<Tag> tags = new ArrayList<Tag>();
-        if(!"".equals(searchFor)) {
-        	tags = this.store.searchByName(searchFor);
-        } else {
-        	tags = this.store.findAll();
-        }
-        
-        return tags;
-    }
+
+	@GET
+	@UnitOfWork
+	@Timed
+	public List<Tag> getAll() {
+		List<Tag> allTags = this.store.findAll();
+		return allTags;
+	}
+
+	@GET
+	@Path("search")
+	@UnitOfWork
+	@Timed
+	public List<Tag> searchTags(@QueryParam("name") Optional<String> search) {
+		String searchFor = search.orElse("");
+		List<Tag> tags = new ArrayList<Tag>();
+		if (!"".equals(searchFor)) {
+			tags = this.store.searchByName(searchFor);
+		} else {
+			tags = this.store.findAll();
+		}
+
+		return tags;
+	}
 }

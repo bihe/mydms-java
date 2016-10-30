@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.shared;
+package net.binggl.mydms.features.shared.store;
 
 public class OrderBy {
 	private String field;

@@ -9,28 +9,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import net.binggl.mydms.features.shared.NamedItem;
+
 @Entity
 @Table(name = "TAGS")
-public class Tag {
-    
-	@Id
-	@Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Tag implements NamedItem {
 
-    @Column(name = "name", nullable = false)
-    private String name;
-    
-    public Tag() {
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+
+	@Column(name = "name", nullable = false, unique = true)
+	private String name;
+
+	public Tag() {
 		super();
 	}
-    
-    public Tag(String name) {
+
+	public Tag(String name) {
 		super();
 		this.name = name;
 	}
-    
-    public Tag(long id, String name) {
+
+	public Tag(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -52,24 +54,22 @@ public class Tag {
 		this.name = name;
 	}
 
-    
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Tag)) {
-            return false;
-        }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Tag)) {
+			return false;
+		}
 
-        final Tag that = (Tag) o;
+		final Tag that = (Tag) o;
 
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.name, that.name);
-    }
+		return Objects.equals(this.id, that.id) && Objects.equals(this.name, that.name);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name);
+	}
 }

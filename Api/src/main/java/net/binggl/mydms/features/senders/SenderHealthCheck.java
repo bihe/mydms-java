@@ -10,7 +10,7 @@ public class SenderHealthCheck extends NamedHealthCheck {
 	private static final String HealthCheckName = "any_senders";
 	private SenderStore store;
 	private TransactionProvider txProvider;
-	
+
 	@Inject
 	public SenderHealthCheck(SenderStore store, TransactionProvider txProvider) {
 		this.store = store;
@@ -19,17 +19,16 @@ public class SenderHealthCheck extends NamedHealthCheck {
 
 	@Override
 	protected Result check() throws Exception {
-		
+
 		boolean any = txProvider.transactional(session -> {
 			return store.any();
 		});
-		
-		if(!any) {
+
+		if (!any) {
 			return Result.unhealthy("No senders available!");
 		}
 		return Result.healthy();
 	}
-
 
 	@Override
 	public String getName() {

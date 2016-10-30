@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.documents;
+package net.binggl.mydms.features.documents.models;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +76,7 @@ public class Document {
 		this.created = created;
 		this.modified = modified;
 	}
-	
+
 	public Document(String title, String fileName, String alternativeId, String previewLink, double amount) {
 		super();
 		this.id = UUID.randomUUID();

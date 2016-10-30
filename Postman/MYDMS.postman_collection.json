@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "MYDMS",
+		"_postman_id": "3dfca423-e6a1-cecc-28e9-4c777557f1cc",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/api/documents",
+			"request": {
+				"url": "http://localhost:8080/api/documents",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"\",\n    \"title\": \"document\",\n    \"fileName\": \"filename\",\n    \"alternativeId\": \"alternativeId\",\n    \"previewLink\": \"previewLink\",\n    \"amount\": 0.0,\n    \"tags\": [{ \"name\": \"tag1\"}\n    \t\n    \t],\n    \"senders\": [\n    \t{ \"id\":1, \"name\": \"sender1\"}\n    \t]\n}"
+				},
+				"description": "Save a new MYDMS Document"
+			},
+			"response": []
+		}
+	]
+}

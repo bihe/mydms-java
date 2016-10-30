@@ -19,12 +19,12 @@ public class DocumentHealthCheck extends NamedHealthCheck {
 
 	@Override
 	protected Result check() throws Exception {
-		
+
 		boolean any = txProvider.transactional(session -> {
 			return store.any();
 		});
-		
-		if(!any) {
+
+		if (!any) {
 			return Result.unhealthy("No documents available!");
 		}
 		return Result.healthy();

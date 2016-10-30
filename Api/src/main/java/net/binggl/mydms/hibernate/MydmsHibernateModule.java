@@ -12,17 +12,19 @@ import com.google.inject.AbstractModule;
  */
 public class MydmsHibernateModule extends AbstractModule {
 
-    private final MydmsHibernateBundle hbnBundle;
+	private final MydmsHibernateBundle hbnBundle;
 
-    public MydmsHibernateModule(MydmsHibernateBundle hbnBundle) {
-        this.hbnBundle = hbnBundle;
-    }
+	public MydmsHibernateModule(MydmsHibernateBundle hbnBundle) {
+		this.hbnBundle = hbnBundle;
+	}
 
-    @Override
-    protected void configure() {
-        // if hibernate bundle was registered before guice, then at this point it's run method
-        // will be already called and so its safe to get session factory instance
-        bind(SessionFactory.class).toInstance(hbnBundle.getSessionFactory());
-        bind(TransactionProvider.class).to(ManagedSessionTransactionProvider.class);
-    }
+	@Override
+	protected void configure() {
+		// if hibernate bundle was registered before guice, then at this point
+		// it's run method
+		// will be already called and so its safe to get session factory
+		// instance
+		bind(SessionFactory.class).toInstance(hbnBundle.getSessionFactory());
+		bind(TransactionProvider.class).to(ManagedSessionTransactionProvider.class);
+	}
 }

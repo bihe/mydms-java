@@ -20,6 +20,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            columnNames="name"
+            constraintName="tag_name"
+            tableName="TAGS"
+            />
+        
         
         <createTable tableName="SENDERS">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -29,6 +35,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+            columnNames="name"
+            constraintName="sender_name"
+            tableName="SENDERS"
+            />
         
         <createTable tableName="DOCUMENTS">
             <column name="id" type="UUID">

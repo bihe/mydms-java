@@ -7,11 +7,11 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ImportDocument {
-	@JsonProperty(value="_id")
+	@JsonProperty(value = "_id")
 	private String id;
 	private String title;
 	private String fileName;
-	@JsonProperty(value="__v")
+	@JsonProperty(value = "__v")
 	private String version;
 	private String state;
 	private DateTime created;
@@ -21,7 +21,7 @@ public class ImportDocument {
 	private String alternativeId;
 	private List<ImportTagSender> tags;
 	private List<ImportTagSender> senders;
-	
+
 	public ImportDocument() {
 		super();
 	}
@@ -121,6 +121,5 @@ public class ImportDocument {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
-	
+
 }

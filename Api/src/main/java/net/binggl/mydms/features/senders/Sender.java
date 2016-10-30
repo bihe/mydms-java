@@ -9,28 +9,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import net.binggl.mydms.features.shared.NamedItem;
+
 @Entity
 @Table(name = "SENDERS")
-public class Sender {
-    
-	@Id
-	@Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Sender implements NamedItem {
 
-    @Column(name = "name", nullable = false)
-    private String name;
-    
-    public Sender() {
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+
+	@Column(name = "name", nullable = false, unique = true)
+	private String name;
+
+	public Sender() {
 		super();
 	}
-    
-    public Sender(String name) {
+
+	public Sender(String name) {
 		super();
 		this.name = name;
 	}
-    
-    public Sender(long id, String name) {
+
+	public Sender(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -52,24 +54,22 @@ public class Sender {
 		this.name = name;
 	}
 
-    
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Sender)) {
-            return false;
-        }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Sender)) {
+			return false;
+		}
 
-        final Sender that = (Sender) o;
+		final Sender that = (Sender) o;
 
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.name, that.name);
-    }
+		return Objects.equals(this.id, that.id) && Objects.equals(this.name, that.name);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name);
+	}
 }

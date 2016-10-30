@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
-import net.binggl.mydms.features.documents.Document;
+import net.binggl.mydms.features.documents.models.Document;
 
 public class DocumentModelTest {
 

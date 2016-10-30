@@ -10,12 +10,11 @@ import net.binggl.mydms.config.MydmsConfiguration;
 public class MydmsHibernateBundle extends HibernateBundle<MydmsConfiguration> {
 
 	public MydmsHibernateBundle(Class<?>[] entities) {
-		super(ImmutableList.<Class<?>>builder().add(entities).build(),
-	             new SessionFactoryFactory());
+		super(ImmutableList.<Class<?>>builder().add(entities).build(), new SessionFactoryFactory());
 	}
 
 	@Override
-    public PooledDataSourceFactory getDataSourceFactory(MydmsConfiguration configuration) {
-        return configuration.getDataSourceFactory();
-    }
+	public PooledDataSourceFactory getDataSourceFactory(MydmsConfiguration configuration) {
+		return configuration.getDataSourceFactory();
+	}
 }

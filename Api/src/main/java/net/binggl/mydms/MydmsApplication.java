@@ -56,9 +56,7 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 		// before guice context start
 		bootstrap.addBundle(hibernate);
 
-		bootstrap.addBundle(GuiceBundle.builder()
-				.enableAutoConfig(APP_BASE_PACKAGE)
-				.searchCommands()
+		bootstrap.addBundle(GuiceBundle.builder().enableAutoConfig(APP_BASE_PACKAGE).searchCommands()
 				.modules(new MydmsHibernateModule(hibernate)).build());
 	}
 

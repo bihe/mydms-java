@@ -18,35 +18,35 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Path("/senders")
 @Produces(MediaType.APPLICATION_JSON)
 public class SenderResource {
-    
-    private SenderStore store;
-    
-    @Inject
+
+	private SenderStore store;
+
+	@Inject
 	public SenderResource(SenderStore store) {
 		this.store = store;
 	}
-    
-    @GET
-    @UnitOfWork
-    @Timed
-    public List<Sender> getAll() {
-        List<Sender> allSenders = this.store.findAll();
-        return allSenders;
-    }
-    
-    @GET
-    @Path("search")
-    @UnitOfWork
-    @Timed
-    public List<Sender> searchSenders(@QueryParam("name") Optional<String> search) {
-    	String searchFor = search.orElse("");
-        List<Sender> senders = new ArrayList<Sender>();
-        if(!"".equals(searchFor)) {
-        	senders = this.store.searchByName(searchFor);
-        } else {
-        	senders = this.store.findAll();
-        }
-        
-        return senders;
-    }
+
+	@GET
+	@UnitOfWork
+	@Timed
+	public List<Sender> getAll() {
+		List<Sender> allSenders = this.store.findAll();
+		return allSenders;
+	}
+
+	@GET
+	@Path("search")
+	@UnitOfWork
+	@Timed
+	public List<Sender> searchSenders(@QueryParam("name") Optional<String> search) {
+		String searchFor = search.orElse("");
+		List<Sender> senders = new ArrayList<Sender>();
+		if (!"".equals(searchFor)) {
+			senders = this.store.searchByName(searchFor);
+		} else {
+			senders = this.store.findAll();
+		}
+
+		return senders;
+	}
 }

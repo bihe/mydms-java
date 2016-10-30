@@ -11,8 +11,8 @@ import io.dropwizard.Application;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.features.documents.Document;
 import net.binggl.mydms.features.documents.DocumentStore;
+import net.binggl.mydms.features.documents.models.Document;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
 import net.binggl.mydms.features.tags.Tag;
@@ -43,9 +43,9 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 			LOGGER.info("Will create initial data to play with.");
 
 			txProvider.transactional(session -> {
-				
+
 				LOGGER.info("Will delete database entries.");
-				
+
 				session.createSQLQuery("DELETE FROM DOCUMENTS_TO_TAGS").executeUpdate();
 				session.createSQLQuery("DELETE FROM DOCUMENTS_TO_SENDERS").executeUpdate();
 				session.createSQLQuery("DELETE FROM TAGS").executeUpdate();
@@ -59,18 +59,18 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 				for (int i = 1; i < 11; i++) {
 					senderStore.save(new Sender(String.format("sender%d", i)));
 				}
-				
+
 				List<Tag> tag1 = tagStore.searchByName("tag1");
 				List<Sender> sender2 = senderStore.searchByName("sender2");
-				
+
 				for (int i = 1; i < 11; i++) {
-					Document document = new Document(String.format("document%d", i), "filename", "alternativeId", "previewLink", 1.0);
+					Document document = new Document(String.format("document%d", i), "filename", "alternativeId",
+							"previewLink", 1.0);
 					document.getTags().addAll(tag1);
 					document.getSenders().addAll(sender2);
 					documentStore.save(document);
 				}
-				
-				
+
 				List<Tag> tags = tagStore.findAll();
 				List<Sender> senders = senderStore.findAll();
 				List<Document> documents = documentStore.findAll();
@@ -92,10 +92,11 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 			LOGGER.warn("Won't create data, configuration setting 'application.initialData' not set!");
 		}
 	}
-	
+
 	public TagStore getTagStore() {
 		return tagStore;
 	}
+
 	@Inject
 	public void setTagStore(TagStore tagStore) {
 		this.tagStore = tagStore;
@@ -104,6 +105,7 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 	public SenderStore getSenderStore() {
 		return senderStore;
 	}
+
 	@Inject
 	public void setSenderStore(SenderStore senderStore) {
 		this.senderStore = senderStore;
@@ -112,6 +114,7 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 	public TransactionProvider getTxProvider() {
 		return txProvider;
 	}
+
 	@Inject
 	public void setTxProvider(TransactionProvider txProvider) {
 		this.txProvider = txProvider;
@@ -120,6 +123,7 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 	public DocumentStore getDocumentStore() {
 		return documentStore;
 	}
+
 	@Inject
 	public void setDocumentStore(DocumentStore documentStore) {
 		this.documentStore = documentStore;

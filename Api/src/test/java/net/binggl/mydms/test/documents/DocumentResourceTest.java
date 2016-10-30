@@ -17,11 +17,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import io.dropwizard.testing.junit.ResourceTestRule;
-import net.binggl.mydms.features.documents.Document;
 import net.binggl.mydms.features.documents.DocumentResource;
 import net.binggl.mydms.features.documents.DocumentStore;
-import net.binggl.mydms.features.shared.OrderBy;
-import net.binggl.mydms.features.shared.SortOrder;
+import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.shared.store.OrderBy;
+import net.binggl.mydms.features.shared.store.SortOrder;
 
 public class DocumentResourceTest {
 
@@ -34,7 +34,7 @@ public class DocumentResourceTest {
 	
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new DocumentResource(store))
+            .addResource(new DocumentResource(store, null, null))
             .build();
 
     @Before

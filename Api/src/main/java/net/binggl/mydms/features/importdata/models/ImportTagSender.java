@@ -5,10 +5,10 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ImportTagSender {
-	@JsonProperty(value="_id")
+	@JsonProperty(value = "_id")
 	private String id;
 	private String name;
-	@JsonProperty(value="__v")
+	@JsonProperty(value = "__v")
 	private String version;
 	private DateTime created;
 

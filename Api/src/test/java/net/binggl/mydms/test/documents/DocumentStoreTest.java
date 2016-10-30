@@ -21,12 +21,12 @@ import org.junit.Test;
 // change the test once the 1.1.0 release is available
 // https://github.com/dropwizard/dropwizard/pull/1594/files
 import io.dropwizard.testing.junit.DAOTestRule;
-import net.binggl.mydms.features.documents.Document;
 import net.binggl.mydms.features.documents.DocumentStore;
+import net.binggl.mydms.features.documents.models.Document;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
-import net.binggl.mydms.features.shared.OrderBy;
-import net.binggl.mydms.features.shared.SortOrder;
+import net.binggl.mydms.features.shared.store.OrderBy;
+import net.binggl.mydms.features.shared.store.SortOrder;
 import net.binggl.mydms.features.tags.Tag;
 import net.binggl.mydms.features.tags.TagStore;
 

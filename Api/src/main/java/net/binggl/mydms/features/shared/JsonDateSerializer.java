@@ -14,13 +14,13 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class JsonDateSerializer extends JsonSerializer<Date> {
 
-    private static DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+	private static DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
 
-    @Override
-    public void serialize(Date value, JsonGenerator gen, SerializerProvider arg2)
-            throws IOException, JsonProcessingException {
-    	
-        gen.writeString(formatter.print(new DateTime(value)));
-    }
+	@Override
+	public void serialize(Date value, JsonGenerator gen, SerializerProvider arg2)
+			throws IOException, JsonProcessingException {
+
+		gen.writeString(formatter.print(new DateTime(value)));
+	}
 
 }
