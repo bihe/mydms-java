@@ -35,7 +35,7 @@ public class Document {
 	@Column(name = "filename", nullable = false)
 	@NotEmpty
 	private String fileName;
-	@Column(name = "alternativeid")
+	@Column(name = "alternativeid", unique = true)
 	private String alternativeId;
 	@Column(name = "previewlink")
 	private String previewLink;

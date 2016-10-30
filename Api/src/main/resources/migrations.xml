@@ -63,6 +63,11 @@
             <column name="modified" type="DATETIME">
             </column>
         </createTable>
+        <addUniqueConstraint
+            columnNames="alternativeid"
+            constraintName="alternativeid_unique"
+            tableName="DOCUMENTS"
+            />
         
         <createTable tableName="DOCUMENTS_TO_TAGS">
             <column name="document_id" type="UUID">

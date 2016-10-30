@@ -61,5 +61,11 @@ public class DocumentStore extends AbstractStore<Document> {
 
 		return list(criteria);
 	}
+	
+	public Optional<Document> findByAlternativeId(String alternativeId) {
+		Criteria criteria = this.currentSession().createCriteria(Document.class)
+				.add(Restrictions.eq("alternativeId", alternativeId).ignoreCase());
+		return Optional.ofNullable(uniqueResult(criteria));
+	}
 
 }

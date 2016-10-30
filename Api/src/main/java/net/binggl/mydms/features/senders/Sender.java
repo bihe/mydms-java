@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import net.binggl.mydms.features.shared.NamedItem;
+import net.binggl.mydms.features.shared.models.NamedItem;
 
 @Entity
 @Table(name = "SENDERS")
