@@ -139,7 +139,7 @@ public class DocumentStoreTest {
 		
     	database.transaction(() -> {
     		for (int i = 1; i < 11; i++) {
-				Document document = new Document(String.format("document%d", i), "filename", "alternativeId", "previewLink", 1.0);
+				Document document = new Document(String.format("document%d", i), "filename", String.format("alternativeId%d", i), "previewLink", 1.0);
 				document.getTags().add(new Tag(String.format("tag%d", i)));
 				document.getSenders().add(new Sender(String.format("sender%d", i)));
 				documentStore.save(document);
