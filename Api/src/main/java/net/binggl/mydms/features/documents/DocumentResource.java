@@ -27,6 +27,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,26 +192,26 @@ public class DocumentResource {
 					document = this.newIntance();
 				}
 			}
-			document.setTitle(docItem.getTitle());
-			document.setFileName(docItem.getFileName());
+			document.setTitle(Encode.forJavaScript(docItem.getTitle()));
+			document.setFileName(Encode.forJavaScript(docItem.getFileName()));
 			document.setAmount(docItem.getAmount());
 
 			List<Tag> tags = this.lookup(docItem.getTags(), item -> {
-				Optional<Tag> t = tagStore.tagByName(item.getName());
+				Optional<Tag> t = tagStore.tagByName(Encode.forJavaScript(item.getName()));
 				if (t.isPresent()) {
 					return t;
 				} else {
-					return Optional.of(new Tag(item.getName()));
+					return Optional.of(new Tag(Encode.forJavaScript(item.getName())));
 				}
 			});
 			document.getTags().addAll(tags);
 
 			List<Sender> senders = this.lookup(docItem.getSenders(), item -> {
-				Optional<Sender> s = senderStore.senderByName(item.getName());
+				Optional<Sender> s = senderStore.senderByName(Encode.forJavaScript(item.getName()));
 				if (s.isPresent()) {
 					return s;
 				} else {
-					return Optional.of(new Sender(item.getName()));
+					return Optional.of(new Sender(Encode.forJavaScript(item.getName())));
 				}
 			});
 			document.getSenders().addAll(senders);

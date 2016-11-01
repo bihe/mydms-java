@@ -1,5 +1,15 @@
 application:
   initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
+  
+  # specify upload settings
+  # path, maxsize, extenstions
+  uploadPath: /tmp
+  maxUploadSize: 512000
+  allowedFileTypes:
+    - application/pdf
+    - image/jpeg
+    - image/png
+    - image/gif
 
 
 server:
