@@ -23,13 +23,13 @@ public class GDriveClientTest {
     public static final DropwizardAppRule<MydmsConfiguration> RULE = new DropwizardAppRule<MydmsConfiguration>(
             MydmsApplication.class, CONFIG_PATH);
 	
-	@Test
-    public void callGDriveClient() throws IOException {
-		GDriveClient client = new GDriveClient(RULE.getConfiguration());
-		String redirectUrl = client.getRedirectUrl();
-		assertNotNull(redirectUrl);
-		
-		Credential credential = client.handleResponse("code");
-		assertNotNull(credential);
-	}
+//	@Test
+//    public void callGDriveClient() throws IOException {
+//		GDriveClient client = new GDriveClient(RULE.getConfiguration());
+//		String redirectUrl = client.getRedirectUrl();
+//		assertNotNull(redirectUrl);
+//		
+//		Credential credential = client.getCredentials("code");
+//		assertNotNull(credential);
+//	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jetty.server.session.SessionHandler;
+
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
@@ -64,6 +66,9 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 
 	@Override
 	public void run(MydmsConfiguration configuration, Environment environment) {
+		
+		environment.servlets().setSessionHandler(new SessionHandler());
+		//environment.jersey().register(HttpSessionProvider.class);
 	}
 
 	private void initHibernateBundel() {
