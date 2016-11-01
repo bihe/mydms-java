@@ -1,3 +1,21 @@
+application:
+  initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
+  
+  # specify upload settings
+  # path, maxsize, extenstions
+  uploadPath: /tmp
+  maxUploadSize: 512000
+  allowedFileTypes:
+    - application/pdf
+    - image/jpeg
+    - image/png
+    - image/gif
+
+  google:
+    clientId: ${MYDMS_GOOGLE_CLIENT_ID}
+    clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET}
+    redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
+
 server:
   rootPath: /api/
 

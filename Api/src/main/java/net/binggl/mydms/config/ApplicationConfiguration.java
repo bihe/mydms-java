@@ -16,6 +16,8 @@ public class ApplicationConfiguration {
 	private Long maxUploadSize = 1000L;
 	@NotEmpty
 	private List<String> allowedFileTypes;
+	@NotNull
+	private GoogleConfiguration google;
 
 	public boolean isInitialData() {
 		return initialData;
@@ -47,6 +49,14 @@ public class ApplicationConfiguration {
 
 	public void setAllowedFileTypes(List<String> allowedFileTypes) {
 		this.allowedFileTypes = allowedFileTypes;
+	}
+
+	public GoogleConfiguration getGoogle() {
+		return google;
+	}
+
+	public void setGoogle(GoogleConfiguration google) {
+		this.google = google;
 	}
 
 }

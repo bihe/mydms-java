@@ -11,6 +11,11 @@ application:
     - image/png
     - image/gif
 
+  google:
+    clientId: ${MYDMS_GOOGLE_CLIENT_ID}
+    clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET}
+    redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
+
 
 server:
   rootPath: /api/
