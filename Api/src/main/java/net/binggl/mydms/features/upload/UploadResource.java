@@ -29,7 +29,7 @@ import net.binggl.mydms.config.ApplicationConfiguration;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.DocumentResource;
 import net.binggl.mydms.features.documents.models.ActionResult;
-import net.binggl.mydms.features.shared.HashHelper;
+import net.binggl.mydms.features.shared.crypto.HashHelper;
 
 @Path("/upload")
 public class UploadResource {

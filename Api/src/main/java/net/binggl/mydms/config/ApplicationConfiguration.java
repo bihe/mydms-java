@@ -17,7 +17,7 @@ public class ApplicationConfiguration {
 	@NotEmpty
 	private List<String> allowedFileTypes;
 	@NotNull
-	private GoogleConfiguration google;
+	private GoogleConfiguration google = new GoogleConfiguration();
 
 	public boolean isInitialData() {
 		return initialData;

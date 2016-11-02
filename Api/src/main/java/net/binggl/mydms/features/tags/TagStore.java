@@ -10,9 +10,9 @@ import org.hibernate.criterion.Restrictions;
 
 import com.google.inject.Inject;
 
-import net.binggl.mydms.features.shared.store.AbstractStore;
+import net.binggl.mydms.features.shared.store.AbstractHibernateStore;
 
-public class TagStore extends AbstractStore<Tag> {
+public class TagStore extends AbstractHibernateStore<Tag> {
 
 	private static final String FIELD_NAME = "name";
 

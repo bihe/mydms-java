@@ -15,6 +15,10 @@ application:
     clientId: ${MYDMS_GOOGLE_CLIENT_ID}
     clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET}
     redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
+    encryptionKey: ${MYDMS_GOOGLE_ENCRYPTION_KEY}
+    parentDrivePath: ${MYDMS_GOOGLE_DRIVE_PARENT_ID}
+    storePath: /tmp
+    successUrl: /
 
 
 server:

@@ -12,11 +12,11 @@ import org.hibernate.criterion.Restrictions;
 import com.google.inject.Inject;
 
 import net.binggl.mydms.features.documents.models.Document;
-import net.binggl.mydms.features.shared.store.AbstractStore;
+import net.binggl.mydms.features.shared.store.AbstractHibernateStore;
 import net.binggl.mydms.features.shared.store.OrderBy;
 import net.binggl.mydms.features.shared.store.SortOrder;
 
-public class DocumentStore extends AbstractStore<Document> {
+public class DocumentStore extends AbstractHibernateStore<Document> {
 
 	@Inject
 	public DocumentStore(final SessionFactory factory) {

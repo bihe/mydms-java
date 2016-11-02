@@ -13,7 +13,7 @@ import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import net.binggl.mydms.MydmsApplication;
 import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.features.gdrive.GDriveClient;
+import net.binggl.mydms.features.gdrive.client.GDriveClient;
 
 public class GDriveClientTest {
 

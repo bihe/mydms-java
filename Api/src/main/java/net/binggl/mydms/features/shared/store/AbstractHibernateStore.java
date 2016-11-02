@@ -11,11 +11,11 @@ import org.hibernate.criterion.Projections;
 
 import io.dropwizard.hibernate.AbstractDAO;
 
-public abstract class AbstractStore<T> extends AbstractDAO<T> {
+public abstract class AbstractHibernateStore<T> extends AbstractDAO<T> {
 
 	private final Class<T> classType;
 
-	public AbstractStore(final Class<T> classType, final SessionFactory factory) {
+	public AbstractHibernateStore(final Class<T> classType, final SessionFactory factory) {
 		super(factory);
 		this.classType = classType;
 	}

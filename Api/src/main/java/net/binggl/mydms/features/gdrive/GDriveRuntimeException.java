@@ -7,4 +7,8 @@ public class GDriveRuntimeException extends RuntimeException {
 	public GDriveRuntimeException(Throwable EX) {
 		super(EX);
 	}
+	
+	public GDriveRuntimeException(String message, Throwable EX) {
+		super(message, EX);
+	}
 }

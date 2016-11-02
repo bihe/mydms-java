@@ -17,6 +17,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.DocumentConfig;
+import net.binggl.mydms.features.gdrive.GDriveModule;
 import net.binggl.mydms.features.senders.SenderConfig;
 import net.binggl.mydms.features.tags.TagConfig;
 import net.binggl.mydms.hibernate.MydmsHibernateBundle;
@@ -61,14 +62,15 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 		bootstrap.addBundle(hibernate);
 
 		bootstrap.addBundle(GuiceBundle.builder().enableAutoConfig(APP_BASE_PACKAGE).searchCommands()
-				.modules(new MydmsHibernateModule(hibernate)).build());
+				.modules(new MydmsHibernateModule(hibernate))
+				.modules(new GDriveModule())
+				.build());
 	}
 
 	@Override
 	public void run(MydmsConfiguration configuration, Environment environment) {
 		
 		environment.servlets().setSessionHandler(new SessionHandler());
-		//environment.jersey().register(HttpSessionProvider.class);
 	}
 
 	private void initHibernateBundel() {

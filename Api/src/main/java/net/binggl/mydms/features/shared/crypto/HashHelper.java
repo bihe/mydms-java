@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.shared;
+package net.binggl.mydms.features.shared.crypto;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
