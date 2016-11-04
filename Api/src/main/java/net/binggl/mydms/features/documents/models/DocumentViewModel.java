@@ -29,13 +29,15 @@ public class DocumentViewModel {
 	private Date modified;
 	private List<Tag> tags = new ArrayList<>();
 	private List<Sender> senders = new ArrayList<>();
+	@NotEmpty
+	private String uploadFileToken;
 	
 	public DocumentViewModel() {
 		super();
 	}
 
 	public DocumentViewModel(UUID id, String title, String fileName, String alternativeId, String previewLink,
-			double amount, Date created, Date modified) {
+			double amount, Date created, Date modified, List<Tag> tags, List<Sender> senders, String uploadFileToken) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -45,6 +47,9 @@ public class DocumentViewModel {
 		this.amount = amount;
 		this.created = created;
 		this.modified = modified;
+		this.tags = tags;
+		this.senders = senders;
+		this.uploadFileToken = uploadFileToken;
 	}
 
 	public UUID getId() {
@@ -125,6 +130,14 @@ public class DocumentViewModel {
 
 	public void setSenders(List<Sender> senders) {
 		this.senders = senders;
+	}
+	
+	public String getUploadFileToken() {
+		return uploadFileToken;
+	}
+
+	public void setUploadFileToken(String uploadFileToken) {
+		this.uploadFileToken = uploadFileToken;
 	}
 
 	@Override

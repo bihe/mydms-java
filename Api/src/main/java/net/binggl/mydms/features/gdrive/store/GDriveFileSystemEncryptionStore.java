@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
+import net.binggl.commons.crypto.AesEncryption;
 import net.binggl.mydms.config.GoogleConfiguration;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.gdrive.GDriveRuntimeException;
 import net.binggl.mydms.features.gdrive.models.FilesystemCredentialHolder;
 import net.binggl.mydms.features.gdrive.models.GDriveCredential;
-import net.binggl.mydms.features.shared.crypto.AesEncryption;
 
 public class GDriveFileSystemEncryptionStore implements GDriveCredentialStore {
 

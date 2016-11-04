@@ -19,6 +19,7 @@ import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -97,21 +98,24 @@ public class GDriveClient {
 		return credentials;
 	}
 	
-	public boolean folderExists(GDriveCredential credentials, String folderName, String parent) {
+	public Optional<GDriveItem> getFolder(GDriveCredential credentials, String folderName, String parent) {
 		this.setupDrive(credentials);
-		boolean folderExists = false;
+		Optional<GDriveItem> folderItem = Optional.empty();
 		try {
 			Optional<File> folder = this.getItem(folderName, parent, (name, parentId) -> {
 				String query = String.format("mimeType = '%s' and '%s' in parents and name = '%s' and explicitlyTrashed = false",
 						GOOGLE_DRIVE_FOLDER, parentId, name);
 				return query;
 			});
-			folderExists = folder.isPresent();
+			if(folder.isPresent()) {
+				GDriveItem item = new GDriveItem(folder.get().getId(), folderName, parent, GOOGLE_DRIVE_FOLDER);
+				folderItem = Optional.of(item);
+			}
 		} catch (Exception EX) {
 			LOGGER.error("Could not check for folder {}, {}", folderName, EX.getMessage(), EX);
 			throw new GDriveRuntimeException(EX);
 		}
-		return folderExists;
+		return folderItem;
 	}
 	
 	public Optional<GDriveFile> getFile(GDriveCredential credentials, String path, String parent) {
@@ -119,7 +123,6 @@ public class GDriveClient {
 		Optional<GDriveFile> contentFile = Optional.empty();
 		
 		try {
-
 			// the supplied path is a /Directory/Filename combination
 			// first we need the folder
 			List<String> pathElements = this.getPathElements(path);
@@ -188,34 +191,73 @@ public class GDriveClient {
 		return item;
 	}
 	
+	public GDriveItem saveItem(GDriveCredential credentials, String fileName, String contentType, byte[] payload, String parent) {
+		this.setupDrive(credentials);
+		GDriveItem item = null;
+		try {
+			// check if the item is already available
+			Optional<File> driveItem = this.getItem(fileName, parent,() -> { return "files(id, name)"; },(name, parentId) -> {
+			
+				String query = String.format("mimeType != '%s' and '%s' in parents and name = '%s' and explicitlyTrashed = false",
+						GOOGLE_DRIVE_FOLDER, parentId, name);
+				return query;
+			});
+			
+			
+			ByteArrayContent content =  new ByteArrayContent(null, payload);
+			File file = null;
+			if(driveItem.isPresent()) {
+				LOGGER.info("Will udpate existing item {}", driveItem.get().getId());
+				file = driveService.files().update(driveItem.get().getId(), null, content)
+						.setFields("id")
+				        .execute();
+			} else {
+				LOGGER.info("Will create a new file {}", fileName);
+				
+				File fileMetadata = new File();
+				fileMetadata.setName(fileName);
+				fileMetadata.setParents(Collections.singletonList(parent));
+				
+				file = driveService.files().create(fileMetadata, content)
+						.setFields("id, mimeType")
+				        .execute();
+			}
+			
+			if(file != null) {
+				item = new GDriveItem(file.getId(), fileName, parent, file.getMimeType());
+			}
+		} catch (Exception EX) {
+			LOGGER.error("Could not save item {}, {}", fileName, EX.getMessage(), EX);
+			throw new GDriveRuntimeException(EX);
+		}
+		return item;
+	}
 	
-	/*
-	 * String folderId = "0BwwA4oUTeiV1TGRPeTVjaWRDY1E";
-File fileMetadata = new File();
-fileMetadata.setName("photo.jpg");
-fileMetadata.setParents(Collections.singletonList(folderId));
-java.io.File filePath = new java.io.File("files/photo.jpg");
-FileContent mediaContent = new FileContent("image/jpeg", filePath);
-File file = driveService.files().create(fileMetadata, mediaContent)
-        .setFields("id, parents")
-        .execute();
-System.out.println("File ID: " + file.getId());
-	 */
+	
+	
+	
 	
 	private Optional<File> getItem(String name, String parent, QueryLambdaFunction queryCallback) throws IOException {
-		Optional<File> folder = Optional.empty();
+		return this.getItem(name, parent, () -> {
+			return "files(id, name, mimeType)";
+		}, queryCallback); 
+	}
+	
+	private Optional<File> getItem(String name, String parent, FieldLambdaFunction fieldsCallback, QueryLambdaFunction queryCallback) throws IOException {
+		Optional<File> item = Optional.empty();
 		
 		String query = queryCallback.apply(name, parent);
-		
+		String fields = fieldsCallback.apply(); 
+				
 		FileList result = this.driveService.files().list()
 	            .setQ(query)
 	            .setSpaces("drive")
-	            .setFields("files(id, name, mimeType)")
+	            .setFields(fields)
 	            .execute();
 		if(result != null && result.getFiles() != null) {
-			folder = result.getFiles().stream().filter(item -> name.equals(item.getName())).findAny();
+			item = result.getFiles().stream().filter(e -> name.equals(e.getName())).findAny();
 		}
-		return folder;
+		return item;
 	}
 
 	private void setupDrive(GDriveCredential credentials) {
@@ -257,8 +299,12 @@ System.out.println("File ID: " + file.getId());
 	
 	@FunctionalInterface
 	private interface QueryLambdaFunction {
-
 		String apply(String name, String parentId);
+	}
+	
+	@FunctionalInterface
+	private interface FieldLambdaFunction {
+		String apply();
 	}
 
 }

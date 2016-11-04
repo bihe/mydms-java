@@ -64,7 +64,7 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 				List<Sender> sender2 = senderStore.searchByName("sender2");
 
 				for (int i = 1; i < 11; i++) {
-					Document document = new Document(String.format("document%d", i), "filename", "alternativeId",
+					Document document = new Document(String.format("document%d", i), "filename", String.format("alternativeId%d", i),
 							"previewLink", 1.0);
 					document.getTags().addAll(tag1);
 					document.getSenders().addAll(sender2);

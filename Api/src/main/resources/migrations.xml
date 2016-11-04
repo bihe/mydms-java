@@ -97,6 +97,22 @@
             tableName="DOCUMENTS_TO_SENDERS"
             />
             
+            
+        <createTable tableName="UPLOADS">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="filename" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mimetype" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="DATETIME" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+            
         
     </changeSet>
 </databaseChangeLog>

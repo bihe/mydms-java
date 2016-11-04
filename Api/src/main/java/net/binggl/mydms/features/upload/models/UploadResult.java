@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.upload;
+package net.binggl.mydms.features.upload.models;
 
 import net.binggl.mydms.features.documents.models.ActionResult;
 import net.binggl.mydms.features.shared.models.SimpleResult;

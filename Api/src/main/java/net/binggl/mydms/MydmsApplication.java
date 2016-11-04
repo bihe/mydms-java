@@ -20,6 +20,7 @@ import net.binggl.mydms.features.documents.DocumentConfig;
 import net.binggl.mydms.features.gdrive.GDriveModule;
 import net.binggl.mydms.features.senders.SenderConfig;
 import net.binggl.mydms.features.tags.TagConfig;
+import net.binggl.mydms.features.upload.UploadConfig;
 import net.binggl.mydms.hibernate.MydmsHibernateBundle;
 import net.binggl.mydms.hibernate.MydmsHibernateModule;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
@@ -84,6 +85,7 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 		Collections.addAll(persistenceEntities, TagConfig.MappedEntities);
 		Collections.addAll(persistenceEntities, SenderConfig.MappedEntities);
 		Collections.addAll(persistenceEntities, DocumentConfig.MappedEntities);
+		Collections.addAll(persistenceEntities, UploadConfig.MappedEntities);
 
 		Class<?>[] entities = persistenceEntities.toArray(new Class<?>[0]);
 		return entities;

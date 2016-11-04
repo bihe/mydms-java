@@ -1,5 +1,7 @@
 package net.binggl.mydms.features.gdrive;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -19,12 +21,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import net.binggl.commons.crypto.HashHelper;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.models.ActionResult;
 import net.binggl.mydms.features.gdrive.client.GDriveClient;
@@ -32,7 +36,6 @@ import net.binggl.mydms.features.gdrive.models.GDriveCredential;
 import net.binggl.mydms.features.gdrive.models.GDriveFile;
 import net.binggl.mydms.features.gdrive.models.GDriveItem;
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore;
-import net.binggl.mydms.features.shared.crypto.HashHelper;
 import net.binggl.mydms.features.shared.models.SimpleResult;
 
 @Path("gdrive")
@@ -158,18 +161,22 @@ public class GDriveResource {
 		Response result = Response.noContent().status(Status.NOT_FOUND).build();
 		try {
 			if(this.store.isCredentialAvailable(USER_TOKEN)) {
-				if(this.client.folderExists(cred(), folderName, configuration.getApplication().getGoogle().getParentDrivePath()))
-					result = Response.noContent().status(Status.OK).build();
-				else {
-					// TEST folder creation
+				Optional<GDriveItem> folder = this.client.getFolder(cred(), folderName, configuration.getApplication().getGoogle().getParentDrivePath());
+				
+				if(!folder.isPresent()) {
 					GDriveItem item = this.client.createFolder(cred(), folderName, configuration.getApplication().getGoogle().getParentDrivePath());
-					LOGGER.debug("Creaed item {}", item);
+					LOGGER.debug("Created item {}", item);
+				} else {
+					GDriveItem item = this.client.saveItem(cred(), "abc.pdf", "application/pdf", 
+							FileUtils.readFileToByteArray(new File("/home/henrik/Downloads/kirchenbeitrag.pdf")), folder.get().getId());
+					LOGGER.debug("Uploaded file {}", item);
+					
 				}
 			} else {
 				throw new WebApplicationException(String.format("Could not get files: Account is not linked!"), Response.Status.UNAUTHORIZED);
 			}
 			
-		} catch(GDriveRuntimeException EX) {
+		} catch(GDriveRuntimeException | IOException EX) {
 			LOGGER.error("Could not check folder {}", EX.getMessage(), EX);
 			throw new WebApplicationException(String.format("Could not check folder: %s!", EX.getMessage()), Response.Status.BAD_GATEWAY);
 		}

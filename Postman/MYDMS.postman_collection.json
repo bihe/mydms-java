@@ -26,6 +26,47 @@
 				"description": "Save a new MYDMS Document"
 			},
 			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/documents/e0189ddf-ea06-48bf-b4f8-0a95b5fe3552",
+			"request": {
+				"url": "http://localhost:8080/api/documents/e0189ddf-ea06-48bf-b4f8-0a95b5fe3552",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/upload/file",
+			"request": {
+				"url": "http://localhost:8080/api/upload/file",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "FILE.pdf",
+							"type": "file",
+							"enabled": true
+						}
+					]
+				},
+				"description": "Upload a file"
+			},
+			"response": []
 		}
 	]
 }

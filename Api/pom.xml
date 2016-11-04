@@ -4,11 +4,11 @@
 
 	<groupId>net.binggl</groupId>
 	<artifactId>mydms</artifactId>
-	<version>${version.number}</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>mydms</name>
-	<url>https://mydms.binggl.net</url>
+	<url>https://github.com/bihe/mydms-java</url>
 
 	<properties>
 		<version.number>${git.commit.time}.${git.commit.id.abbrev}</version.number>
@@ -181,6 +181,12 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>net.binggl</groupId>
+		    <artifactId>commons</artifactId>
+		    <version>1.0.1</version>
 		</dependency>
 
 
