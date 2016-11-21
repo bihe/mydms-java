@@ -1,5 +1,8 @@
 package net.binggl.mydms.features.documents;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +25,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -35,9 +40,14 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 
 import io.dropwizard.hibernate.UnitOfWork;
+import liquibase.util.file.FilenameUtils;
+import net.binggl.mydms.config.ApplicationConfiguration;
+import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.models.ActionResult;
 import net.binggl.mydms.features.documents.models.Document;
 import net.binggl.mydms.features.documents.models.DocumentViewModel;
+import net.binggl.mydms.features.files.FileItem;
+import net.binggl.mydms.features.files.FileService;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
 import net.binggl.mydms.features.shared.models.NamedItem;
@@ -46,6 +56,8 @@ import net.binggl.mydms.features.shared.store.OrderBy;
 import net.binggl.mydms.features.shared.store.SortOrder;
 import net.binggl.mydms.features.tags.Tag;
 import net.binggl.mydms.features.tags.TagStore;
+import net.binggl.mydms.features.upload.UploadStore;
+import net.binggl.mydms.features.upload.models.UploadItem;
 
 @Path("/documents")
 @Produces(MediaType.APPLICATION_JSON)
@@ -55,15 +67,21 @@ public class DocumentResource {
 	private TagStore tagStore;
 	private SenderStore senderStore;
 	private DocumentStore store;
+	private UploadStore uploadStore;
+	private FileService fileService;
+	private ApplicationConfiguration config;
 	private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd.MM.yyyy");
 	private static final Logger LOGGER = LoggerFactory.getLogger(DocumentResource.class);
 	private static final UUID EMPTY = new UUID(0, 0);
 
 	@Inject
-	public DocumentResource(DocumentStore docStore, TagStore tagStore, SenderStore senderStore) {
+	public DocumentResource(DocumentStore docStore, TagStore tagStore, SenderStore senderStore, UploadStore uploadStore,
+			FileService fileService, MydmsConfiguration configuration) {
 		this.store = docStore;
 		this.tagStore = tagStore;
 		this.senderStore = senderStore;
+		this.fileService = fileService;
+		this.config = configuration != null ? configuration.getApplication() : null;
 	}
 
 	@GET
@@ -75,6 +93,7 @@ public class DocumentResource {
 		return all;
 	}
 
+	
 	@GET
 	@Path("search")
 	@UnitOfWork
@@ -116,6 +135,7 @@ public class DocumentResource {
 		return searchResults;
 	}
 
+	
 	@GET
 	@UnitOfWork
 	@Path("{id}")
@@ -144,6 +164,7 @@ public class DocumentResource {
 				Status.NOT_FOUND);
 	}
 
+	
 	@DELETE
 	@UnitOfWork
 	@Path("{id}")
@@ -166,6 +187,7 @@ public class DocumentResource {
 				Status.NOT_FOUND);
 	}
 
+	
 	@POST
 	@UnitOfWork
 	@Timed
@@ -216,6 +238,9 @@ public class DocumentResource {
 			});
 			document.getSenders().addAll(senders);
 
+			// use the uploadFileToken and retrieve the upload-queue-item
+			this.processUploadedFile(docItem.getUploadFileToken(), document.getFileName());
+
 			Document saved = store.save(document);
 			if (saved != null) {
 				String message = "";
@@ -232,7 +257,9 @@ public class DocumentResource {
 			LOGGER.error("Could not save a new document {}", cvEX.getMessage());
 			String message = "The supplied information were not valid!";
 			throw new WebApplicationException(message, Status.BAD_REQUEST);
-
+		} catch (WebApplicationException webEx) {
+			LOGGER.error("Could not save a new document {}", webEx.getMessage(), webEx);
+			throw webEx;
 		} catch (Exception EX) {
 			LOGGER.error("Could not save a new document {}", EX.getMessage(), EX);
 			String message = "Could not save the document: ";
@@ -241,6 +268,62 @@ public class DocumentResource {
 		}
 
 		return result;
+	}
+
+	
+	
+	
+	private void processUploadedFile(String uploadToken, String fileName) throws IOException {
+		if (StringUtils.isEmpty(uploadToken))
+			return;
+
+		Optional<UploadItem> upload = uploadStore.findById(UUID.fromString(uploadToken));
+		if (!upload.isPresent()) {
+			throw new WebApplicationException(String.format("The given upload token %s is not available!", uploadToken),
+					Status.BAD_REQUEST);
+		}
+
+		LOGGER.debug("Got upload-item from store!");
+
+		// folder is current date
+		DateTimeFormatter folderFormat = DateTimeFormat.forPattern("yyyy_MM_dd");
+		String folderName = DateTime.now().toString(folderFormat);
+
+		// 1) upload the file to the google store
+		File uploadFile = this.getFile(fileName, config.getUploadPath(), uploadToken);
+		byte[] payload = FileUtils.readFileToByteArray(uploadFile);
+		if (payload == null) {
+			throw new WebApplicationException(
+					String.format("There is no upload file payload available for token %s", uploadToken),
+					Response.Status.BAD_GATEWAY);
+		}
+
+		LOGGER.debug("Read file {}", uploadFile.getName());
+
+		FileItem item = new FileItem(fileName, upload.get().getMimeType(), payload, folderName);
+
+		if (!this.fileService.saveFile(item)) {
+			throw new WebApplicationException(String.format("Could not upload file: %s!", item.getFileName()),
+					Response.Status.BAD_GATEWAY);
+		}
+
+		LOGGER.debug("Saved file to backend file-store!");
+
+		// 2) clear the temp file
+		if (!uploadFile.delete()) {
+			LOGGER.warn(String.format("Could not delete upload file on filesystem! %s", uploadToken));
+		}
+
+		// 3) remove the uploadItem from the database
+		this.uploadStore.delete(upload.get().getId());
+
+	}
+
+	private File getFile(String fileName, String uploadPath, String uploadToken) {
+		String fileExtension = FilenameUtils.getExtension(fileName);
+		java.nio.file.Path outputPath = FileSystems.getDefault().getPath(uploadPath,
+				String.format("%s.%s", uploadToken, fileExtension));
+		return outputPath.toFile();
 	}
 
 	private Document newIntance() {

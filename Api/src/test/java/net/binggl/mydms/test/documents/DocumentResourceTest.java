@@ -34,7 +34,7 @@ public class DocumentResourceTest {
 	
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new DocumentResource(store, null, null))
+            .addResource(new DocumentResource(store, null, null, null, null, null))
             .build();
 
     @Before
