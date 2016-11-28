@@ -13,7 +13,9 @@ import javax.ws.rs.core.MediaType;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import net.binggl.mydms.features.security.models.User;
 
 @Path("/tags")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,7 +31,7 @@ public class TagResource {
 	@GET
 	@UnitOfWork
 	@Timed
-	public List<Tag> getAll() {
+	public List<Tag> getAll(@Auth User user) {
 		List<Tag> allTags = this.store.findAll();
 		return allTags;
 	}

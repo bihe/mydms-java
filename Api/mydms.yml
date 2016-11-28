@@ -1,6 +1,12 @@
 application:
   initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
   
+  security:
+    tokenSecret: ${MYDMS_JWT_TOKEN_SECRET}
+    cookieName: login_token
+    appName: mydms
+    appUrl: https://mydms.binggl.net
+  
   # specify upload settings
   # path, maxsize, extenstions
   uploadPath: /tmp

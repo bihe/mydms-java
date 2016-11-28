@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ApplicationConfiguration {
 
 	@NotNull
@@ -17,7 +19,12 @@ public class ApplicationConfiguration {
 	@NotEmpty
 	private List<String> allowedFileTypes;
 	@NotNull
+	@JsonProperty("google")
 	private GoogleConfiguration google = new GoogleConfiguration();
+
+	@NotNull
+	@JsonProperty("security")
+	private SecurityConfiguration security = new SecurityConfiguration();
 
 	public boolean isInitialData() {
 		return initialData;
@@ -57,6 +64,14 @@ public class ApplicationConfiguration {
 
 	public void setGoogle(GoogleConfiguration google) {
 		this.google = google;
+	}
+
+	public SecurityConfiguration getSecurity() {
+		return security;
+	}
+
+	public void setSecurity(SecurityConfiguration security) {
+		this.security = security;
 	}
 
 }
