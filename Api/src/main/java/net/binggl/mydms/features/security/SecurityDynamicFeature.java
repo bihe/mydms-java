@@ -17,12 +17,15 @@ public class SecurityDynamicFeature extends AuthDynamicFeature {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Inject
-	SecurityDynamicFeature(JwtAuthenticator authenticator, MydmsAuthorizer authorizer, Environment environment, MydmsConfiguration configuration) {
-		super(new CookieFilter
-				.Builder<User>()
-				.setConfiguration(configuration)
-				.setAuthenticator(authenticator)
-				.setAuthorizer(authorizer)
+	SecurityDynamicFeature(JwtAuthenticator authenticator, MydmsAuthorizer authorizer, Environment environment,
+			MydmsConfiguration configuration) {
+		super(new CookieFilter.Builder<User>()
+				.setCookieName(configuration.getApplication().getSecurity().getCookieName())
+				.setAuthenticator(authenticator
+						.tokenSecret(configuration.getApplication().getSecurity().getTokenSecret()))
+				.setAuthorizer(authorizer
+						.appName(configuration.getApplication().getSecurity().getAppName())
+						.appUrl(configuration.getApplication().getSecurity().getAppUrl()))
 				.buildAuthFilter());
 
 		environment.jersey().register(RolesAllowedDynamicFeature.class);

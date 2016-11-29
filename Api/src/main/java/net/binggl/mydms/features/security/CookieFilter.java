@@ -18,20 +18,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.dropwizard.auth.AuthFilter;
-import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.config.SecurityConfiguration;
 
 @PreMatching
 @Priority(Priorities.AUTHENTICATION)
 public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CookieFilter.class);
-	private final SecurityConfiguration configuration;
-	private final String CookieName;
+	private final String cookieName;
 
-	private CookieFilter(MydmsConfiguration config) {
-		this.configuration = config != null ? config.getApplication().getSecurity() : null;
-		this.CookieName = this.configuration != null ? this.configuration.getCookieName() : "login_token";
+	
+	private CookieFilter(String cookieName) {
+		this.cookieName = cookieName;
 	}
 
 	@Override
@@ -44,7 +41,7 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 			throw new WebApplicationException(message, Response.Status.UNAUTHORIZED);
 		}
 
-		Optional<String> jwtCookie = cookies.keySet().stream().filter(a -> a.equals(CookieName)).findFirst();
+		Optional<String> jwtCookie = cookies.keySet().stream().filter(a -> a.equals(cookieName)).findFirst();
 
 		if (!jwtCookie.isPresent()) {
 			LOGGER.warn("No authentication cookie available!");
@@ -52,7 +49,7 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 			throw new WebApplicationException(message, Response.Status.UNAUTHORIZED);
 		}
 
-		Cookie cookiePayload = cookies.get(CookieName);
+		Cookie cookiePayload = cookies.get(cookieName);
 
 		if (cookiePayload == null || StringUtils.isEmpty(cookiePayload.getValue())) {
 			LOGGER.warn("The authentication cookie is empty!");
@@ -69,16 +66,16 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 
 	public static class Builder<P extends Principal> extends AuthFilterBuilder<String, P, CookieFilter<P>> {
 
-		private MydmsConfiguration configuration;
+		private String cookieName;
 
-		public Builder<P> setConfiguration(MydmsConfiguration configuration) {
-			this.configuration = configuration;
+		public Builder<P> setCookieName(String cookieName) {
+			this.cookieName = cookieName;
 			return this;
 		}
 
 		@Override
 		protected CookieFilter<P> newInstance() {
-			return new CookieFilter<>(this.configuration);
+			return new CookieFilter<>(this.cookieName);
 		}
 	}
 }
