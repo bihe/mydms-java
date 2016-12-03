@@ -10,6 +10,7 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.caching.Cache;
 import net.binggl.mydms.features.security.models.User;
 
 @Provider
@@ -18,7 +19,7 @@ public class SecurityDynamicFeature extends AuthDynamicFeature {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Inject
 	SecurityDynamicFeature(JwtAuthenticator authenticator, MydmsAuthorizer authorizer, Environment environment,
-			MydmsConfiguration configuration) {
+			MydmsConfiguration configuration, Cache cache) {
 		super(new CookieFilter.Builder<User>()
 				.setCookieName(configuration.getApplication().getSecurity().getCookieName())
 				.setAuthenticator(authenticator

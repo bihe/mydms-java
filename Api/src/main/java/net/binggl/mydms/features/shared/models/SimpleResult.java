@@ -1,7 +1,5 @@
 package net.binggl.mydms.features.shared.models;
 
-import net.binggl.mydms.features.documents.models.ActionResult;
-
 public class SimpleResult {
 	private String message;
 	private ActionResult result;

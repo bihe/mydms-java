@@ -11,22 +11,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 
-import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-import net.binggl.mydms.features.security.models.User;
 
 @Path("/tags")
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("User")
 public class TagResource {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TagResource.class);
-	
 	private TagStore store;
 
 	@Inject
@@ -37,10 +31,8 @@ public class TagResource {
 	@GET
 	@UnitOfWork
 	@Timed
-	@RolesAllowed("User")
-	public List<Tag> getAll(@Auth User user) {
+	public List<Tag> getAll() {
 		List<Tag> allTags = this.store.findAll();
-		LOGGER.debug("User {}", user);
 		return allTags;
 	}
 

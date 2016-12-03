@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -28,11 +29,12 @@ import liquibase.util.file.FilenameUtils;
 import net.binggl.mydms.config.ApplicationConfiguration;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.DocumentResource;
-import net.binggl.mydms.features.documents.models.ActionResult;
+import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.upload.models.UploadItem;
 import net.binggl.mydms.features.upload.models.UploadResult;
 
 @Path("/upload")
+@RolesAllowed("User")
 public class UploadResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DocumentResource.class);

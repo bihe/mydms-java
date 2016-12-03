@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.dropwizard.testing.ConfigOverride;
@@ -30,15 +31,15 @@ public class EndToEndTest {
     private static final String CONFIG_PATH = ResourceHelpers.resourceFilePath("testing.yml");
 
     @ClassRule
-    public static final DropwizardAppRule<MydmsConfiguration> RULE = new DropwizardAppRule<MydmsConfiguration>(
+    public static final DropwizardAppRule<MydmsConfiguration> ApplicationRule = new DropwizardAppRule<MydmsConfiguration>(
             MydmsApplication.class, CONFIG_PATH,
             ConfigOverride.config("database.url", "jdbc:h2:" + TMP_FILE));
-
+    
     private Client client;
 
     @BeforeClass
     public static void migrateDb() throws Exception {
-        RULE.getApplication().run("db", "migrate", CONFIG_PATH);
+        ApplicationRule.getApplication().run("db", "migrate", CONFIG_PATH);
     }
 
     @Before
@@ -60,10 +61,12 @@ public class EndToEndTest {
     }
 	
     @Test
+    @Ignore
     public void testSearchTags() throws Exception {
         final Optional<String> name = Optional.of("tag");
+        
         @SuppressWarnings("unchecked")
-		final List<Tag> tags = client.target("http://localhost:" + RULE.getLocalPort() + "/api/tags/search")
+		final List<Tag> tags = client.target("http://localhost:" + ApplicationRule.getLocalPort() + "/api/tags/search")
                 .queryParam("name", name.get())
                 .request()
                 .get(List.class);

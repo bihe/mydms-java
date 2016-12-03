@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.documents.models;
+package net.binggl.mydms.features.shared.models;
 
 public enum ActionResult {
 	None(0, "None"),

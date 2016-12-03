@@ -16,6 +16,7 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.caching.CacheModule;
 import net.binggl.mydms.features.documents.DocumentConfig;
 import net.binggl.mydms.features.files.FileServiceModule;
 import net.binggl.mydms.features.gdrive.GDriveModule;
@@ -67,6 +68,7 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 				.modules(new MydmsHibernateModule(hibernate))
 				.modules(new GDriveModule())
 				.modules(new FileServiceModule())
+				.modules(new CacheModule())
 				.build());
 	}
 

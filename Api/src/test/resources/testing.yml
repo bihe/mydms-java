@@ -1,6 +1,12 @@
 application:
   initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
   
+  security:
+    tokenSecret: SUPA_SECRET
+    cookieName: login_token
+    appName: mydms
+    appUrl: https://mydms.binggl.net/
+  
   # specify upload settings
   # path, maxsize, extenstions
   uploadPath: /tmp
@@ -16,7 +22,9 @@ application:
     clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET}
     redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
     encryptionKey: ${MYDMS_GOOGLE_ENCRYPTION_KEY}
+    parentDrivePath: ${MYDMS_GOOGLE_DRIVE_PARENT_ID}
     storePath: /tmp
+    successUrl: /
 
 server:
   rootPath: /api/

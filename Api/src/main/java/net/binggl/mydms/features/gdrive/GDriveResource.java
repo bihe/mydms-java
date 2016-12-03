@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.DELETE;
@@ -27,15 +28,16 @@ import com.google.inject.Inject;
 
 import net.binggl.commons.crypto.HashHelper;
 import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.features.documents.models.ActionResult;
 import net.binggl.mydms.features.gdrive.client.GDriveClient;
 import net.binggl.mydms.features.gdrive.models.GDriveCredential;
 import net.binggl.mydms.features.gdrive.models.GDriveFile;
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore;
 import net.binggl.mydms.features.shared.Globals;
+import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.shared.models.SimpleResult;
 
 @Path("gdrive")
+@RolesAllowed("User")
 public class GDriveResource implements Globals {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDriveResource.class);

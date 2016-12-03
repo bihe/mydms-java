@@ -25,7 +25,6 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CookieFilter.class);
 	private final String cookieName;
-
 	
 	private CookieFilter(String cookieName) {
 		this.cookieName = cookieName;
@@ -67,12 +66,12 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 	public static class Builder<P extends Principal> extends AuthFilterBuilder<String, P, CookieFilter<P>> {
 
 		private String cookieName;
-
+		
 		public Builder<P> setCookieName(String cookieName) {
 			this.cookieName = cookieName;
 			return this;
 		}
-
+		
 		@Override
 		protected CookieFilter<P> newInstance() {
 			return new CookieFilter<>(this.cookieName);

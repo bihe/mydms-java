@@ -58,13 +58,17 @@ public class JwtAuthenticator implements Authenticator<String, User> {
 
 					List<Claim> claims = this.parseClaims((List<String>) payload.get(CLAIMS));
 					
-					return new UserBuilder()
+					User jwtUser = new UserBuilder()
 							.userId((String) payload.get(USER_ID))
 							.userName((String) payload.get(USERNAME))
 							.displayName((String) payload.get(DISPLAYNAME))
 							.email((String) payload.get(EMAIL))
 							.claims(claims)
 							.build();
+					
+					//cache.put(key, item);
+					
+					return jwtUser;
 				}
 			}
 			return null;

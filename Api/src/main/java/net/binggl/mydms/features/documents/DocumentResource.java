@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -43,13 +44,13 @@ import io.dropwizard.hibernate.UnitOfWork;
 import liquibase.util.file.FilenameUtils;
 import net.binggl.mydms.config.ApplicationConfiguration;
 import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.features.documents.models.ActionResult;
 import net.binggl.mydms.features.documents.models.Document;
 import net.binggl.mydms.features.documents.models.DocumentViewModel;
 import net.binggl.mydms.features.files.FileItem;
 import net.binggl.mydms.features.files.FileService;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
+import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.shared.models.NamedItem;
 import net.binggl.mydms.features.shared.models.SimpleResult;
 import net.binggl.mydms.features.shared.store.OrderBy;
@@ -62,6 +63,7 @@ import net.binggl.mydms.features.upload.models.UploadItem;
 @Path("/documents")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("User")
 public class DocumentResource {
 
 	private TagStore tagStore;
