@@ -56,7 +56,7 @@ public class SenderResourceTest {
     @Test
     public void testSearchAll() throws Exception {
     	
-    	Object result = resources.client().target("/senders/").request().get(ArrayList.class);
+    	Object result = resources.client().target("/api/senders/").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
     	
     	Sender[] allSenders = new Sender[] { new Sender(1, "sender1"), new Sender(2, "sender2") };
@@ -69,14 +69,14 @@ public class SenderResourceTest {
 	@Test
     public void testSearchSenders() throws Exception {
     	
-    	Object result = resources.client().target("/senders/search?name=sender1").request().get(ArrayList.class);
+    	Object result = resources.client().target("/api/senders/search?name=sender1").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
     	Sender[] senders = new Sender[] { new Sender(1, "sender1") };
     	String expected = MAPPER.writeValueAsString(Arrays.asList(senders));
         assertThat(json).isEqualTo(expected);
         verify(store).searchByName("sender1");
         
-        result = resources.client().target("/senders/search?name=").request().get(ArrayList.class);
+        result = resources.client().target("/api/senders/search?name=").request().get(ArrayList.class);
     	json = MAPPER.writeValueAsString(result);
     	Sender[] allSenders = new Sender[] { new Sender(1, "sender1"), new Sender(2, "sender2") };
     	expected = MAPPER.writeValueAsString(Arrays.asList(allSenders));

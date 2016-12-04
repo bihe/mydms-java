@@ -33,7 +33,7 @@ import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.upload.models.UploadItem;
 import net.binggl.mydms.features.upload.models.UploadResult;
 
-@Path("/upload")
+@Path("/api/upload")
 @RolesAllowed("User")
 public class UploadResource {
 

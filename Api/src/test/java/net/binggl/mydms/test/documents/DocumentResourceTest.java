@@ -58,7 +58,7 @@ public class DocumentResourceTest {
     public void testSearchAll() throws Exception {
     	
     	@SuppressWarnings("unchecked")
-		List<Document> docs = resources.client().target("/documents/").request().get(ArrayList.class);
+		List<Document> docs = resources.client().target("/api/documents/").request().get(ArrayList.class);
     	assertNotNull(docs);
     	assertEquals(3, docs.size());
     	

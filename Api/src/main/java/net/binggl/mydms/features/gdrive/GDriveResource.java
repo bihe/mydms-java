@@ -36,7 +36,7 @@ import net.binggl.mydms.features.shared.Globals;
 import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.shared.models.SimpleResult;
 
-@Path("gdrive")
+@Path("/api/gdrive")
 @RolesAllowed("User")
 public class GDriveResource implements Globals {
 

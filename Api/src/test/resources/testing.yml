@@ -1,11 +1,14 @@
 application:
   initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
   
+  applicationStartUrl: /ui/index.html
+  
   security:
     tokenSecret: SUPA_SECRET
     cookieName: login_token
     appName: mydms
     appUrl: https://mydms.binggl.net/
+    requiredRole: User
   
   # specify upload settings
   # path, maxsize, extenstions
@@ -27,7 +30,7 @@ application:
     successUrl: /
 
 server:
-  rootPath: /api/
+  rootPath: /
 
 # Database settings.
 database:

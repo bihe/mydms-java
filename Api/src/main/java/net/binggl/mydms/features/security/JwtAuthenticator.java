@@ -7,9 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import com.auth0.jwt.JWTVerifier;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.inject.Singleton;
 
 import io.dropwizard.auth.AuthenticationException;
@@ -31,6 +34,12 @@ public class JwtAuthenticator implements Authenticator<String, User> {
 	private static final String TYPE_VALUE = "login.User";
 	private static final List<String> KEYS = Arrays.asList(USER_ID, USERNAME, DISPLAYNAME, EMAIL, CLAIMS, TYPE);
 
+	private final Cache<String, User> userCache = CacheBuilder.newBuilder()
+		       .maximumSize(10)
+		       .expireAfterWrite(60, TimeUnit.MINUTES)
+		       .build();
+	
+	
 	private String tokenSecret;
 
 	public JwtAuthenticator tokenSecret(String tokenSecret) {
@@ -40,15 +49,18 @@ public class JwtAuthenticator implements Authenticator<String, User> {
 
 	@Override
 	public Optional<User> authenticate(String authentication) throws AuthenticationException {
-
-		User user = this.verifyToken(authentication, this.tokenSecret);
+		User user = wrapEx(() -> {
+			return userCache.get(authentication, () -> {
+			    return this.verifyToken(authentication);
+			});
+		});
 		return Optional.ofNullable(user);
 	}
 
 	@SuppressWarnings("unchecked")
-	private User verifyToken(String token, String secret) {
+	private User verifyToken(String token) {
 		User result = null;
-		JWTVerifier jwtVerifier = new JWTVerifier(secret);
+		JWTVerifier jwtVerifier = new JWTVerifier(this.tokenSecret);
 
 		result = wrapEx(() -> {
 			Map<String, Object> payload = jwtVerifier.verify(token);
@@ -65,8 +77,6 @@ public class JwtAuthenticator implements Authenticator<String, User> {
 							.email((String) payload.get(EMAIL))
 							.claims(claims)
 							.build();
-					
-					//cache.put(key, item);
 					
 					return jwtUser;
 				}

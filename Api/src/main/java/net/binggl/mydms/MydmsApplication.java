@@ -16,18 +16,18 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.features.caching.CacheModule;
 import net.binggl.mydms.features.documents.DocumentConfig;
 import net.binggl.mydms.features.files.FileServiceModule;
 import net.binggl.mydms.features.gdrive.GDriveModule;
 import net.binggl.mydms.features.senders.SenderConfig;
+import net.binggl.mydms.features.shared.Globals;
 import net.binggl.mydms.features.tags.TagConfig;
 import net.binggl.mydms.features.upload.UploadConfig;
 import net.binggl.mydms.hibernate.MydmsHibernateBundle;
 import net.binggl.mydms.hibernate.MydmsHibernateModule;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 
-public final class MydmsApplication extends Application<MydmsConfiguration> {
+public final class MydmsApplication extends Application<MydmsConfiguration> implements Globals {
 
 	private static final String APP_BASE_PACKAGE = "net.binggl.mydms";
 
@@ -39,7 +39,7 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 
 	@Override
 	public String getName() {
-		return "mydms";
+		return APPLICATION_NAME;
 	}
 
 	@Override
@@ -48,8 +48,8 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 		// Enable variable substitution with environment variables
 		bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
 				bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
-
-		bootstrap.addBundle(new AssetsBundle("/assets/", "/static"));
+		
+		bootstrap.addBundle(new AssetsBundle("/assets/", ASSETS_PATH));
 		bootstrap.addBundle(new MultiPartBundle());
 
 		bootstrap.addBundle(new MigrationsBundle<MydmsConfiguration>() {
@@ -68,13 +68,11 @@ public final class MydmsApplication extends Application<MydmsConfiguration> {
 				.modules(new MydmsHibernateModule(hibernate))
 				.modules(new GDriveModule())
 				.modules(new FileServiceModule())
-				.modules(new CacheModule())
 				.build());
 	}
 
 	@Override
 	public void run(MydmsConfiguration configuration, Environment environment) {
-		
 		environment.servlets().setSessionHandler(new SessionHandler());
 	}
 

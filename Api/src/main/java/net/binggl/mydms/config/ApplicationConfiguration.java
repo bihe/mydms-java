@@ -15,6 +15,8 @@ public class ApplicationConfiguration {
 	@NotNull
 	private String uploadPath = "";
 	@NotNull
+	private String applicationStartUrl = "";
+	@NotNull
 	private Long maxUploadSize = 1000L;
 	@NotEmpty
 	private List<String> allowedFileTypes;
@@ -72,6 +74,14 @@ public class ApplicationConfiguration {
 
 	public void setSecurity(SecurityConfiguration security) {
 		this.security = security;
+	}
+
+	public String getApplicationStartUrl() {
+		return applicationStartUrl;
+	}
+
+	public void setApplicationStartUrl(String applicationStartUrl) {
+		this.applicationStartUrl = applicationStartUrl;
 	}
 
 }

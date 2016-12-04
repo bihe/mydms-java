@@ -56,7 +56,7 @@ public class TagResourceTest {
     @Test
     public void testSearchAll() throws Exception {
     	
-    	Object result = resources.client().target("/tags/").request().get(ArrayList.class);
+    	Object result = resources.client().target("/api/tags/").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
     	
     	Tag[] allTags = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
@@ -69,14 +69,14 @@ public class TagResourceTest {
 	@Test
     public void testSearchTags() throws Exception {
     	
-    	Object result = resources.client().target("/tags/search?name=tag1").request().get(ArrayList.class);
+    	Object result = resources.client().target("/api/tags/search?name=tag1").request().get(ArrayList.class);
     	String json = MAPPER.writeValueAsString(result);
     	Tag[] tags = new Tag[] { new Tag(1, "tag1") };
     	String expected = MAPPER.writeValueAsString(Arrays.asList(tags));
         assertThat(json).isEqualTo(expected);
         verify(store).searchByName("tag1");
         
-        result = resources.client().target("/tags/search?name=").request().get(ArrayList.class);
+        result = resources.client().target("/api/tags/search?name=").request().get(ArrayList.class);
     	json = MAPPER.writeValueAsString(result);
     	Tag[] allTags = new Tag[] { new Tag(1, "tag1"), new Tag(2, "tag2") };
     	expected = MAPPER.writeValueAsString(Arrays.asList(allTags));

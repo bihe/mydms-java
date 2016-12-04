@@ -60,7 +60,7 @@ import net.binggl.mydms.features.tags.TagStore;
 import net.binggl.mydms.features.upload.UploadStore;
 import net.binggl.mydms.features.upload.models.UploadItem;
 
-@Path("/documents")
+@Path("/api/documents")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("User")

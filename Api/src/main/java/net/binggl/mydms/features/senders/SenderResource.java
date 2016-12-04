@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 
 import io.dropwizard.hibernate.UnitOfWork;
 
-@Path("/senders")
+@Path("/api/senders")
 @Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("User")
 public class SenderResource {

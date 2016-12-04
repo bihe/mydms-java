@@ -5,15 +5,14 @@ import javax.validation.constraints.NotNull;
 public class SecurityConfiguration {
 	@NotNull
 	private String tokenSecret;
-
 	@NotNull
 	private String cookieName;
-	
 	@NotNull
 	private String appName;
-	
 	@NotNull
 	private String appUrl;
+	@NotNull
+	private String requiredRole;
 
 	public String getTokenSecret() {
 		return tokenSecret;
@@ -46,4 +45,13 @@ public class SecurityConfiguration {
 	public void setAppUrl(String appUrl) {
 		this.appUrl = appUrl;
 	}
+
+	public String getRequiredRole() {
+		return requiredRole;
+	}
+
+	public void setRequiredRole(String requiredRole) {
+		this.requiredRole = requiredRole;
+	}
+
 }
