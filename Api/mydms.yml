@@ -31,7 +31,7 @@ application:
 
 server:
   rootPath: /
-
+  
 
 # Database settings.
 database:

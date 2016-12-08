@@ -27,12 +27,12 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import net.binggl.commons.crypto.HashHelper;
+import net.binggl.mydms.application.Globals;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.gdrive.client.GDriveClient;
 import net.binggl.mydms.features.gdrive.models.GDriveCredential;
 import net.binggl.mydms.features.gdrive.models.GDriveFile;
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore;
-import net.binggl.mydms.features.shared.Globals;
 import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.shared.models.SimpleResult;
 

@@ -14,9 +14,9 @@ import com.google.inject.Inject;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.setup.Environment;
+import net.binggl.mydms.application.Globals;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.security.models.User;
-import net.binggl.mydms.features.shared.Globals;
 
 @Provider
 public class SecurityDynamicFeature extends AuthDynamicFeature implements Globals {
@@ -43,5 +43,6 @@ public class SecurityDynamicFeature extends AuthDynamicFeature implements Global
 		
 		environment.servlets().addFilter(StaticAssetsServletFilter.getName(), new StaticAssetsServletFilter(authenticator, authorizer, configuration))
 			.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, ASSETS_PATH + "*");
+		
 	}
 }

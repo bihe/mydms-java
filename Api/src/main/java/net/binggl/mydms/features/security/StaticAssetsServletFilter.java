@@ -15,7 +15,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.WebApplicationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -25,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.dropwizard.jackson.Jackson;
+import net.binggl.mydms.application.MydmsException;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.security.models.ErrorResult;
 import net.binggl.mydms.features.security.models.User;
@@ -33,6 +33,10 @@ public class StaticAssetsServletFilter implements javax.servlet.Filter {
     
 	private static final Logger LOGGER = LoggerFactory.getLogger(StaticAssetsServletFilter.class);
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+	
+	private static final String AJAX_HEADER = "x-requested-with";
+	private static final String AJAX_HEADER_STRING = "xmlhttprequest";
+	private static final String AJAX_MEDIA_TYPE = "application/json";
 	
 	private final JwtAuthenticator authenticator;
 	private final MydmsAuthorizer authorizer;
@@ -56,16 +60,27 @@ public class StaticAssetsServletFilter implements javax.servlet.Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
         	try {
-        	
-	            if (this.authenticate((HttpServletRequest)request)) {
-	                chain.doFilter(request, response); 
-	            } else {
-	            	this.createErrorResponse((HttpServletResponse)response, "Could not authenticate the user!");
-	            	return;
-	            }
-        	} catch(WebApplicationException webEx) {
-        		LOGGER.error("Could not authentication the request {}!", webEx.getMessage(), webEx);
-        		this.createErrorResponse((HttpServletResponse)response, webEx.getMessage());
+	            this.authenticate((HttpServletRequest)request);
+	            chain.doFilter(request, response); 
+        	} catch(MydmsException webEx) {
+        		
+        		String message = String.format("Could not authentication the request %s!", webEx.getMessage());
+        		LOGGER.error(message);
+        		HttpServletResponse httpResponse = (HttpServletResponse)response;
+        		        		
+        		if(webEx.isBrowserRequest()) {
+        			
+        			httpResponse.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+        			httpResponse.setHeader("Location", "/403");
+        			return;
+        			
+        		} else { 		
+        			ErrorResult result = new ErrorResult(HttpStatus.SC_UNAUTHORIZED, message);
+        			
+        			httpResponse.setStatus(HttpStatus.SC_UNAUTHORIZED);
+        			httpResponse.setContentType("application/json");
+        			httpResponse.getWriter().print(MAPPER.writeValueAsString(result));
+        		}
         	}
         }
     }
@@ -81,24 +96,31 @@ public class StaticAssetsServletFilter implements javax.servlet.Filter {
 	public static String getName() {
 		return "StaticAssetsServletFilter";
 	}
-		
-	private void createErrorResponse(HttpServletResponse httpResponse, String message) throws IOException {
-		
-		ErrorResult result = new ErrorResult(HttpStatus.SC_UNAUTHORIZED, message);
-		
-        httpResponse.setStatus(HttpStatus.SC_UNAUTHORIZED);
-        httpResponse.setContentType("application/json");
-        httpResponse.getWriter().print(MAPPER.writeValueAsString(result));
-	}
 	
-	
-	private boolean authenticate(HttpServletRequest request) {
+	private void authenticate(HttpServletRequest request) {
+		
+		boolean isAjaxRequest = false;
+		boolean isAjaxMediaType = false;
+		boolean treatAsBrowser = true;
+		
+		String contentType = request.getContentType();
+		if(contentType != null && AJAX_MEDIA_TYPE.equals(contentType.toLowerCase())) {
+			isAjaxMediaType = true;
+		}
+		String ajaxHeaderValue = request.getHeader(AJAX_HEADER);
+		if(ajaxHeaderValue != null && AJAX_HEADER_STRING.equals(ajaxHeaderValue.toLowerCase())) {
+			isAjaxRequest = true;
+		}
+		
+		if(isAjaxMediaType || isAjaxRequest) {
+			treatAsBrowser = false;
+		}
 		
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null || cookies.length == 0) {
 			LOGGER.warn("No cookies available. Cannot authenticate!");
 			String message = "No authentication cookies available!";
-			throw new WebApplicationException(message, HttpStatus.SC_UNAUTHORIZED);
+			throw new MydmsException(message, HttpStatus.SC_UNAUTHORIZED).browserRequest(treatAsBrowser);
 		}
 
 		List<Cookie> cookieList = Arrays.asList(cookies);
@@ -107,13 +129,13 @@ public class StaticAssetsServletFilter implements javax.servlet.Filter {
 		if (!jwtCookie.isPresent()) {
 			LOGGER.warn("No authentication cookie available!");
 			String message = "No authentication cookie available!";
-			throw new WebApplicationException(message, HttpStatus.SC_UNAUTHORIZED);
+			throw new MydmsException(message, HttpStatus.SC_UNAUTHORIZED).browserRequest(treatAsBrowser);
 		}
 
 		if (StringUtils.isEmpty(jwtCookie.get().getValue())) {
 			LOGGER.warn("The authentication cookie is empty!");
 			String message = "The authentication cookie is empty!";
-			throw new WebApplicationException(message, HttpStatus.SC_UNAUTHORIZED);
+			throw new MydmsException(message, HttpStatus.SC_UNAUTHORIZED).browserRequest(treatAsBrowser);
 		}
 		
 		Optional<User> user = wrapEx(() -> {
@@ -123,10 +145,12 @@ public class StaticAssetsServletFilter implements javax.servlet.Filter {
 		if(!user.isPresent()) {
 			LOGGER.warn("Could not authenticate the user by the token!");
 			String message = "Could not authenticate the user by the token!";
-			throw new WebApplicationException(message, HttpStatus.SC_UNAUTHORIZED);
+			throw new MydmsException(message, HttpStatus.SC_UNAUTHORIZED).browserRequest(treatAsBrowser);
 		}
 		
-		return this.authorizer.authorize(user.get(), this.configuration.getApplication().getSecurity().getRequiredRole());
+		if(!this.authorizer.authorize(user.get(), this.configuration.getApplication().getSecurity().getRequiredRole())) {
+			String message = "Could not authorize the user!";
+			throw new MydmsException(message, HttpStatus.SC_UNAUTHORIZED).browserRequest(treatAsBrowser);
+		}	
 	}
-	
 }

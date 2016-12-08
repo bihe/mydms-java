@@ -12,12 +12,12 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import net.binggl.mydms.application.Globals;
+import net.binggl.mydms.application.Mydms403View;
 import net.binggl.mydms.config.MydmsConfiguration;
-import net.binggl.mydms.features.shared.Globals;
 
 @Path("/")
-@Produces(MediaType.APPLICATION_JSON)
-@RolesAllowed("User")
+
 public class IndexResource implements Globals {
 
 	private final MydmsConfiguration configuration;
@@ -28,8 +28,17 @@ public class IndexResource implements Globals {
 	}
 	
 	@GET
+	@RolesAllowed("User")
 	public Response home() throws URISyntaxException {
 		Response response = Response.temporaryRedirect(new URI(configuration.getApplication().getApplicationStartUrl())).build();
 		return response;
 	}
+	
+	@GET
+	@Path("403")
+	@Produces(MediaType.TEXT_HTML)
+	public Mydms403View show403() {
+		return new Mydms403View();
+	}
+	
 }

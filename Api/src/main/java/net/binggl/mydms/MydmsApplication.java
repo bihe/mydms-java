@@ -15,12 +15,13 @@ import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
+import net.binggl.mydms.application.Globals;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.DocumentConfig;
 import net.binggl.mydms.features.files.FileServiceModule;
 import net.binggl.mydms.features.gdrive.GDriveModule;
 import net.binggl.mydms.features.senders.SenderConfig;
-import net.binggl.mydms.features.shared.Globals;
 import net.binggl.mydms.features.tags.TagConfig;
 import net.binggl.mydms.features.upload.UploadConfig;
 import net.binggl.mydms.hibernate.MydmsHibernateBundle;
@@ -49,8 +50,12 @@ public final class MydmsApplication extends Application<MydmsConfiguration> impl
 		bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
 				bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
 		
-		bootstrap.addBundle(new AssetsBundle("/assets/", ASSETS_PATH));
+		bootstrap.addBundle(new AssetsBundle("/assets/ui", "/ui", null, "ui"));
+		bootstrap.addBundle(new AssetsBundle("/assets/static", "/static", null, "static"));
+		
+		
 		bootstrap.addBundle(new MultiPartBundle());
+		bootstrap.addBundle(new ViewBundle<MydmsConfiguration>());
 
 		bootstrap.addBundle(new MigrationsBundle<MydmsConfiguration>() {
 			@Override

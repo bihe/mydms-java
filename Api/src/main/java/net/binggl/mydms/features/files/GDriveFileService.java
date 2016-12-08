@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import net.binggl.mydms.application.Globals;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.gdrive.client.GDriveClient;
 import net.binggl.mydms.features.gdrive.models.GDriveCredential;
 import net.binggl.mydms.features.gdrive.models.GDriveItem;
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore;
-import net.binggl.mydms.features.shared.Globals;
 
 public class GDriveFileService implements FileService, Globals {
 
