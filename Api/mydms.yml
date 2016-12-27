@@ -9,6 +9,7 @@ application:
     appName: mydms
     appUrl: https://mydms.binggl.net/
     requiredRole: User
+    loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=https://mydms.binggl.net/
   
   # specify upload settings
   # path, maxsize, extenstions

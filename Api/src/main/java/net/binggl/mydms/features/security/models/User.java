@@ -15,7 +15,7 @@ public class User implements Principal, Serializable {
 	private final String email;
 	private final List<Claim> claims;
 	
-	private User(final String userId, final String userName, final String displayName, final String email, final List<Claim> claims) {
+	protected User(final String userId, final String userName, final String displayName, final String email, final List<Claim> claims) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -42,7 +42,7 @@ public class User implements Principal, Serializable {
 	
 	@Override
 	public String getName() {
-		return String.format("%s (%s)", this.userName, this.userId);
+		return String.format("%s (%s)", this.displayName, this.userName);
 	}
 	
 	public static class UserBuilder {

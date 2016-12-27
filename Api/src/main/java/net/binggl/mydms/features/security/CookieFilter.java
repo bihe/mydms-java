@@ -38,7 +38,7 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		boolean isAjaxRequest = false;
 		boolean isAjaxMediaType = false;
-		boolean treatAsBrowser = false;
+		boolean treatAsBrowser = true;
 		
 		MediaType mediaType = requestContext.getAcceptableMediaTypes().get(0);
 		if(mediaType != null && AJAX_MEDIA_TYPE.equals(mediaType.toString().toLowerCase())) {

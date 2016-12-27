@@ -12,12 +12,13 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import io.dropwizard.auth.Auth;
 import net.binggl.mydms.application.Globals;
 import net.binggl.mydms.application.Mydms403View;
 import net.binggl.mydms.config.MydmsConfiguration;
+import net.binggl.mydms.features.security.models.User;
 
 @Path("/")
-
 public class IndexResource implements Globals {
 
 	private final MydmsConfiguration configuration;
@@ -38,7 +39,17 @@ public class IndexResource implements Globals {
 	@Path("403")
 	@Produces(MediaType.TEXT_HTML)
 	public Mydms403View show403() {
-		return new Mydms403View();
+		Mydms403View view = new Mydms403View();
+		view.setLoginUrl(configuration.getApplication().getSecurity().getLoginUrl());
+		return view;
+	}
+	
+	@GET
+	@Path("userinfo")
+	@RolesAllowed("User")
+	@Produces(MediaType.APPLICATION_JSON)
+	public UserInfo getUser(@Auth User user) {
+		return new UserInfo(user);
 	}
 	
 }

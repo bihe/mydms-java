@@ -48,7 +48,7 @@
           <div class="col-md-3"></div>
           <div class="col-md-6">
             <blockquote>
-            <p>The authentication is done via Google, the authorization is done via login.binggl.net. Once you click on the login button you are forwarded to a authentication sytem. After the process is finished you are redirected to this application.</p>
+            <p>The <u>authentication</u> is done via <strong>Google</strong>, the <u>authorization</u> is done via <strong>login.binggl.net</strong>. Once you click on the login button you are forwarded to a authentication sytem. After the process is finished you are redirected to this application.</p>
             </blockquote>
           </div>
           <div class="col-md-3"></div>
@@ -61,7 +61,7 @@
           <div class="col-md-4">
           
             <form class="form-signin">
-                <a href="https://login.binggl.net/auth/flow?~site=mydms&~url=https://mydms.binggl.net/" class="btn btn-lg btn-success btn-block" type="submit"><i class="fa fa-google"></i>: Go to login.binggl.net!</a>
+                <a href="${loginUrl}" class="btn btn-lg btn-success btn-block" type="submit"><i class="fa fa-google"></i>: Go to login.binggl.net!</a>
             </form>
             
           </div>

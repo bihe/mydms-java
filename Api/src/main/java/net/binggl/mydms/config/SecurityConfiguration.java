@@ -13,6 +13,8 @@ public class SecurityConfiguration {
 	private String appUrl;
 	@NotNull
 	private String requiredRole;
+	@NotNull
+	private String loginUrl;
 
 	public String getTokenSecret() {
 		return tokenSecret;
@@ -52,6 +54,14 @@ public class SecurityConfiguration {
 
 	public void setRequiredRole(String requiredRole) {
 		this.requiredRole = requiredRole;
+	}
+
+	public String getLoginUrl() {
+		return loginUrl;
+	}
+
+	public void setLoginUrl(String loginUrl) {
+		this.loginUrl = loginUrl;
 	}
 
 }
