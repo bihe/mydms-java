@@ -1,3 +1,41 @@
-<ul>
-  <li *ngFor="let document of documents">{{ document.title }}</li>
-</ul>
+<div class="add">
+  <i class="fa fa-plus-circle fa-4x" aria-hidden="true"></i>
+</div>
+
+<div id="container-fluid">
+
+  <div class="row" *ngFor="let document of documents">
+    <div class="col-md-12">
+
+      <div class="card">
+
+        <div class="amount" *ngIf="document.amount > 0">
+          &euro; {{ document.formatAmount(2, 3, '.', ',') }}
+        </div>
+
+        <div class="download">
+          <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
+        </div>
+
+        <header>
+          {{ document.title }}
+        </header>
+        <content>
+          <div>
+            <span *ngFor="let sender of document.senderList" class="label label-success">
+              <i class="fa fa-truck"></i> {{ sender }}
+            </span>
+          </div>
+          <div>
+            <span *ngFor="let tag of document.tagList" class="label label-info">
+              <i class="fa fa-tag"></i> {{ tag }}
+            </span>
+          </div>
+        </content>
+        <footer>
+          <a title="{{ document.dateHuman }}">{{ document.dateHuman }}</a>
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>

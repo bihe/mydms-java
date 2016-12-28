@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 // import 'rxjs/add/operator/do';  // for debugging
 
 import { BaseService } from './base.service';
-import { UserInfo } from '../models/userinfo.contract';
+import { UserInfo } from '../models/userinfo.model';
 
 @Injectable()
 export class BackendService extends BaseService {

@@ -1,4 +1,4 @@
-import { UserInfo } from './userinfo.contract';
+import { UserInfo } from './userinfo.model';
 
 export class DataModel {
   public userInfo: UserInfo;

@@ -374,7 +374,10 @@ export class SeedConfig {
       '*': 'node_modules/*'
     },
     packages: {
-
+      'moment': {
+        main: 'moment.js',
+        defaultExtension: 'js'
+      }
     }
   };
 
@@ -444,6 +447,10 @@ export class SeedConfig {
       },
       'rxjs': {
         main: 'Rx.js',
+        defaultExtension: 'js'
+      },
+      'moment': {
+        main: 'moment.js',
         defaultExtension: 'js'
       }
     }

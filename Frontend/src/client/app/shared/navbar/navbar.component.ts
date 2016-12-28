@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { BackendService } from '../backend/index';
-import { UserInfo } from '../models/userinfo.contract';
+import { UserInfo } from '../models/userinfo.model';
 import { DataModel } from '../models/data.model';
 
 @Component({

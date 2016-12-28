@@ -1,13 +1,69 @@
-:host {
+#container-fluid {
+  padding-top: 55px;
+}
+
+.add {
+  position: fixed;
+  right: 30px;
+  bottom: 50px;
+  z-index: 9999;
+  font-weight: normal;
+  color: darkred;
+}
+
+.card {
+  margin: 5px 5px 5px 5px;
+  border: 1px solid #E5E5E5;
+  border-radius: 2px;
+}
+
+.card > div.amount {
+  position: absolute;
+  right: 30px;
+  top: 10px;
+  font-weight: bold;
+}
+
+.card > div.download {
+  position: absolute;
+  right: 30px;
+  top: 40px;
+}
+
+.card > header {
+  padding: 10px 5px 5px 5px;
+  font-size: 1em;
+}
+
+.card > content {
+  padding: 2px 5px;
   display: block;
-  padding: 0 16px;
+  margin-bottom: 5px;
 }
 
-input {
-  width: 250px;
+.card > content > div {
+  margin-top: 5px;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0 0 0 8px;
+.card > content > div > span.label {
+  margin-right: 5px;
+  font-weight: normal;
+  font-size: 10pt;
 }
+
+.card > footer {
+  text-align: center;
+  background-color: #F5F5F4;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-top: 1px solid #ECEEEB;
+
+  color: #999;
+  height: 25px;
+}
+
+.card > footer > a {
+  font-size: 10pt;
+  color: #999;
+}
+
