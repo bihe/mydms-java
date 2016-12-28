@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.index;
+package net.binggl.mydms.features.startpage;
 
 import net.binggl.mydms.features.security.models.User;
 

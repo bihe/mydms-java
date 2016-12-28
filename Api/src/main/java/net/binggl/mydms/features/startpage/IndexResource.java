@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.index;
+package net.binggl.mydms.features.startpage;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,7 +45,7 @@ public class IndexResource implements Globals {
 	}
 	
 	@GET
-	@Path("userinfo")
+	@Path("api/userinfo")
 	@RolesAllowed("User")
 	@Produces(MediaType.APPLICATION_JSON)
 	public UserInfo getUser(@Auth User user) {
