@@ -25,8 +25,23 @@ export class BackendService extends BaseService {
       .catch(this.handleError);
   }
 
-  searchDocuments(): Observable<any[]> {
-    return this.http.get(this.SEARCH_DOCUMENTS, this.getRequestOptions())
+  searchDocuments(title:string, pageSize:number, skipEntries:number): Observable<any[]> {
+    let searchUrl = 'title=%TITLE%&limit=%LIMIT%&skip=%SKIP%';
+    let url = this.SEARCH_DOCUMENTS + '?' + searchUrl.replace('%TITLE%', title || '');
+    if(!pageSize) {
+      url = url.replace('%LIMIT%', '');
+    } else {
+      url = url.replace('%LIMIT%', pageSize.toString());
+    }
+    if(!skipEntries) {
+      url = url.replace('%SKIP%', '');
+    } else {
+      url = url.replace('%SKIP%', skipEntries.toString());
+    }
+
+    console.debug('Url: ' + url);
+
+    return this.http.get(url, this.getRequestOptions())
       //.timeout(this.RequestTimeOutDefault, new Error('Timeout exceeded!'))
       .map(res => {
         return this.extractData<any[]>(res);

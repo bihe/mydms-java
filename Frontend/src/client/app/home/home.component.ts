@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { BackendService } from '../shared/index';
-import { Document, Tag, Sender } from '../shared/index';
+import { Document, Tag, Sender, DataModel } from '../shared/index';
+
+import { Message } from 'primeng/primeng';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -13,19 +15,59 @@ import { Document, Tag, Sender } from '../shared/index';
 })
 export class HomeComponent implements OnInit {
 
-  documents: Array<Document> = null;
+  documents: Array<Document> = new Array<Document>();
+  msgs: Message[] = [];
 
-  constructor(private backend:BackendService) {}
+  readonly InitialPageSize:number = 20;
+  private pagedDocuments: Array<Document> = null;
+  private searchString:string = null;
+
+  constructor(private backend:BackendService, private data:DataModel) {}
 
   ngOnInit() {
-    this.searchDocuments();
+    this.data.setIsActive(false);
+    this.searchDocuments(null, 0);
   }
 
-  searchDocuments() {
-    this.backend.searchDocuments()
+  /**
+   * rather simple infinite scrolling logic
+   */
+  onScroll(event:any) {
+    let scrollingElement:any = event.srcElement.scrollingElement;
+    let scrollHeight:number = scrollingElement.scrollHeight;
+    let scrollTop:number = scrollingElement.scrollTop;
+    let offsetHeight:number = scrollingElement.offsetHeight;
+
+    // calculate the remaining scrolling-space
+    // @see http://stackoverflow.com/questions/4244841/how-to-know-the-end-of-scrolling-event-for-a-div-tag
+    if(scrollHeight - scrollTop === offsetHeight) {
+      let skip:number = this.documents.length;
+      console.debug('Load additional entries from backend. skip: ' + skip);
+      this.searchDocuments(this.searchString, skip);
+
+      this.msgs = [];
+      if(skip > 0) {
+        this.msgs.push({severity:'info', summary:'Data Loaded', detail:'Between ' + skip + ' and ' + (skip + this.InitialPageSize)});
+      }
+    }
+  }
+
+  /**
+   * the search was triggered by user interaction
+   */
+  onSearch(searchText:string) {
+    this.documents = new Array<Document>();
+    this.searchString = searchText;
+    this.searchDocuments(searchText, 0);
+  }
+
+  searchDocuments(title:string, skipEntries:number) {
+    this.data.setIsActive(true);
+
+    this.backend.searchDocuments(title, this.InitialPageSize, skipEntries)
       .subscribe(
         result => {
-          this.documents = new Array<Document>();
+          this.pagedDocuments = new Array<Document>();
           result.forEach(a => {
             let doc = new Document();
             doc.title = a.title;
@@ -39,10 +81,17 @@ export class HomeComponent implements OnInit {
             let senders = a.senders as Array<Sender>;
             doc.senders = senders;
 
-            this.documents.push(doc);
+            this.pagedDocuments.push(doc);
           });
+
+          this.documents = this.documents.concat(this.pagedDocuments);
+
+          this.data.setIsActive(false);
         },
-        error => { window.alert(<any>error); }
+        error => {
+          this.data.setIsActive(false);
+          window.alert(<any>error);
+        }
       );
   }
 

@@ -2,6 +2,7 @@
   padding-top: 55px;
 }
 
+
 .add {
   position: fixed;
   right: 30px;
@@ -11,10 +12,20 @@
   color: darkred;
 }
 
+.search-container {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.card-container {
+  position: relative;
+}
+
 .card {
   margin: 5px 5px 5px 5px;
   border: 1px solid #E5E5E5;
   border-radius: 2px;
+
 }
 
 .card > div.amount {
@@ -27,7 +38,7 @@
 .card > div.download {
   position: absolute;
   right: 30px;
-  top: 40px;
+  top: 30px;
 }
 
 .card > header {
