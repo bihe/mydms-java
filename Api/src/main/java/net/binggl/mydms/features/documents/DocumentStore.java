@@ -28,11 +28,11 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 			Optional<Date> dateFrom, Optional<Date> dateUntil, Optional<Integer> limit, Optional<Integer> skip,
 			OrderBy... order) {
 		Criteria criteria = this.currentSession().createCriteria(Document.class);
+		
+		criteria = criteria.createAlias("tags", "tags"); 
+		criteria = criteria.createAlias("senders", "senders");
 
 		if (title.isPresent()) {
-			criteria = criteria.createAlias("tags", "tags"); 
-			criteria = criteria.createAlias("senders", "senders");
-			
 			Disjunction or = Restrictions.disjunction();
 			or.add(Restrictions.like("title", "%" + title.get() + "%").ignoreCase());
 			or.add(Restrictions.like("tags.name", "%" + title.get() + "%").ignoreCase());
@@ -41,12 +41,10 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 			criteria = criteria.add(or);
 		}
 		if (tagId.isPresent()) {
-			criteria = criteria.createAlias("tags", "t");
-			criteria = criteria.add(Restrictions.eq("t.id", tagId.get()));
+			criteria = criteria.add(Restrictions.eq("tags.id", tagId.get()));
 		}
 		if (senderId.isPresent()) {
-			criteria = criteria.createAlias("senders", "s");
-			criteria = criteria.add(Restrictions.eq("s.id", senderId.get()));
+			criteria = criteria.add(Restrictions.eq("senders.id", senderId.get()));
 		}
 		if (dateFrom.isPresent()) {
 			criteria = criteria.add(Restrictions.ge("created", dateFrom.get()));
