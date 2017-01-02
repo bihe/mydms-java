@@ -6,6 +6,7 @@ export class Document {
   public created:Date;
   public modified:Date;
   public amount:number;
+  public path:string;
   public tags: Array<Tag>;
   public senders: Array<Sender>;
 

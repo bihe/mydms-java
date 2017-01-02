@@ -28,11 +28,13 @@ import com.google.inject.Inject;
 
 import net.binggl.commons.crypto.HashHelper;
 import net.binggl.mydms.application.Globals;
+import net.binggl.mydms.application.MydmsException;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.gdrive.client.GDriveClient;
 import net.binggl.mydms.features.gdrive.models.GDriveCredential;
 import net.binggl.mydms.features.gdrive.models.GDriveFile;
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore;
+import net.binggl.mydms.features.shared.JsonUtils;
 import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.shared.models.SimpleResult;
 
@@ -120,13 +122,14 @@ public class GDriveResource implements Globals {
 	@GET
 	@Path("file")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getFile(@QueryParam("path") String path) {
+	public Response getFile(@QueryParam("path") String path, @Context HttpServletRequest request) {
 		Response result = Response.noContent().status(Status.NOT_FOUND).build();
 		try {
-
+			boolean isBrowserRequest = JsonUtils.isBrowserRequest(request);
+			
 			if (!this.store.isCredentialAvailable(USER_TOKEN))
-				throw new WebApplicationException(String.format("Could not get files: Account is not linked!"),
-						Response.Status.UNAUTHORIZED);
+				throw new MydmsException(String.format("Could not get files: Account is not linked!"),
+						Response.Status.UNAUTHORIZED).browserRequest(isBrowserRequest);
 
 			LOGGER.debug("Supplied path {}", path);
 

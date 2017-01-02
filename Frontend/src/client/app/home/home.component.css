@@ -6,7 +6,7 @@
 .add {
   position: fixed;
   right: 30px;
-  bottom: 50px;
+  bottom: 30px;
   z-index: 9999;
   font-weight: normal;
   color: darkred;
@@ -28,17 +28,22 @@
 
 }
 
-.card > div.amount {
+footer {
+  position: relative;
+}
+
+footer > div.amount {
   position: absolute;
-  right: 30px;
-  top: 10px;
+  right: 10px;
+  top: 2px;
   font-weight: bold;
+  color: black;
 }
 
 .card > div.download {
   position: absolute;
-  right: 30px;
-  top: 30px;
+  right: 10px;
+  top: 3px;
 }
 
 .card > header {
@@ -77,4 +82,3 @@
   font-size: 10pt;
   color: #999;
 }
-

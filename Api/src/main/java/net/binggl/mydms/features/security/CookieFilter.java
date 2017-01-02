@@ -10,7 +10,6 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import io.dropwizard.auth.AuthFilter;
 import net.binggl.mydms.application.MydmsException;
+import net.binggl.mydms.features.shared.JsonUtils;
 
 @PreMatching
 @Priority(Priorities.AUTHENTICATION)
@@ -26,9 +26,6 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CookieFilter.class);
 	private final String cookieName;
-	private static final String AJAX_HEADER = "x-requested-with";
-	private static final String AJAX_HEADER_STRING = "xmlhttprequest";
-	private static final String AJAX_MEDIA_TYPE = "application/json";
 	
 	private CookieFilter(String cookieName) {
 		this.cookieName = cookieName;
@@ -36,23 +33,8 @@ public class CookieFilter<P extends Principal> extends AuthFilter<String, P> {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		boolean isAjaxRequest = false;
-		boolean isAjaxMediaType = false;
-		boolean treatAsBrowser = true;
 		
-		MediaType mediaType = requestContext.getAcceptableMediaTypes().get(0);
-		if(mediaType != null && AJAX_MEDIA_TYPE.equals(mediaType.toString().toLowerCase())) {
-			isAjaxMediaType = true;
-		}
-		String ajaxHeaderValue = requestContext.getHeaderString(AJAX_HEADER);
-		if(ajaxHeaderValue != null && AJAX_HEADER_STRING.equals(ajaxHeaderValue.toLowerCase())) {
-			isAjaxRequest = true;
-		}
-		
-		if(isAjaxMediaType || isAjaxRequest) {
-			treatAsBrowser = false;
-		}
-		
+		boolean treatAsBrowser = JsonUtils.isBrowserRequest(requestContext);
 		
 		Map<String, Cookie> cookies = requestContext.getCookies();
 		if (cookies == null) {

@@ -74,6 +74,7 @@ export class HomeComponent implements OnInit {
             doc.created = a.created;
             doc.modified = a.modified;
             doc.amount = a.amount;
+            doc.path = a.fileName;
 
             let tags = a.tags as Array<Tag>;
             doc.tags = tags;

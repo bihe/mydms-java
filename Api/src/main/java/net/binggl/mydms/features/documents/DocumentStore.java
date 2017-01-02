@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -29,7 +30,15 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 		Criteria criteria = this.currentSession().createCriteria(Document.class);
 
 		if (title.isPresent()) {
-			criteria = criteria.add(Restrictions.like("title", title.get() + "%").ignoreCase());
+			criteria = criteria.createAlias("tags", "tags"); 
+			criteria = criteria.createAlias("senders", "senders");
+			
+			Disjunction or = Restrictions.disjunction();
+			or.add(Restrictions.like("title", "%" + title.get() + "%").ignoreCase());
+			or.add(Restrictions.like("tags.name", "%" + title.get() + "%").ignoreCase());
+			or.add(Restrictions.like("senders.name", "%" + title.get() + "%").ignoreCase());
+			
+			criteria = criteria.add(or);
 		}
 		if (tagId.isPresent()) {
 			criteria = criteria.createAlias("tags", "t");

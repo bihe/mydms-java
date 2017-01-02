@@ -28,15 +28,12 @@ import net.binggl.mydms.application.MydmsException;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.security.models.ErrorResult;
 import net.binggl.mydms.features.security.models.User;
+import net.binggl.mydms.features.shared.JsonUtils;
 
 public class StaticAssetsServletFilter implements javax.servlet.Filter {
     
 	private static final Logger LOGGER = LoggerFactory.getLogger(StaticAssetsServletFilter.class);
 	private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-	
-	private static final String AJAX_HEADER = "x-requested-with";
-	private static final String AJAX_HEADER_STRING = "xmlhttprequest";
-	private static final String AJAX_MEDIA_TYPE = "application/json";
 	
 	private final JwtAuthenticator authenticator;
 	private final MydmsAuthorizer authorizer;
@@ -99,22 +96,7 @@ public class StaticAssetsServletFilter implements javax.servlet.Filter {
 	
 	private void authenticate(HttpServletRequest request) {
 		
-		boolean isAjaxRequest = false;
-		boolean isAjaxMediaType = false;
-		boolean treatAsBrowser = true;
-		
-		String contentType = request.getContentType();
-		if(contentType != null && AJAX_MEDIA_TYPE.equals(contentType.toLowerCase())) {
-			isAjaxMediaType = true;
-		}
-		String ajaxHeaderValue = request.getHeader(AJAX_HEADER);
-		if(ajaxHeaderValue != null && AJAX_HEADER_STRING.equals(ajaxHeaderValue.toLowerCase())) {
-			isAjaxRequest = true;
-		}
-		
-		if(isAjaxMediaType || isAjaxRequest) {
-			treatAsBrowser = false;
-		}
+		boolean treatAsBrowser = JsonUtils.isBrowserRequest(request);
 		
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null || cookies.length == 0) {

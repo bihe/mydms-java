@@ -26,12 +26,10 @@
 
         <div class="card">
 
-          <div class="amount" *ngIf="document.amount > 0">
-            &euro; {{ document.formatAmount(2, 3, '.', ',') }}
-          </div>
-
           <div class="download">
-            <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
+            <a href="/api/gdrive/file/?path={{ document.path }}">
+              <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
+            </a>
           </div>
 
           <header>
@@ -51,6 +49,11 @@
           </content>
           <footer>
             <a title="{{ document.dateHuman }}">{{ document.dateHuman }}</a>
+
+            <div class="amount" *ngIf="document.amount > 0">
+              &euro; {{ document.formatAmount(2, 3, '.', ',') }}
+            </div>
+
           </footer>
         </div>
       </div>
