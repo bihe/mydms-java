@@ -51,6 +51,10 @@ footer > div.amount {
   font-size: 1em;
 }
 
+.card > header > a.routelink {
+  color:black;
+}
+
 .card > content {
   padding: 2px 5px;
   display: block;

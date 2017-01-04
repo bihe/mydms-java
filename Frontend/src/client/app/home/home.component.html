@@ -1,5 +1,5 @@
 <div class="add">
-  <i class="fa fa-plus-circle fa-4x" aria-hidden="true"></i>
+  <i class="fa fa-plus-circle fa-4x" aria-hidden="true" (click)="onNavigateTo('-1')"  ></i>
 </div>
 
 <p-growl [value]="msgs" [life]="1500"></p-growl>
@@ -33,7 +33,7 @@
           </div>
 
           <header>
-            {{ document.title }}
+            <a class="routelink" (click)="onNavigateTo(document.id)">{{ document.title }}</a>
           </header>
           <content>
             <div>

@@ -8,10 +8,33 @@ body {
   position: relative;
 }
 
-
 .ui-growl {
     position: fixed;
     top: 50px;
     right: 2px;
     width: 20em;
+}
+
+.ui-autocomplete-token {
+    cursor: default;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    padding: .125em .5em;
+    white-space: nowrap;
+    position: relative;
+    margin-right: .125em;
+    border: 0 none;
+    font-size: 12pt;
+}
+
+.ui-autocomplete {
+    width: 100%;
+    zoom: 1;
+    cursor: pointer;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    position: relative;
+    display: inline-block;
 }

@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { Tag,Sender } from '../models/index';
 
 export class Document {
+  public id:string;
   public title:string;
   public created:Date;
   public modified:Date;

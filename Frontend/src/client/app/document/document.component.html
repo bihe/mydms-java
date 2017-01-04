@@ -1,0 +1,71 @@
+<div id="container-fluid">
+
+  <div class="document">
+
+    <div *ngIf="error !== ''" class="alert alert-danger" role="alert">
+      <strong>{{ errorTitle }}</strong> {{ error }}.
+    </div>
+
+
+    <div class="form-group">
+      <label for="Title">Title</label>
+      <input type="text" class="form-control" id="Title" placeholder="Title">
+    </div>
+    <div class="form-group form-group-small">
+      <label for="amount">Amount</label>
+      <input type="number" class="form-control" id="amount" placeholder="Amount">
+    </div>
+
+    <div class="form-group">
+
+      <div class="uploadfile" *ngIf="uploadFileName !== ''">
+          <div class="pull-left">
+            <i class="fa fa-cloud-download" aria-hidden="true"></i> {{ uploadFileName }}
+          </div>
+          <div class="pull-right">
+            <i class="fa fa-times" aria-hidden="true" (click)="onClearUploadedFile()"></i>
+          </div>
+      </div>
+
+      <p-fileUpload name="file" url="/api/upload/file" *ngIf="uploadFileName === ''"
+        (onError)="onUploadError($event)"
+        (onUpload)="onUploadDone($event)"
+      ></p-fileUpload>
+
+    </div>
+
+    <div class="form-group">
+
+      <p-autoComplete
+        [(ngModel)]="senders"
+        [suggestions]="senderResults"
+        (completeMethod)="onSearchSenders($event)"
+        [multiple]="true">
+
+        <template let-sender>
+            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                {{ sender }}
+            </div>
+        </template>
+
+      </p-autoComplete>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="pull-left">
+      <button type="button" class="btn btn-default" (click)="onCancel()" >Cancel</button>
+    </div>
+
+    <div class="pull-right">
+      <button type="submit" class="btn btn-success">Save</button>
+    </div>
+  </div>
+</footer>

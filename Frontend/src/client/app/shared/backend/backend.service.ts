@@ -11,6 +11,7 @@ export class BackendService extends BaseService {
 
   private readonly SEARCH_DOCUMENTS:string = '/api/documents/search';
   private readonly USER_INFO_URL:string = '/api/userinfo';
+  private readonly SEARCH_SENDERS_URL:string = '/api/senders/search';
 
   constructor(private http: Http) {
     super();
@@ -40,6 +41,18 @@ export class BackendService extends BaseService {
     }
 
     console.debug('Url: ' + url);
+
+    return this.http.get(url, this.getRequestOptions())
+      //.timeout(this.RequestTimeOutDefault, new Error('Timeout exceeded!'))
+      .map(res => {
+        return this.extractData<any[]>(res);
+      })
+      .catch(this.handleError);
+  }
+
+  searchSenders(name:string): Observable<any[]> {
+    let searchUrl = 'name=%NAME%';
+    let url = this.SEARCH_SENDERS_URL + '?' + searchUrl.replace('%NAME%', name || '');
 
     return this.http.get(url, this.getRequestOptions())
       //.timeout(this.RequestTimeOutDefault, new Error('Timeout exceeded!'))

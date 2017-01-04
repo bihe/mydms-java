@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { BackendService } from '../shared/index';
 import { Document, Tag, Sender, DataModel } from '../shared/index';
 
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
   private pagedDocuments: Array<Document> = null;
   private searchString:string = null;
 
-  constructor(private backend:BackendService, private data:DataModel) {}
+  constructor(private backend:BackendService, private data:DataModel, private router:Router,) {}
 
   ngOnInit() {
     this.data.setIsActive(false);
@@ -61,6 +62,11 @@ export class HomeComponent implements OnInit {
     this.searchDocuments(searchText, 0);
   }
 
+  onNavigateTo(id:string) {
+    console.debug('Got id: ' + id);
+    this.router.navigate(['/document', id]);
+  }
+
   searchDocuments(title:string, skipEntries:number) {
     this.data.setIsActive(true);
 
@@ -75,6 +81,7 @@ export class HomeComponent implements OnInit {
             doc.modified = a.modified;
             doc.amount = a.amount;
             doc.path = a.fileName;
+            doc.id = a.id;
 
             let tags = a.tags as Array<Tag>;
             doc.tags = tags;
