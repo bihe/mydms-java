@@ -83,6 +83,7 @@ public class DocumentResource {
 		this.tagStore = tagStore;
 		this.senderStore = senderStore;
 		this.fileService = fileService;
+		this.uploadStore = uploadStore;
 		this.config = configuration != null ? configuration.getApplication() : null;
 	}
 
@@ -241,8 +242,12 @@ public class DocumentResource {
 			document.getSenders().addAll(senders);
 
 			// use the uploadFileToken and retrieve the upload-queue-item
-			this.processUploadedFile(docItem.getUploadFileToken(), document.getFileName());
-
+			String filePath = this.processUploadedFile(docItem.getUploadFileToken(), document.getFileName());
+			if(StringUtils.isEmpty(filePath)) {
+				throw new WebApplicationException("Could not process upload file in backend!");
+			}
+			document.setFileName(filePath);
+						
 			Document saved = store.save(document);
 			if (saved != null) {
 				String message = "";
@@ -275,9 +280,10 @@ public class DocumentResource {
 	
 	
 	
-	private void processUploadedFile(String uploadToken, String fileName) throws IOException {
+	private String processUploadedFile(String uploadToken, String fileName) throws IOException {
+		String filePath = "";
 		if (StringUtils.isEmpty(uploadToken))
-			return;
+			return null;
 
 		Optional<UploadItem> upload = uploadStore.findById(UUID.fromString(uploadToken));
 		if (!upload.isPresent()) {
@@ -308,6 +314,8 @@ public class DocumentResource {
 			throw new WebApplicationException(String.format("Could not upload file: %s!", item.getFileName()),
 					Response.Status.BAD_GATEWAY);
 		}
+		
+		filePath = String.format("/%s/%s", folderName, item.getFileName());
 
 		LOGGER.debug("Saved file to backend file-store!");
 
@@ -319,6 +327,7 @@ public class DocumentResource {
 		// 3) remove the uploadItem from the database
 		this.uploadStore.delete(upload.get().getId());
 
+		return filePath;
 	}
 
 	private File getFile(String fileName, String uploadPath, String uploadToken) {

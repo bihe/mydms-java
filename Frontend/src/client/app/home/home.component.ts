@@ -80,7 +80,8 @@ export class HomeComponent implements OnInit {
             doc.created = a.created;
             doc.modified = a.modified;
             doc.amount = a.amount;
-            doc.path = a.fileName;
+            doc.fileName = a.fileName;
+            doc.encodedFilename = btoa(a.fileName);
             doc.id = a.id;
 
             let tags = a.tags as Array<Tag>;

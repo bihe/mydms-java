@@ -2,14 +2,18 @@ import * as moment from 'moment';
 import { Tag,Sender } from '../models/index';
 
 export class Document {
-  public id:string;
-  public title:string;
-  public created:Date;
-  public modified:Date;
-  public amount:number;
-  public path:string;
-  public tags: Array<Tag>;
-  public senders: Array<Sender>;
+  id:string;
+  title:string;
+  fileName:string;
+  encodedFilename:string;
+  alternativeId:string;
+  previewLink:string;
+  uploadFileToken:string;
+  amount:number;
+  created:Date;
+  modified:Date;
+  tags: Array<Tag>;
+  senders: Array<Sender>;
 
   public get dateFormat(): string {
     let dateFormat = moment(this.created).format('DD.MM.YYYY');

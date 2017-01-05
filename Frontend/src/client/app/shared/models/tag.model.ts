@@ -1,4 +1,4 @@
-export class Tag {
-  public id:number;
-  public name:string;
+import { BaseModel } from './base.model';
+
+export class Tag extends BaseModel {
 }

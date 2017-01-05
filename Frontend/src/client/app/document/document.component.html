@@ -6,14 +6,20 @@
       <strong>{{ errorTitle }}</strong> {{ error }}.
     </div>
 
+    <h3><i class="fa fa-asterisk" aria-hidden="true"></i> Create a new Document</h3>
+    <hr/>
 
     <div class="form-group">
       <label for="Title">Title</label>
-      <input type="text" class="form-control" id="Title" placeholder="Title">
+      <input type="text" class="form-control input-lg" id="Title" placeholder="Title"
+        [(ngModel)]="documentTitle"
+      >
     </div>
     <div class="form-group form-group-small">
-      <label for="amount">Amount</label>
-      <input type="number" class="form-control" id="amount" placeholder="Amount">
+      <label for="amount" class="optional">Amount</label>
+      <input type="number" class="form-control input-lg" id="amount" placeholder="Amount"
+      [(ngModel)]="documentAmount"
+      >
     </div>
 
     <div class="form-group">
@@ -25,6 +31,7 @@
           <div class="pull-right">
             <i class="fa fa-times" aria-hidden="true" (click)="onClearUploadedFile()"></i>
           </div>
+          <br/>
       </div>
 
       <p-fileUpload name="file" url="/api/upload/file" *ngIf="uploadFileName === ''"
@@ -35,8 +42,8 @@
     </div>
 
     <div class="form-group">
-
-      <p-autoComplete
+      <label for="Sender">Sender</label>
+      <p-autoComplete id="Sender"
         [(ngModel)]="senders"
         [suggestions]="senderResults"
         (completeMethod)="onSearchSenders($event)"
@@ -47,10 +54,23 @@
                 {{ sender }}
             </div>
         </template>
-
       </p-autoComplete>
+    </div>
 
+    <div class="form-group">
+      <label for="Tags" class="optional">Tags</label>
+      <p-autoComplete id="Tags"
+        [(ngModel)]="tags"
+        [suggestions]="tagResults"
+        (completeMethod)="onSearchTags($event)"
+        [multiple]="true">
 
+        <template let-tag>
+            <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                {{ tag }}
+            </div>
+        </template>
+      </p-autoComplete>
     </div>
 
   </div>
@@ -65,7 +85,7 @@
     </div>
 
     <div class="pull-right">
-      <button type="submit" class="btn btn-success">Save</button>
+      <button type="submit" class="btn btn-success" [disabled]="!isFormValid()" (click)="onSave()" >Save</button>
     </div>
   </div>
 </footer>

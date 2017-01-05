@@ -38,3 +38,12 @@ body {
     position: relative;
     display: inline-block;
 }
+
+#Sender > span > ul > li.ui-state-highlight {
+  background-color: #5bc0de;
+}
+
+#Tag > span > ul > li.ui-state-highlight {
+  background-color: #337ab7;
+}
+

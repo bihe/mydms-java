@@ -13,10 +13,16 @@ export class DocumentComponent implements OnInit {
 
   error:string = '';
   errorTitle:string = '';
-  uploadFileName:string = '';
-  senders:Sender[];
-  senderResults:Sender[] = [];
 
+  senderResults:Sender[] = [];
+  tagResults:Tag[] = [];
+
+  document:Document = null;
+  documentTitle:string = '';
+  documentAmount:number;
+  uploadFileName:string = '';
+  senders:Sender[] = [];
+  tags:Tag[] = [];
   private uploadToken:string = '';
 
   constructor(
@@ -69,9 +75,6 @@ export class DocumentComponent implements OnInit {
     this.backend.searchSenders(event.query)
       .subscribe(
         result => {
-
-          console.debug(result);
-
           if(result && result.length > 0) {
             result.forEach(a => {
               let s = new Sender();
@@ -82,15 +85,89 @@ export class DocumentComponent implements OnInit {
           } else {
             let s = new Sender();
             s.id = -1;
-            s.create = true;
             s.name = event.query;
-            this.senderResults.push(s);
+
+            let index = this.senderResults.findIndex(a => {
+              return a.id === s.id && a.name === s.name;
+            });
+            if(index === -1) {
+              this.senderResults.push(s);
+            }
           }
         },
         error => {
           window.alert(<any>error);
         }
       );
+  }
+
+  onSearchTags(event:any) {
+    this.tagResults = [];
+
+    this.backend.searchTags(event.query)
+      .subscribe(
+        result => {
+          if(result && result.length > 0) {
+            result.forEach(a => {
+              let t = new Tag();
+              t.id = a.id;
+              t.name = a.name;
+              this.tagResults.push(t);
+            });
+          } else {
+            let t = new Tag();
+            t.id = -1;
+            t.name = event.query;
+
+            let index = this.tagResults.findIndex(a => {
+              return a.id === t.id && a.name === t.name;
+            });
+            if(index === -1) {
+              this.tagResults.push(t);
+            }
+          }
+        },
+        error => {
+          window.alert(<any>error);
+        }
+      );
+  }
+
+  isFormValid() {
+    if(this.documentTitle !== '' && this.uploadFileName !== '' && this.uploadToken !== ''
+      && this.senders.length > 0) {
+        return true;
+      }
+    return false;
+  }
+
+  onSave() {
+    if(this.isFormValid()) {
+
+      // create a new one
+      this.document = new Document();
+      this.document.title = this.documentTitle;
+      this.document.amount = this.documentAmount;
+      this.document.senders = this.senders;
+      this.document.tags = this.tags;
+      this.document.uploadFileToken = this.uploadToken;
+      this.document.fileName = this.uploadFileName;
+
+      this.backend.saveDocument(this.document)
+        .subscribe(
+          result => {
+            if(result) {
+              console.debug(result);
+            }
+          },
+          error => {
+            window.alert(<any>error);
+          }
+        );
+
+    } else {
+      this.showError('Form-Error', 'The form input is not valid!');
+    }
   }
 
   private clearError() {
