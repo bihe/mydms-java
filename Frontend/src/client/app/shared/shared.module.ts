@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/index';
 import { ProgressComponent } from './progress/index';
 import { BackendService } from './backend/index';
+import { EllipsisPipe, DateFormatPipe } from './pipes/index';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -13,9 +14,19 @@ import { BackendService } from './backend/index';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [NavbarComponent, ProgressComponent],
+  declarations: [NavbarComponent,
+    ProgressComponent,
+    EllipsisPipe,
+    DateFormatPipe
+    ],
   exports: [NavbarComponent,
-    CommonModule, FormsModule, RouterModule, ProgressComponent]
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    ProgressComponent,
+    EllipsisPipe,
+    DateFormatPipe
+    ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

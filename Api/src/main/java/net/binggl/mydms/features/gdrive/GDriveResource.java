@@ -55,6 +55,18 @@ public class GDriveResource implements Globals {
 		this.store = store;
 		this.configuration = configuration;
 	}
+	
+	@GET
+	@Path("islinked")
+	public boolean isLinked() {
+		boolean isLinked = false;
+		try {
+			isLinked = this.store.isCredentialAvailable(USER_TOKEN);
+		} catch (Exception e) {
+			LOGGER.error("Could not geta redirect URL {}", e.getMessage(), e);
+		}
+		return isLinked;
+	}
 
 	@GET
 	@Path("link")

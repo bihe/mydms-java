@@ -7,12 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { DocumentModule } from './document/document.module';
 import { HomeModule } from './home/home.module';
+import { SettingsModule } from './settings/settings.module';
 import { SharedModule } from './shared/shared.module';
 
 import { DataModel } from './shared/models/data.model';
 
 @NgModule({
-  imports: [BrowserModule, HttpModule, AppRoutingModule, DocumentModule, HomeModule, SharedModule.forRoot()],
+  imports: [BrowserModule, HttpModule, AppRoutingModule, DocumentModule, HomeModule, SettingsModule, SharedModule.forRoot()],
   declarations: [AppComponent],
   providers: [{
     provide: APP_BASE_HREF,

@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.google.inject.Inject;
 
@@ -28,22 +30,33 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 			Optional<Date> dateFrom, Optional<Date> dateUntil, Optional<Integer> limit, Optional<Integer> skip,
 			OrderBy... order) {
 		Criteria criteria = this.currentSession().createCriteria(Document.class);
-		
-		criteria = criteria.createAlias("tags", "tags"); 
-		criteria = criteria.createAlias("senders", "senders");
 
+		boolean hasAlias = false;
+		
 		if (title.isPresent()) {
+			
+			criteria = criteria.createAlias("tags", "tags"); 
+			criteria = criteria.createAlias("senders", "senders");
+			
+			hasAlias = true;
+			
 			Disjunction or = Restrictions.disjunction();
 			or.add(Restrictions.like("title", "%" + title.get() + "%").ignoreCase());
 			or.add(Restrictions.like("tags.name", "%" + title.get() + "%").ignoreCase());
 			or.add(Restrictions.like("senders.name", "%" + title.get() + "%").ignoreCase());
 			
 			criteria = criteria.add(or);
+			
+			criteria = criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 		}
 		if (tagId.isPresent()) {
+			if(!hasAlias)
+				criteria = criteria.createAlias("tags", "tags", JoinType.INNER_JOIN);
 			criteria = criteria.add(Restrictions.eq("tags.id", tagId.get()));
 		}
 		if (senderId.isPresent()) {
+			if(!hasAlias)
+				criteria = criteria.createAlias("senders", "senders");
 			criteria = criteria.add(Restrictions.eq("senders.id", senderId.get()));
 		}
 		if (dateFrom.isPresent()) {
@@ -52,6 +65,8 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 		if (dateUntil.isPresent()) {
 			criteria = criteria.add(Restrictions.le("created", dateUntil.get()));
 		}
+		
+		
 		if (limit.isPresent()) {
 			criteria = criteria.setMaxResults(limit.get());
 		}

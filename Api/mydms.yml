@@ -96,6 +96,7 @@ logging:
           currentLogFilename: ./target/mydms-sql.log
           archivedLogFilenamePattern: ./target/mydms-sql-%d.log.gz
           archivedFileCount: 5
+        - type: console
 
 # Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log.gz
 # Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz

@@ -21,6 +21,7 @@ export class DocumentComponent implements OnInit {
   documentTitle:string = '';
   documentAmount:number;
   uploadFileName:string = '';
+  encodedUploadFileName:string = '';
   senders:Sender[] = [];
   tags:Tag[] = [];
   private uploadToken:string = '';
@@ -34,10 +35,46 @@ export class DocumentComponent implements OnInit {
   ngOnInit() {
     this.clearError();
 
-    let id = +this.route.snapshot.params['id'] || -1;
+    let id = this.route.snapshot.params['id'] || '';
     console.debug('Got route id: ' + id);
+    if(id === '-1') {
+      return;
+    }
 
+    this.backend.getDocument(id)
+      .subscribe(
+        result => {
+          if(result) {
+            this.document = result;
+            this.documentTitle = this.document.title;
+            this.documentAmount = this.document.amount;
+            this.uploadFileName = this.document.fileName;
+            this.encodedUploadFileName = btoa(this.uploadFileName);
+            this.uploadToken = '-';
 
+            if(this.document.senders && this.document.senders.length > 0) {
+              this.senders = this.document.senders.map(a => {
+                let s = new Sender();
+                s.id = a.id;
+                s.name = a.name;
+                return s;
+              });
+            }
+
+            if(this.document.tags && this.document.tags.length > 0) {
+              this.tags = this.document.tags.map(a => {
+                let t = new Tag();
+                t.id = a.id;
+                t.name = a.name;
+                return t;
+              });
+            }
+          }
+        },
+        error => {
+          window.alert(<any>error);
+        }
+      );
   }
 
   onClearUploadedFile() {
@@ -144,8 +181,10 @@ export class DocumentComponent implements OnInit {
   onSave() {
     if(this.isFormValid()) {
 
-      // create a new one
-      this.document = new Document();
+      if(this.document === null) {
+        this.document = new Document();
+      }
+
       this.document.title = this.documentTitle;
       this.document.amount = this.documentAmount;
       this.document.senders = this.senders;
@@ -157,11 +196,17 @@ export class DocumentComponent implements OnInit {
         .subscribe(
           result => {
             if(result) {
-              console.debug(result);
+              if(result.result === 'Created') {
+                console.debug(result.message);
+                this.router.navigate(['/']);
+                return;
+              } else {
+                this.showError('Save-Error', result.message);
+              }
             }
           },
           error => {
-            window.alert(<any>error);
+            this.showError('Save-Error', error);
           }
         );
 

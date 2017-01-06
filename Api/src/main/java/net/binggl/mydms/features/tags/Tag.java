@@ -1,14 +1,21 @@
 package net.binggl.mydms.features.tags;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import net.binggl.mydms.features.documents.models.Document;
 import net.binggl.mydms.features.shared.models.NamedItem;
 
 @Entity
@@ -22,7 +29,10 @@ public class Tag implements NamedItem {
 
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
-
+	
+	@ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
+    private Set<Document> documents = new HashSet<Document>();
+	
 	public Tag() {
 		super();
 	}
@@ -52,6 +62,15 @@ public class Tag implements NamedItem {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@JsonIgnore
+	public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
 	}
 
 	@Override

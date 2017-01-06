@@ -39,6 +39,27 @@ body {
     display: inline-block;
 }
 
+.ui-inputswitch {
+    height: 40px;
+    width: 100px;
+}
+
+.ui-inputswitch-on {
+    left: 0;
+    border: 0 none;
+    margin-left: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.ui-inputswitch-off {
+    left: 0;
+    border: 0 none;
+    margin-left: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
 #Sender > span > ul > li.ui-state-highlight {
   background-color: #5bc0de;
 }

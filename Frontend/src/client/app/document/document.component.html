@@ -6,7 +6,8 @@
       <strong>{{ errorTitle }}</strong> {{ error }}.
     </div>
 
-    <h3><i class="fa fa-asterisk" aria-hidden="true"></i> Create a new Document</h3>
+    <h3 *ngIf="!this.document || this.document === null || this.document.id === ''"><i class="fa fa-plus" aria-hidden="true"></i> Create a new Document</h3>
+    <h3 *ngIf="this.document && this.document !== null && this.document.id !== ''"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Document</h3>
     <hr/>
 
     <div class="form-group">
@@ -26,7 +27,7 @@
 
       <div class="uploadfile" *ngIf="uploadFileName !== ''">
           <div class="pull-left">
-            <i class="fa fa-cloud-download" aria-hidden="true"></i> {{ uploadFileName }}
+            <i class="fa fa-cloud-download" aria-hidden="true"></i> <a href="/api/gdrive/file/?path={{ encodedUploadFileName }}">{{ uploadFileName | ellipsis:30 }}</a>
           </div>
           <div class="pull-right">
             <i class="fa fa-times" aria-hidden="true" (click)="onClearUploadedFile()"></i>

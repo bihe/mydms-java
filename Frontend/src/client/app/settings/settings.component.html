@@ -1,0 +1,41 @@
+<div id="container-fluid">
+
+  <p-growl [value]="msgs"></p-growl>
+
+  <div class="settings">
+    <h3><i class="fa fa-cogs" aria-hidden="true"></i> Settings</h3>
+    <hr/>
+
+    <p>
+      Backend storage integration with Google Drive. <br/>
+      Link status is
+    </p>
+
+    <div class="backend-status">
+
+      <div class="pull-left">
+        <p-inputSwitch onLabel="linked" offLabel="unlinked" [(ngModel)]="isLinked"></p-inputSwitch>
+      </div>
+      <div class="pull-right icon">
+        <i *ngIf="backendLinked" class="fa fa-link fa-2x" aria-hidden="true"></i><i *ngIf="!backendLinked" class="fa fa-chain-broken fa-2x" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <p>
+    <br/>
+    </p>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="pull-left">
+      <button type="button" class="btn btn-default" (click)="onCancel()" >Cancel</button>
+    </div>
+
+    <div class="pull-right">
+      <button type="submit" class="btn btn-success" (click)="onSave()" >Save</button>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,18 @@
+#container-fluid {
+  padding-top: 60px;
+}
+
+.settings {
+  padding:5px;
+}
+
+.settings > .backend-status {
+  vertical-align: middle;
+  height: 50px;
+  padding: 5px;
+}
+
+.settings > .backend-status > .icon {
+    margin-right: 30px;
+    margin-top: 5px;
+}

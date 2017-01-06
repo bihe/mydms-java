@@ -25,11 +25,10 @@ export class BaseService {
     let errMsg = '';
     try {
       let errorObject = error.json();
-      errMsg = errorObject.Error + ': ' + errorObject.Description || 'Server error';
+      errMsg = errorObject.code + ': ' + errorObject.message || 'Server error';
     } catch(ex) {
       errMsg = (error.message) ? error.message : 'Server error: ' + error;
     }
-    console.error(error);
     return Observable.throw(errMsg);
   }
 

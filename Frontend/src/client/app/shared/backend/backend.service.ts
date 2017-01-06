@@ -17,6 +17,9 @@ export class BackendService extends BaseService {
   private readonly SEARCH_SENDERS_URL:string = '/api/senders/search';
   private readonly SEARCH_TAGS_URL:string = '/api/tags/search';
   private readonly SAVE_DOCUMENTS_URL:string = '/api/documents/';
+  private readonly LOAD_DOCUMENT_URL:string = '/api/documents/%ID%';
+  private readonly GDRIVE_LINKED_URL:string = '/api/gdrive/islinked';
+  private readonly GDRIVE_UNLINK_URL:string = '/api/gdrive';
 
   constructor(private http: Http) {
     super();
@@ -27,6 +30,24 @@ export class BackendService extends BaseService {
       .timeout(this.RequestTimeOutDefault)
       .map(res => {
         return this.extractData<UserInfo>(res);
+      })
+      .catch(this.handleError);
+  }
+
+  isGDriveLinked(): Observable<boolean> {
+    return this.http.get(this.GDRIVE_LINKED_URL, this.getRequestOptions())
+      .timeout(this.RequestTimeOutDefault)
+      .map(res => {
+        return this.extractData<boolean>(res);
+      })
+      .catch(this.handleError);
+  }
+
+  unlinkGDrive() : Observable<Result> {
+    return this.http.delete(this.GDRIVE_UNLINK_URL, this.getRequestOptions())
+      .timeout(this.RequestTimeOutDefault)
+      .map(res => {
+        return this.extractData<Result>(res);
       })
       .catch(this.handleError);
   }
@@ -44,8 +65,6 @@ export class BackendService extends BaseService {
     } else {
       url = url.replace('%SKIP%', skipEntries.toString());
     }
-
-    console.debug('Url: ' + url);
 
     return this.http.get(url, this.getRequestOptions())
       .timeout(this.RequestTimeOutDefault)
@@ -89,5 +108,16 @@ export class BackendService extends BaseService {
               .map(this.extractData)
               .catch(this.handleError);
 
+  }
+
+  getDocument(id:string): Observable<Document> {
+    let url = this.LOAD_DOCUMENT_URL.replace('%ID%', id || '');
+
+    return this.http.get(url, this.getRequestOptions())
+      .timeout(this.RequestTimeOutDefault)
+      .map(res => {
+        return this.extractData<Document>(res);
+      })
+      .catch(this.handleError);
   }
 }

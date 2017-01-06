@@ -217,8 +217,8 @@ public class DocumentResource {
 					document = this.newIntance();
 				}
 			}
-			document.setTitle(Encode.forJavaScript(docItem.getTitle()));
-			document.setFileName(Encode.forJavaScript(docItem.getFileName()));
+			document.setTitle(Encode.forHtml(docItem.getTitle()));
+			document.setFileName(Encode.forHtml(docItem.getFileName()));
 			document.setAmount(docItem.getAmount());
 
 			List<Tag> tags = this.lookup(docItem.getTags(), item -> {
@@ -282,8 +282,8 @@ public class DocumentResource {
 	
 	private String processUploadedFile(String uploadToken, String fileName) throws IOException {
 		String filePath = "";
-		if (StringUtils.isEmpty(uploadToken))
-			return null;
+		if (StringUtils.isEmpty(uploadToken) || "-".equals(uploadToken))
+			return fileName;
 
 		Optional<UploadItem> upload = uploadStore.findById(UUID.fromString(uploadToken));
 		if (!upload.isPresent()) {

@@ -61,7 +61,7 @@ public class GDriveFileService implements FileService, Globals {
 			
 		} catch (Exception EX) {
 			LOGGER.error("Could not save file in backend: {}!", EX.getMessage(), EX);
-			throw new RuntimeException(EX);
+			throw new RuntimeException(EX.getMessage());
 		}
 		
 		return result;

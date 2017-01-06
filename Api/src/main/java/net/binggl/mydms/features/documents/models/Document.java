@@ -8,12 +8,15 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -48,13 +51,15 @@ public class Document {
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private Date modified;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "DOCUMENTS_TO_TAGS", joinColumns = {
 			@JoinColumn(name = "document_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
-					@JoinColumn(name = "tag_id", referencedColumnName = "id", nullable = true) })
+					@JoinColumn(name = "tag_id", referencedColumnName = "id", nullable = true) } )
 	private List<Tag> tags = new ArrayList<>();
 
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "DOCUMENTS_TO_SENDERS", joinColumns = {
 			@JoinColumn(name = "document_id", referencedColumnName = "id", nullable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = true) })
