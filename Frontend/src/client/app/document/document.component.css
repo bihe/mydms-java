@@ -6,6 +6,12 @@
   padding: 5px;
 }
 
+.document > .wait {
+  position: absolute;
+  height: 50px;
+  right: 5px;
+}
+
 .form-group-small {
   width: 30%;
 }

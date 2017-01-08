@@ -13,6 +13,8 @@ import io.dropwizard.setup.Environment;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.DocumentStore;
 import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.documents.models.DocumentsSenders;
+import net.binggl.mydms.features.documents.models.DocumentsTags;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
 import net.binggl.mydms.features.tags.Tag;
@@ -66,8 +68,17 @@ public class InitialDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 				for (int i = 1; i < 11; i++) {
 					Document document = new Document(String.format("document%d", i), "filename", String.format("alternativeId%d", i),
 							"previewLink", 1.0);
-					document.getTags().addAll(tag1);
-					document.getSenders().addAll(sender2);
+					
+					for(Tag tag : tag1) {
+						DocumentsTags tagRef = new DocumentsTags(document, tag);
+						document.getTags().add(tagRef);
+					}
+					
+					for(Sender sender : sender2) {
+						DocumentsSenders senderRef = new DocumentsSenders(document, sender);
+						document.getSenders().add(senderRef);
+					}
+					
 					documentStore.save(document);
 				}
 

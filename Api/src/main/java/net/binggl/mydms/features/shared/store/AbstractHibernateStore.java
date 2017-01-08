@@ -2,7 +2,6 @@ package net.binggl.mydms.features.shared.store;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -24,8 +23,12 @@ public abstract class AbstractHibernateStore<T> extends AbstractDAO<T> {
 		return Optional.ofNullable(get(id));
 	}
 
-	public Optional<T> findById(UUID id) {
+	public Optional<T> findById(String id) {
 		return Optional.ofNullable(get(id));
+	}
+	
+	public void flush() {
+		this.currentSession().flush();
 	}
 
 	public T save(T entity) {
@@ -42,7 +45,7 @@ public abstract class AbstractHibernateStore<T> extends AbstractDAO<T> {
 			this.currentSession().delete(entity.get());
 	}
 
-	public void delete(UUID id) {
+	public void delete(String id) {
 		Optional<T> entity = this.findById(id);
 		if (entity.isPresent())
 			this.currentSession().delete(entity.get());

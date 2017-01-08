@@ -19,6 +19,8 @@ import org.junit.Test;
 // https://github.com/dropwizard/dropwizard/pull/1594/files
 import io.dropwizard.testing.junit.DAOTestRule;
 import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.documents.models.DocumentsSenders;
+import net.binggl.mydms.features.documents.models.DocumentsTags;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
 import net.binggl.mydms.features.tags.Tag;
@@ -27,9 +29,11 @@ public class SenderStoreTest {
 
 	@Rule
     public DAOTestRule database = DAOTestRule.newBuilder()
-        .addEntityClass(Sender.class)
-        .addEntityClass(Document.class)
-        .addEntityClass(Tag.class)
+    		.addEntityClass(Sender.class)
+            .addEntityClass(Tag.class)
+            .addEntityClass(Document.class)
+            .addEntityClass(DocumentsTags.class)
+            .addEntityClass(DocumentsSenders.class)
         .build();
 
     private SenderStore senderStore;

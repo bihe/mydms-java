@@ -2,12 +2,16 @@
 
   <div class="document">
 
+    <div class="wait">
+      <mydms-progress></mydms-progress>
+    </div>
+
     <div *ngIf="error !== ''" class="alert alert-danger" role="alert">
       <strong>{{ errorTitle }}</strong> {{ error }}.
     </div>
 
-    <h3 *ngIf="!this.document || this.document === null || this.document.id === ''"><i class="fa fa-plus" aria-hidden="true"></i> Create a new Document</h3>
-    <h3 *ngIf="this.document && this.document !== null && this.document.id !== ''"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Document</h3>
+    <h3 *ngIf="this.isNewDocument === true"><i class="fa fa-plus" aria-hidden="true"></i> Create a new Document</h3>
+    <h3 *ngIf="this.isNewDocument === false"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Document</h3>
     <hr/>
 
     <div class="form-group">

@@ -45,7 +45,7 @@ database:
   password: sa
 
   # the JDBC URL
-  url: jdbc:h2:./target/integration
+  url: jdbc:h2:/tmp/mydms.integration
   
   # any properties specific to your JDBC driver:
   properties:

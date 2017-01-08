@@ -17,6 +17,7 @@ export class DocumentComponent implements OnInit {
   senderResults:Sender[] = [];
   tagResults:Tag[] = [];
 
+  isNewDocument:boolean = true;
   document:Document = null;
   documentTitle:string = '';
   documentAmount:number;
@@ -30,10 +31,12 @@ export class DocumentComponent implements OnInit {
     private backend:BackendService,
     private router:Router,
     private route: ActivatedRoute,
+    private data:DataModel
   ) {}
 
   ngOnInit() {
     this.clearError();
+    this.isNewDocument = true;
 
     let id = this.route.snapshot.params['id'] || '';
     console.debug('Got route id: ' + id);
@@ -41,6 +44,7 @@ export class DocumentComponent implements OnInit {
       return;
     }
 
+    this.data.setIsActive(true);
     this.backend.getDocument(id)
       .subscribe(
         result => {
@@ -55,8 +59,7 @@ export class DocumentComponent implements OnInit {
             if(this.document.senders && this.document.senders.length > 0) {
               this.senders = this.document.senders.map(a => {
                 let s = new Sender();
-                s.id = a.id;
-                s.name = a.name;
+                s.name = a;
                 return s;
               });
             }
@@ -64,15 +67,18 @@ export class DocumentComponent implements OnInit {
             if(this.document.tags && this.document.tags.length > 0) {
               this.tags = this.document.tags.map(a => {
                 let t = new Tag();
-                t.id = a.id;
-                t.name = a.name;
+                t.name = a;
                 return t;
               });
             }
+
+            this.isNewDocument = false;
+            this.data.setIsActive(false);
           }
         },
         error => {
-          window.alert(<any>error);
+          this.data.setIsActive(false);
+          this.showError('Load-Error', error);
         }
       );
   }
@@ -187,25 +193,29 @@ export class DocumentComponent implements OnInit {
 
       this.document.title = this.documentTitle;
       this.document.amount = this.documentAmount;
-      this.document.senders = this.senders;
-      this.document.tags = this.tags;
+      this.document.senders = this.senders.map(a => a.name);
+      this.document.tags = this.tags.map(a => a.name);
       this.document.uploadFileToken = this.uploadToken;
       this.document.fileName = this.uploadFileName;
 
+      this.data.setIsActive(true);
       this.backend.saveDocument(this.document)
         .subscribe(
           result => {
             if(result) {
               if(result.result === 'Created') {
+                this.data.setIsActive(false);
                 console.debug(result.message);
                 this.router.navigate(['/']);
                 return;
               } else {
+                this.data.setIsActive(false);
                 this.showError('Save-Error', result.message);
               }
             }
           },
           error => {
+            this.data.setIsActive(false);
             this.showError('Save-Error', error);
           }
         );

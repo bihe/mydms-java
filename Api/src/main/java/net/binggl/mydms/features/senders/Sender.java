@@ -1,21 +1,22 @@
 package net.binggl.mydms.features.senders;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.documents.models.DocumentsSenders;
 import net.binggl.mydms.features.shared.models.NamedItem;
 
 @Entity
@@ -30,8 +31,8 @@ public class Sender implements NamedItem {
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 	
-	@ManyToMany(mappedBy = "senders", fetch = FetchType.LAZY)
-    private Set<Document> documents = new HashSet<Document>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.sender", cascade=CascadeType.REMOVE, orphanRemoval=true)
+	private List<DocumentsSenders> documents = new ArrayList<DocumentsSenders>();
 
 	public Sender() {
 		super();
@@ -65,12 +66,8 @@ public class Sender implements NamedItem {
 	}
 		
 	@JsonIgnore
-	public Set<Document> getDocuments() {
+	public List<DocumentsSenders> getDocuments() {
 		return documents;
-	}
-
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
 	}
 
 	@Override

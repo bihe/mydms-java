@@ -67,6 +67,8 @@ export class BackendService extends BaseService {
     }
 
     return this.http.get(url, this.getRequestOptions())
+      .distinctUntilChanged()   // ignore if next search term is same as previous
+      .debounceTime(300)        // wait for 300ms pause in events
       .timeout(this.RequestTimeOutDefault)
       .map(res => {
         return this.extractData<any[]>(res);

@@ -76,7 +76,7 @@ public class UploadResource {
 						Status.BAD_REQUEST);
 			}
 			
-			UUID id = UUID.randomUUID();
+			String id = UUID.randomUUID().toString();
 			UploadItem uploadQueueItem = new UploadItem(id, fileDetail.getFileName(), mimeType);
 			
 			LOGGER.debug("Will save the given file {} using the created token {}", fileDetail.getFileName(), id.toString());

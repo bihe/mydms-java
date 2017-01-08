@@ -1,7 +1,6 @@
 package net.binggl.mydms.features.upload.models;
 
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +19,7 @@ public class UploadItem {
 
 	@Id
 	@Column(name = "id")
-	private UUID id;
+	private String id;
 	
 	@Column(name = "filename", nullable = false)
 	@NotEmpty
@@ -38,7 +37,7 @@ public class UploadItem {
 		super();
 	}
 
-	public UploadItem(UUID id, String fileName, String mimeType) {
+	public UploadItem(String id, String fileName, String mimeType) {
 		super();
 		this.id = id;
 		this.fileName = fileName;
@@ -46,7 +45,7 @@ public class UploadItem {
 		this.created = new Date();
 	}
 
-	public UploadItem(UUID id, String fileName, String mimeType, Date created) {
+	public UploadItem(String id, String fileName, String mimeType, Date created) {
 		super();
 		this.id = id;
 		this.fileName = fileName;
@@ -54,11 +53,11 @@ public class UploadItem {
 		this.created = created;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

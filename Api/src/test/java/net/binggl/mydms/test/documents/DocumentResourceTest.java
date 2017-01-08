@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +21,7 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import net.binggl.mydms.features.documents.DocumentResource;
 import net.binggl.mydms.features.documents.DocumentStore;
 import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.documents.viewmodels.DocumentViewModel;
 import net.binggl.mydms.features.shared.store.OrderBy;
 import net.binggl.mydms.features.shared.store.SortOrder;
 
@@ -28,8 +30,9 @@ public class DocumentResourceTest {
 	private static final DocumentStore store = mock(DocumentStore.class);
 	
 	private OrderBy[] SORT_ORDER = new OrderBy[] {
-			new OrderBy("title", SortOrder.Ascending),
-			new OrderBy("created", SortOrder.Ascending)
+			new OrderBy("created", SortOrder.Descending),
+			new OrderBy("title", SortOrder.Ascending)
+			
 	};
 	
     @ClassRule
@@ -39,12 +42,12 @@ public class DocumentResourceTest {
 
     @Before
     public void setup() {
-    	Document[] all = new Document[] { 
-			new Document("document1", "filename", "alternativeId", "previewLink", 1.0),
-			new Document("document2", "filename", "alternativeId", "previewLink", 1.0),
-			new Document("document3", "filename", "alternativeId", "previewLink", 1.0)
+    	DocumentViewModel[] all = new DocumentViewModel[] { 
+			new DocumentViewModel(UUID.randomUUID().toString(), "document1", "filename", "alternativeId", "previewLink", 1.0),
+			new DocumentViewModel(UUID.randomUUID().toString(), "document2", "filename", "alternativeId", "previewLink", 1.0),
+			new DocumentViewModel(UUID.randomUUID().toString(), "document3", "filename", "alternativeId", "previewLink", 1.0)
     	};
-        when(store.findAll(SORT_ORDER)).thenReturn(Arrays.asList(all));
+        when(store.findAllItems(SORT_ORDER)).thenReturn(Arrays.asList(all));
     }
 
     @After
@@ -62,6 +65,6 @@ public class DocumentResourceTest {
     	assertNotNull(docs);
     	assertEquals(3, docs.size());
     	
-        verify(store).findAll(SORT_ORDER);
+        verify(store).findAllItems(SORT_ORDER);
     }
 }

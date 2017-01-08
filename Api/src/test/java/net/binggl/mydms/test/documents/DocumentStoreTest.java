@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
 
@@ -23,6 +22,9 @@ import org.junit.Test;
 import io.dropwizard.testing.junit.DAOTestRule;
 import net.binggl.mydms.features.documents.DocumentStore;
 import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.documents.models.DocumentsSenders;
+import net.binggl.mydms.features.documents.models.DocumentsTags;
+import net.binggl.mydms.features.documents.viewmodels.DocumentViewModel;
 import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.senders.SenderStore;
 import net.binggl.mydms.features.shared.store.OrderBy;
@@ -37,13 +39,22 @@ public class DocumentStoreTest {
         .addEntityClass(Sender.class)
         .addEntityClass(Tag.class)
         .addEntityClass(Document.class)
+        .addEntityClass(DocumentsTags.class)
+        .addEntityClass(DocumentsSenders.class)
+        .setConnectionDriverClass(org.h2.Driver.class)
+        .setConnectionUrl("jdbc:h2:/tmp/mydms.integration")
+        .setConnectionUsername("sa")
         .build();
 
     private DocumentStore documentStore;
+    private TagStore tagStore;
+    private SenderStore senderStore;
 
     @Before
     public void setUp() throws Exception {
         documentStore = new DocumentStore(database.getSessionFactory());
+        tagStore = new TagStore(database.getSessionFactory());
+        senderStore = new SenderStore(database.getSessionFactory());
     }
     
     @Test
@@ -78,16 +89,28 @@ public class DocumentStoreTest {
         Tag tag1 = new Tag("tag1");
         Tag tag2 = new Tag("tag2");
         
-        d.getTags().add(tag1);
-        d.getTags().add(tag2);
+        DocumentsTags tagRef1 = new DocumentsTags(d, tag1);
+        DocumentsTags tagRef2 = new DocumentsTags(d, tag2);
         
+        d.getTags().add(tagRef1);
+        d.getTags().add(tagRef2);
         
         // add a sender
         Sender sender1 = new Sender("sender1");
-        d.getSenders().add(sender1);
                 
+        DocumentsSenders senderRef1 = new DocumentsSenders(d, sender1);
+        
+        d.getSenders().add(senderRef1);
+        
         Document ref = database.transaction(() -> {
-            return documentStore.save(d);
+        	
+        	senderStore.save(sender1);
+        	
+        	tagStore.save(tag1);
+        	tagStore.save(tag2);
+        	
+        	Document r = documentStore.save(d);
+        	return r;
         });
         
         assertNotNull(ref);
@@ -101,15 +124,28 @@ public class DocumentStoreTest {
         
         // remove a tag
         d1.getTags().clear();
-        Tag tag3 = new Tag("tag3");
-        d1.getTags().add(tag3);
         
         ref = database.transaction(() -> {
-            return documentStore.save(d1);
+        	documentStore.flush();
+        	
+        	Tag tag3 = new Tag("tag3");
+            DocumentsTags tagRef3 = new DocumentsTags(d1, tag3);
+            DocumentsTags tagRef4 = new DocumentsTags(d1, tag1);
+                    
+            d1.getTags().add(tagRef3);
+            d1.getTags().add(tagRef4);
+            
+            tagStore.save(tag3);
+        	
+            Document doc = documentStore.save(d1);
+            
+        	return doc;
         });
         
+        
         assertNotNull(ref);
-        assertEquals(1, ref.getTags().size());
+        assertEquals(2, ref.getTags().size());
+        
     }
    
     
@@ -120,7 +156,7 @@ public class DocumentStoreTest {
         Document saved = database.transaction(() -> {
             return documentStore.save(document);
         });
-        UUID id = saved.getId();
+        String id = saved.getId();
         
         assertTrue("Document got id", id != null);
         
@@ -136,20 +172,26 @@ public class DocumentStoreTest {
     @Test
     public void searchDocuments() {
 		
-		
     	database.transaction(() -> {
     		for (int i = 1; i < 11; i++) {
 				Document document = new Document(String.format("document%d", i), "filename", String.format("alternativeId%d", i), "previewLink", 1.0);
-				document.getTags().add(new Tag(String.format("tag%d", i)));
-				document.getSenders().add(new Sender(String.format("sender%d", i)));
+				
+				Tag tag = new Tag(String.format("tag%d", i));
+				DocumentsTags tagRef = new DocumentsTags(document, tag);
+				document.getTags().add(tagRef);
+				tagStore.save(tag);
+				
+				Sender sender = new Sender(String.format("sender%d", i));
+				DocumentsSenders senderRef = new DocumentsSenders(document, sender);
+				document.getSenders().add(senderRef);
+				senderStore.save(sender);				
+				
 				documentStore.save(document);
 			}
     		return null;
     	});
     	
-    	TagStore tagStore = new TagStore(database.getSessionFactory());
-    	SenderStore senderStore = new SenderStore(database.getSessionFactory());
-    	
+    	    	
     	List<Tag> findTags = tagStore.searchByName("tag1");
     	assertNotNull(findTags);
     	Tag tag1 = findTags.get(0);
@@ -163,12 +205,12 @@ public class DocumentStoreTest {
     	List<Document> all = documentStore.findAll();
     	assertNotNull(all);
     	
-    	List<Document> search = documentStore.searchDocuments(Optional.empty(), Optional.of(tag1.getId()), Optional.empty(), 
+    	List<DocumentViewModel> search = documentStore.searchDocuments(Optional.empty(), Optional.of(tag1.getName()), Optional.empty(), 
     			Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(1, search.size());
     	
-    	search = documentStore.searchDocuments(Optional.empty(), Optional.of(-1L), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    	search = documentStore.searchDocuments(Optional.empty(), Optional.of("__"), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(0, search.size());
     	
@@ -176,39 +218,39 @@ public class DocumentStoreTest {
     	assertNotNull(search);
     	assertEquals(10, search.size());
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.of(tag1.getId()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.of(tag1.getName()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(1, search.size());
     	assertEquals("document1", search.get(0).getTitle());
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getId()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(1, search.size());
     	assertEquals("document5", search.get(0).getTitle());
     	
     	DateTime from = new DateTime();
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getId()), 
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.minusHours(1).toDate()), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(1, search.size());
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getId()), 
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.empty(), Optional.of(from.plusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(1, search.size());
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getId()), 
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.minusHours(1).toDate()), Optional.of(from.plusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(1, search.size());
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getId()), 
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.plusHours(1).toDate()), Optional.of(from.plusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(0, search.size());
     	
-    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getId()), 
+    	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.minusHours(1).toDate()), Optional.of(from.minusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
     	assertEquals(0, search.size());

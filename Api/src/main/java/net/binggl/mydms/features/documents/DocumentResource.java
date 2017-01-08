@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
@@ -45,7 +46,9 @@ import liquibase.util.file.FilenameUtils;
 import net.binggl.mydms.config.ApplicationConfiguration;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.models.Document;
-import net.binggl.mydms.features.documents.models.DocumentViewModel;
+import net.binggl.mydms.features.documents.models.DocumentsSenders;
+import net.binggl.mydms.features.documents.models.DocumentsTags;
+import net.binggl.mydms.features.documents.viewmodels.DocumentViewModel;
 import net.binggl.mydms.features.files.FileItem;
 import net.binggl.mydms.features.files.FileService;
 import net.binggl.mydms.features.senders.Sender;
@@ -90,10 +93,10 @@ public class DocumentResource {
 	@GET
 	@UnitOfWork
 	@Timed
-	public List<Document> getAll() {
-		List<Document> all = this.store.findAll(new OrderBy("title", SortOrder.Ascending),
-				new OrderBy("created", SortOrder.Ascending));
-		return all;
+	public List<DocumentViewModel> getAll() {
+		return this.store.findAllItems(
+				new OrderBy("created", SortOrder.Descending),
+				new OrderBy("title", SortOrder.Ascending));
 	}
 
 	
@@ -101,8 +104,8 @@ public class DocumentResource {
 	@Path("search")
 	@UnitOfWork
 	@Timed
-	public List<Document> searchDocuments(@QueryParam("title") Optional<String> search,
-			@QueryParam("tag") Optional<Long> byTag, @QueryParam("sender") Optional<Long> bySender,
+	public List<DocumentViewModel> searchDocuments(@QueryParam("title") Optional<String> search,
+			@QueryParam("tag") Optional<String> byTag, @QueryParam("sender") Optional<String> bySender,
 			@QueryParam("from") Optional<String> fromDateString, @QueryParam("to") Optional<String> toDateString,
 			@QueryParam("limit") Optional<Integer> limitResults, @QueryParam("skip") Optional<Integer> skipResults) {
 
@@ -131,7 +134,7 @@ public class DocumentResource {
 			}
 		}
 
-		List<Document> searchResults = this.store.searchDocuments(search, byTag, bySender, fromDate, toDate,
+		List<DocumentViewModel> searchResults = this.store.searchDocuments(search, byTag, bySender, fromDate, toDate,
 				limitResults, skipResults, new OrderBy("created", SortOrder.Descending),
 				new OrderBy("title", SortOrder.Ascending));
 
@@ -142,36 +145,36 @@ public class DocumentResource {
 	@GET
 	@UnitOfWork
 	@Path("{id}")
-	public Document getDocument(@PathParam("id") UUID documentId) {
+	public DocumentViewModel getDocument(@PathParam("id") String documentId) {
 		LOGGER.debug("Get document {}", documentId);
 
 		Optional<Document> document = store.findById(documentId);
-		if (document.isPresent())
-			return document.get();
-
-		throw new WebApplicationException(String.format("Could not find the given document (%s)", documentId),
-				Status.NOT_FOUND);
+		if(!document.isPresent())
+			throw new WebApplicationException(String.format("Could not find the given document (%s)", documentId),
+					Status.NOT_FOUND);
+		
+		return this.toModel(document);
 	}
 
 	@GET
 	@UnitOfWork
 	@Path("alt/{id}")
-	public Document getDocumentByAlternativeId(@PathParam("id") String alternativeId) {
+	public DocumentViewModel getDocumentByAlternativeId(@PathParam("id") String alternativeId) {
 		LOGGER.debug("Get document by alternative id {}", alternativeId);
 
 		Optional<Document> document = store.findByAlternativeId(alternativeId);
-		if (document.isPresent())
-			return document.get();
+		if (!document.isPresent())
+			throw new WebApplicationException(String.format("Could not find the given document (%s)", alternativeId),
+					Status.NOT_FOUND);
 
-		throw new WebApplicationException(String.format("Could not find the given document (%s)", alternativeId),
-				Status.NOT_FOUND);
+		return this.toModel(document);
 	}
 
 	
 	@DELETE
 	@UnitOfWork
 	@Path("{id}")
-	public SimpleResult deleteDocument(@PathParam("id") UUID documentId) {
+	public SimpleResult deleteDocument(@PathParam("id") String documentId) {
 		SimpleResult result = new SimpleResult("", ActionResult.None);
 
 		LOGGER.debug("Delete document {}", documentId);
@@ -213,6 +216,9 @@ public class DocumentResource {
 					document.getTags().clear();
 					document.getSenders().clear();
 					newDoc = false;
+					
+					this.store.flush(); // force a flush to delete the tags/senders
+					
 				} else {
 					document = this.newIntance();
 				}
@@ -222,24 +228,34 @@ public class DocumentResource {
 			document.setAmount(docItem.getAmount());
 
 			List<Tag> tags = this.lookup(docItem.getTags(), item -> {
-				Optional<Tag> t = tagStore.tagByName(Encode.forJavaScript(item.getName()));
+				Optional<Tag> t = tagStore.tagByName(Encode.forHtml(item));
 				if (t.isPresent()) {
 					return t;
 				} else {
-					return Optional.of(new Tag(Encode.forJavaScript(item.getName())));
+					Tag tag = new Tag(Encode.forHtml(item));
+					this.tagStore.save(tag);
+					return Optional.of(tag);
 				}
 			});
-			document.getTags().addAll(tags);
+			for(Tag t : tags) {
+				DocumentsTags ref = new DocumentsTags(document, t);
+				document.getTags().add(ref);
+			}
 
 			List<Sender> senders = this.lookup(docItem.getSenders(), item -> {
-				Optional<Sender> s = senderStore.senderByName(Encode.forJavaScript(item.getName()));
+				Optional<Sender> s = senderStore.senderByName(Encode.forHtml(item));
 				if (s.isPresent()) {
 					return s;
 				} else {
-					return Optional.of(new Sender(Encode.forJavaScript(item.getName())));
+					Sender sender = new Sender(Encode.forHtml(item));
+					this.senderStore.save(sender);
+					return Optional.of(sender);
 				}
 			});
-			document.getSenders().addAll(senders);
+			for(Sender s : senders) {
+				DocumentsSenders ref = new DocumentsSenders(document, s);
+				document.getSenders().add(ref);
+			}
 
 			// use the uploadFileToken and retrieve the upload-queue-item
 			String filePath = this.processUploadedFile(docItem.getUploadFileToken(), document.getFileName());
@@ -285,7 +301,7 @@ public class DocumentResource {
 		if (StringUtils.isEmpty(uploadToken) || "-".equals(uploadToken))
 			return fileName;
 
-		Optional<UploadItem> upload = uploadStore.findById(UUID.fromString(uploadToken));
+		Optional<UploadItem> upload = uploadStore.findById(uploadToken);
 		if (!upload.isPresent()) {
 			throw new WebApplicationException(String.format("The given upload token %s is not available!", uploadToken),
 					Status.BAD_REQUEST);
@@ -339,7 +355,7 @@ public class DocumentResource {
 
 	private Document newIntance() {
 		Document document = new Document();
-		document.setId(UUID.randomUUID());
+		document.setId(UUID.randomUUID().toString());
 		document.setCreated(new Date());
 		document.setModified(null);
 		document.setAlternativeId(RandomStringUtils.random(8, true, true));
@@ -347,14 +363,33 @@ public class DocumentResource {
 		return document;
 	}
 
-	private <V extends NamedItem> List<V> lookup(List<V> items, Function<V, Optional<V>> callback) {
+	private <V extends NamedItem> List<V> lookup(List<String> items, Function<String, Optional<V>> callback) {
 		List<V> lookupList = new ArrayList<>();
 
-		for (V item : items) {
+		for (String item : items) {
 			Optional<V> lookupItem = callback.apply(item);
 			if (lookupItem.isPresent())
 				lookupList.add(lookupItem.get());
 		}
 		return lookupList;
+	}
+	
+	private DocumentViewModel toModel(Optional<Document> document) {
+		DocumentViewModel model = new DocumentViewModel();
+		if (document.isPresent()) {
+			model.setId(document.get().getId());
+			model.setAlternativeId(document.get().getAlternativeId());
+			model.setAmount(document.get().getAmount());
+			model.setCreated(document.get().getCreated());
+			model.setFileName(document.get().getFileName());
+			model.setModified(document.get().getModified());
+			model.setPreviewLink(document.get().getPreviewLink());
+			model.setTitle(document.get().getTitle());
+			
+			model.setTags(document.get().getTags().stream().map(a -> a.getTag().getName()).collect(Collectors.toList()));
+			model.setSenders(document.get().getSenders().stream().map(a -> a.getSender().getName()).collect(Collectors.toList()));
+		}
+		
+		return model;
 	}
 }

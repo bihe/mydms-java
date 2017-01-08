@@ -84,12 +84,8 @@ export class HomeComponent implements OnInit {
             //doc.encodedFilename = btoa(a.fileName);
             doc.encodedFilename = btoa(unescape(encodeURIComponent(a.fileName)));
             doc.id = a.id;
-
-            let tags = a.tags as Array<Tag>;
-            doc.tags = tags;
-
-            let senders = a.senders as Array<Sender>;
-            doc.senders = senders;
+            doc.tags = a.tags;
+            doc.senders = a.senders;
 
             this.pagedDocuments.push(doc);
           });

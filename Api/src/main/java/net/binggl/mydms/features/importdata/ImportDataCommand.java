@@ -26,6 +26,8 @@ import liquibase.util.file.FilenameUtils;
 import net.binggl.mydms.config.MydmsConfiguration;
 import net.binggl.mydms.features.documents.DocumentStore;
 import net.binggl.mydms.features.documents.models.Document;
+import net.binggl.mydms.features.documents.models.DocumentsSenders;
+import net.binggl.mydms.features.documents.models.DocumentsTags;
 import net.binggl.mydms.features.importdata.models.ImportDocument;
 import net.binggl.mydms.features.importdata.models.ImportTagSender;
 import net.binggl.mydms.features.importdata.models.PathResult;
@@ -145,7 +147,7 @@ public class ImportDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 				Optional<Sender> s;
 				for (ImportDocument item : items) {
 					document = new Document();
-					document.setId(UUID.randomUUID());
+					document.setId(UUID.randomUUID().toString());
 					document.setAlternativeId(item.getAlternativeId());
 					document.setAmount(item.getAmount());
 					document.setCreated(item.getCreated().toDate());
@@ -157,14 +159,14 @@ public class ImportDataCommand extends EnvironmentCommand<MydmsConfiguration> {
 					for (ImportTagSender tag : item.getTags()) {
 						t = tagStore.tagByName(tag.getName());
 						if (t.isPresent()) {
-							document.getTags().add(t.get());
+							document.getTags().add(new DocumentsTags(document, t.get()));
 						}
 					}
 
 					for (ImportTagSender sender : item.getSenders()) {
 						s = senderStore.senderByName(sender.getName());
 						if (s.isPresent()) {
-							document.getSenders().add(s.get());
+							document.getSenders().add(new DocumentsSenders(document, s.get()));
 						}
 					}
 

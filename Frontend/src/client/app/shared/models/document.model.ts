@@ -12,8 +12,8 @@ export class Document {
   amount:number;
   created:Date;
   modified:Date;
-  tags: Array<Tag>;
-  senders: Array<Sender>;
+  tags: Array<string>;
+  senders: Array<string>;
 
   public get dateFormat(): string {
     let dateFormat = moment(this.created).format('DD.MM.YYYY');
@@ -23,18 +23,6 @@ export class Document {
   public get dateHuman(): string {
     let dateFormat = moment(this.lastDate).fromNow();
     return dateFormat;
-  }
-
-  public get tagList(): Array<string> {
-    return this.tags.map(tag => {
-      return tag.name;
-    });
-  }
-
-  public get senderList(): Array<string> {
-    return this.senders.map(sender => {
-      return sender.name;
-    });
   }
 
   private get lastDate(): Date {

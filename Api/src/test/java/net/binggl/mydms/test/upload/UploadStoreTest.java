@@ -38,7 +38,7 @@ public class UploadStoreTest {
     
     @Test
     public void saveSender() {
-    	UUID id = UUID.randomUUID();
+    	String id = UUID.randomUUID().toString();
     	UploadItem item = new UploadItem(id, "test.pdf", "application/pdf");
         UploadItem saved = database.transaction(() -> {
             return store.save(item);
@@ -65,7 +65,7 @@ public class UploadStoreTest {
     
     @Test
     public void deleteSender() {
-    	UUID id = UUID.randomUUID();
+    	String id = UUID.randomUUID().toString();
     	UploadItem item = new UploadItem(id, "test.pdf", "application/pdf");
     	UploadItem saved = database.transaction(() -> {
             return store.save(item);
@@ -84,7 +84,7 @@ public class UploadStoreTest {
     
     @Test(expected = ConstraintViolationException.class)
     public void testValidation() {
-    	UUID id = UUID.randomUUID();
+    	String id = UUID.randomUUID().toString();
     	UploadItem item = new UploadItem(id, null, null);
         database.transaction(() -> {
             return store.save(item);

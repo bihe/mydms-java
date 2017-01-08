@@ -42,7 +42,7 @@
             />
         
         <createTable tableName="DOCUMENTS">
-            <column name="id" type="UUID">
+            <column name="id" type="char(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="nvarchar(255)">
@@ -62,6 +62,10 @@
             </column>
             <column name="modified" type="DATETIME">
             </column>
+            <column name="taglist" type="nvarchar(max)">
+            </column>
+            <column name="senderlist" type="nvarchar(max)">
+            </column>
         </createTable>
         <addUniqueConstraint
             columnNames="alternativeid"
@@ -70,7 +74,7 @@
             />
         
         <createTable tableName="DOCUMENTS_TO_TAGS">
-            <column name="document_id" type="UUID">
+            <column name="document_id" type="char(36)">
                 <constraints nullable="false" references="documents(id)" foreignKeyName="fk_document_tag_id"/>
             </column>
             <column name="tag_id" type="BIGINT">
@@ -84,7 +88,7 @@
             />
             
         <createTable tableName="DOCUMENTS_TO_SENDERS">
-            <column name="document_id" type="UUID">
+            <column name="document_id" type="char(36)">
                 <constraints nullable="false" references="documents(id)" foreignKeyName="fk_document_sender_id"/>
             </column>
             <column name="sender_id" type="BIGINT">
@@ -99,7 +103,7 @@
             
             
         <createTable tableName="UPLOADS">
-            <column name="id" type="UUID">
+            <column name="id" type="char(36)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="filename" type="nvarchar(255)">

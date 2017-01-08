@@ -1,21 +1,18 @@
-package net.binggl.mydms.features.documents.models;
+package net.binggl.mydms.features.documents.viewmodels;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import net.binggl.mydms.features.senders.Sender;
 import net.binggl.mydms.features.shared.JsonDateSerializer;
-import net.binggl.mydms.features.tags.Tag;
 
 public class DocumentViewModel {
 
-	private UUID id;
+	private String id;
 	@NotEmpty
 	private String title;
 	@NotEmpty
@@ -27,17 +24,28 @@ public class DocumentViewModel {
 	private Date created;
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private Date modified;
-	private List<Tag> tags = new ArrayList<>();
-	private List<Sender> senders = new ArrayList<>();
+	private List<String> tags = new ArrayList<>();
+	private List<String> senders = new ArrayList<>();
 	@NotEmpty
 	private String uploadFileToken;
 	
 	public DocumentViewModel() {
 		super();
 	}
+	
+	public DocumentViewModel(String id, String title, String fileName, String alternativeId, String previewLink,
+			double amount) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.fileName = fileName;
+		this.alternativeId = alternativeId;
+		this.previewLink = previewLink;
+		this.amount = amount;
+	}
 
-	public DocumentViewModel(UUID id, String title, String fileName, String alternativeId, String previewLink,
-			double amount, Date created, Date modified, List<Tag> tags, List<Sender> senders, String uploadFileToken) {
+	public DocumentViewModel(String id, String title, String fileName, String alternativeId, String previewLink,
+			double amount, Date created, Date modified, List<String> tags, List<String> senders, String uploadFileToken) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -52,11 +60,11 @@ public class DocumentViewModel {
 		this.uploadFileToken = uploadFileToken;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -116,19 +124,19 @@ public class DocumentViewModel {
 		this.modified = modified;
 	}
 
-	public List<Tag> getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
 
-	public List<Sender> getSenders() {
+	public List<String> getSenders() {
 		return senders;
 	}
 
-	public void setSenders(List<Sender> senders) {
+	public void setSenders(List<String> senders) {
 		this.senders = senders;
 	}
 	

@@ -33,12 +33,12 @@
           </header>
           <content>
             <div>
-              <span *ngFor="let sender of document.senderList" class="label label-success">
+              <span *ngFor="let sender of document.senders" class="label label-success">
                 <i class="fa fa-truck"></i> {{ sender | ellipsis:20 }}
               </span>
             </div>
             <div>
-              <span *ngFor="let tag of document.tagList" class="label label-info">
+              <span *ngFor="let tag of document.tags" class="label label-info">
                 <i class="fa fa-tag"></i> {{ tag }}
               </span>
             </div>
