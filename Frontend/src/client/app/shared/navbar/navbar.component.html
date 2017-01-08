@@ -1,25 +1,29 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/"><span class="home"><i class="fa fa-file" aria-hidden="true"></i> mydms</span></a>
+<header>
+  <span class="header__icon" (click)="toggleMenu(true)">
+    <svg class="menu__icon no--select" width="24px" height="24px" viewBox="0 0 48 48" fill="#fff">
+      <path d="M6 36h36v-4H6v4zm0-10h36v-4H6v4zm0-14v4h36v-4H6z"></path>
+    </svg>
+  </span>
+
+  <span class="header__title no--select">mydms</span>
+</header>
+
+<div class="menu"
+  [ngClass]="{'menu--show': menuVisible }"
+  [style.transform]="menuTransform()">
+  <div class="menu__header">
+    <div class="user_info">
+      <i class="fa fa-user-circle" aria-hidden="true"></i> {{ userInfo.displayName }}
     </div>
-    <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-      <ul class="nav navbar-nav">
-        <li data-toggle="collapse" data-target="#navbar"><a routerLink="" routerLinkActive="active"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-        <li data-toggle="collapse" data-target="#navbar"><a  routerLink="settings" routerLinkActive="active"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
-        <li data-toggle="collapse" data-target="#navbar"><a  routerLink="document/-1" routerLinkActive="active"><i class="fa fa-plus" aria-hidden="true"></i> New Document</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="active">
-          <a><i class="fa fa-id-card-o" aria-hidden="true"></i> {{ userInfo.displayName }}</a>
-        </li>
-      </ul>
-    </div><!--/.nav-collapse -->
   </div>
-</nav>
+  <ul class="menu__list">
+    <li><a (click)="navigateTo('')"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+    <li><a (click)="navigateTo('settings')"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
+  </ul>
+</div>
+
+<div class="menu__overlay"
+  (click)="toggleMenu(false)"
+  [ngClass]="{'menu__overlay--show': menuVisible }"
+
+></div>

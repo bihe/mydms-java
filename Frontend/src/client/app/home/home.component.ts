@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   private pagedDocuments: Array<Document> = null;
   private searchString:string = null;
 
-  constructor(private backend:BackendService, private data:DataModel, private router:Router,) {}
+  constructor(private backend:BackendService, private data:DataModel, private router:Router) {}
 
   ngOnInit() {
     this.data.setIsActive(false);

@@ -1,78 +1,217 @@
-#container-fluid {
-  padding-top: 55px;
+.add_entry {
+  z-index: 9999;
+  background-color: rgb(233, 30, 99);
 }
 
-.search-container {
-  padding-left: 5px;
-  padding-right: 5px;
+.add_entry > a {
+  color:white;
 }
 
-.card-container {
-  position: relative;
+
+
+.app__content {
+  width: 320px;
+  height: 100%;
+  margin: 0 auto;
+  margin-top: 56px;
+  padding-top: 10px;
+}
+
+
+
+.card__container {
+  margin-top: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .card {
-  margin: 5px 5px 5px 5px;
-  border: 1px solid #E5E5E5;
+  width: 80%;
+  min-height: 130px;
+  background: #fff;
+  margin: 20px auto;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 2px;
+  position: relative;
+  padding: 4px 1em;
+}
+
+.card a {
+  color: red;
+  cursor: pointer;
+}
+
+.card__title,
+.card__desc {
+  display: block;
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+}
+
+.card__title {
+  margin-left: 5px;
+  font-weight: 500;
+}
+
+.card__temp {
+  padding: 20px;
+  padding-bottom: 10px;
+}
+
+.card__following,
+.card__followers {
+  padding: 10px 20px 5px;
+}
+
+.card__desc {
+  padding: 12px 15px;
+  vertical-align: top;
+}
+
+.card__img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 20px auto 10px;
+  border-radius: 50%;
+}
+
+b {
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.card b {
+  margin-right: 5px;
+}
+
+.card__temp,
+.card__followers,
+.card__following {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  margin-bottom: 5px;
+}
+
+.card__followers {
+  margin-bottom: 20px;
+}
+
+.container > .card > h4 > .routelink {
+  color:black;
+}
+
+.container > .card > div.download {
+  position: absolute;
+  right: 20px;
+  top: 50px;
 
 }
 
-footer {
+.container > .card > div.download > a {
+  color: rgb(96, 125, 139);
+}
+
+content {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.search_input {
+  color: #fff;
+  font-size: 16px;
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
+  padding-left: 50px !important;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: 0 15px;
+  color: rgba(0, 0, 0, 0.87);
+  border:none;
+  border-bottom: solid 1px #aaa;
+
+}
+
+.search_icon {
+  display: inline;
   position: relative;
+  left: 10px;
+  top: 28px;
+}
+
+.mdl-chip {
+    height: 32px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    line-height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 16px;
+    background-color: #dedede;
+    display: inline-block;
+    color: rgba(0,0,0,.87);
+    margin: 2px 0;
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.mdl-chip-sender {
+    background-color: rgb(255, 87, 34);
+    margin-right: 2px
+}
+
+.mdl-chip-tag {
+  background-color: rgb(33, 150, 243);
+  margin-right: 2px
+}
+
+.mdl-chip__text {
+    font-size: 13px;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 footer > div.amount {
   position: absolute;
   right: 10px;
   top: 2px;
-  font-weight: bold;
   color: black;
-}
-
-.card > div.download {
-  position: absolute;
-  right: 10px;
-  top: 3px;
-}
-
-.card > header {
-  padding: 10px 5px 5px 5px;
-  font-size: 1em;
-}
-
-.card > header > a.routelink {
-  color:black;
-}
-
-.card > content {
-  padding: 2px 5px;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.card > content > div {
-  margin-top: 5px;
-}
-
-.card > content > div > span.label {
-  margin-right: 5px;
-  font-weight: normal;
   font-size: 10pt;
 }
 
-.card > footer {
+
+footer {
+  position: relative;
   text-align: center;
   background-color: #F5F5F4;
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 2px;
-  border-top: 1px solid #ECEEEB;
-
+  border-radius: 8px;
+  border: 1px solid #ECEEEB;
+  margin-bottom: 10px;
   color: #999;
-  height: 25px;
 }
 
-.card > footer > a {
-  font-size: 10pt;
+footer > a.info {
+  font-size: 8pt;
   color: #999;
+}
+
+
+.search-container {
+  padding-left: 5px;
+  padding-right: 5px;
 }
