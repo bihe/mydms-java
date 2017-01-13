@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { BackendService } from '../shared/index';
 import { Document, Tag, Sender, DataModel } from '../shared/index';
-
+import * as moment from 'moment';
 import { Message } from 'primeng/primeng';
 
 /**
@@ -86,11 +86,13 @@ export class HomeComponent implements OnInit {
             doc.id = a.id;
             doc.tags = a.tags;
             doc.senders = a.senders;
+            doc.dateHuman = moment(doc.lastDate).fromNow();
 
             this.pagedDocuments.push(doc);
           });
 
           this.documents = this.documents.concat(this.pagedDocuments);
+          this.documents = arrayUnique(this.documents);
 
           this.data.setIsActive(false);
         },
@@ -102,3 +104,15 @@ export class HomeComponent implements OnInit {
   }
 
 }
+
+function arrayUnique(array:any) {
+    var a = array.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+    return a;
+}
+

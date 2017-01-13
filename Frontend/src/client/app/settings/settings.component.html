@@ -1,4 +1,4 @@
-<div id="container-fluid">
+<div class="app__content">
 
   <p-growl [value]="msgs"></p-growl>
 
@@ -6,7 +6,7 @@
     <h3><i class="fa fa-cogs" aria-hidden="true"></i> Settings</h3>
     <hr/>
 
-    <p>
+    <p class="site_description">
       Backend storage integration with Google Drive. <br/>
       Link status is
     </p>
@@ -31,11 +31,11 @@
 <footer class="footer">
   <div class="container">
     <div class="pull-left">
-      <button type="button" class="btn btn-default" (click)="onCancel()" >Cancel</button>
+      <button md-raised-button (click)="onCancel()">Cancel</button>
     </div>
 
     <div class="pull-right">
-      <button type="submit" class="btn btn-success" (click)="onSave()" >Save</button>
+      <button md-raised-button class="save" (click)="onSave()">Save</button>
     </div>
   </div>
 </footer>

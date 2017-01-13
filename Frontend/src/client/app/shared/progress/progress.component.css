@@ -54,5 +54,7 @@
 
 .mydms-progress {
   margin: 0px;
-  display: block;
+  display: inline;
+  position: absolute;
+  right: 10px;
 }

@@ -1,8 +1,14 @@
 <p-growl [value]="msgs" [life]="1500"></p-growl>
 
-<mydms-progress></mydms-progress>
+
 
 <div class="app__content">
+
+  <mydms-progress></mydms-progress>
+
+
+
+
   <div class="fab fab__push add_entry">
     <a  routerLink="document/-1" routerLinkActive="active">
     <div class="fab__ripple"></div>
@@ -15,17 +21,12 @@
 
   <div class="search-container">
 
-    <div class="search_icon">
-      <i class="fa fa-search" aria-hidden="true"></i>
-    </div>
-
-    <div>
-
-      <input type="text" class="search_input" placeholder="Search"
+    <md-input-container class="input-full-width">
+      <input type="search" md-input placeholder="Search"
         #search
         (keyup)="onSearch(search.value)"
-        >
-    </div>
+      >
+    </md-input-container>
 
   </div>
 
@@ -51,7 +52,7 @@
 
           <div>
             <span class="mdl-chip mdl-chip-tag" *ngFor="let tag of document.tags">
-                <span class="mdl-chip__text"><i class="fa fa-truck"></i> {{ tag | ellipsis:20 }}</span>
+                <span class="mdl-chip__text"><i class="fa fa-tag"></i> {{ tag | ellipsis:20 }}</span>
             </span>
           </div>
 

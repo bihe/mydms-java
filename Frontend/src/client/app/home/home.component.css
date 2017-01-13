@@ -215,3 +215,12 @@ footer > a.info {
   padding-left: 5px;
   padding-right: 5px;
 }
+
+
+.app__content {
+  margin-top: 60px;
+}
+
+.input-full-width {
+  width: 100%;
+}

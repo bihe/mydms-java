@@ -366,8 +366,7 @@ export class SeedConfig {
         'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
       '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
 
-      'primeng': '${this.APP_BASE}node_modules/primeng',
-
+      'primeng': `${this.APP_BASE}node_modules/primeng`,
       'app/*': '/app/*',
       // For test config
       'dist/dev/*': '/base/dist/dev/*',
@@ -376,6 +375,10 @@ export class SeedConfig {
     packages: {
       'moment': {
         main: 'moment.js',
+        defaultExtension: 'js'
+      },
+      'hammerjs': {
+        main: 'hammer.js',
         defaultExtension: 'js'
       }
     }
@@ -451,6 +454,10 @@ export class SeedConfig {
       },
       'moment': {
         main: 'moment.js',
+        defaultExtension: 'js'
+      },
+      'hammerjs': {
+        main: 'hammer.js',
         defaultExtension: 'js'
       }
     }

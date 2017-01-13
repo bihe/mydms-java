@@ -14,18 +14,14 @@ export class Document {
   modified:Date;
   tags: Array<string>;
   senders: Array<string>;
+  dateHuman:string;
 
   public get dateFormat(): string {
     let dateFormat = moment(this.created).format('DD.MM.YYYY');
     return dateFormat;
   }
 
-  public get dateHuman(): string {
-    let dateFormat = moment(this.lastDate).fromNow();
-    return dateFormat;
-  }
-
-  private get lastDate(): Date {
+  public get lastDate(): Date {
     let date1:Date = moment(this.modified).toDate();
     if(!date1) {
       date1 = new Date(1970,1,1);

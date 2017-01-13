@@ -1,3 +1,7 @@
+.app__content {
+  margin-top: 60px;
+}
+
 
 .document {
   padding: 5px;
@@ -54,4 +58,17 @@ code {
   display: none;
 }
 
+.save {
+  background-color: rgb(96,125,139);
+  color: white;
+  font-weight: bold;
+}
+
+.input-full-width {
+  width: 100%;
+}
+
+.tag-completion {
+  margin-top:10px;
+}
 

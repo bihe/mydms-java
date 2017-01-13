@@ -1,4 +1,4 @@
-<div id="container-fluid">
+<div class="app__content">
 
   <div class="document">
 
@@ -10,28 +10,26 @@
       <strong>{{ errorTitle }}</strong> {{ error }}.
     </div>
 
-    <h3 *ngIf="this.isNewDocument === true"><i class="fa fa-plus" aria-hidden="true"></i> Create a new Document</h3>
-    <h3 *ngIf="this.isNewDocument === false"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Document</h3>
+    <h3 *ngIf="isNewDocument === true"><i class="fa fa-plus" aria-hidden="true"></i> Create a new Document</h3>
+    <h3 *ngIf="isNewDocument === false"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Document</h3>
     <hr/>
 
     <div class="form-group">
-      <label for="Title">Title</label>
-      <input type="text" class="form-control input-lg" id="Title" placeholder="Title"
-        [(ngModel)]="documentTitle"
-      >
+      <md-input-container class="input-full-width">
+        <input md-input placeholder="Title" [(ngModel)]="documentTitle">
+      </md-input-container>
     </div>
     <div class="form-group form-group-small">
-      <label for="amount" class="optional">Amount</label>
-      <input type="number" class="form-control input-lg" id="amount" placeholder="Amount"
-      [(ngModel)]="documentAmount"
-      >
+      <md-input-container class="">
+        <input md-input placeholder="Amount" [(ngModel)]="documentAmount">
+      </md-input-container>
     </div>
 
     <div class="form-group">
 
       <div class="uploadfile" *ngIf="uploadFileName !== ''">
           <div class="pull-left">
-            <i class="fa fa-cloud-download" aria-hidden="true"></i> <a href="/api/gdrive/file/?path={{ encodedUploadFileName }}">{{ uploadFileName | ellipsis:30 }}</a>
+            <i class="fa fa-cloud-download" aria-hidden="true"></i> <a href="/api/gdrive/file/?path={{ encodedUploadFileName }}">{{ uploadFileName | ellipsis:25 }}</a>
           </div>
           <div class="pull-right">
             <i class="fa fa-times" aria-hidden="true" (click)="onClearUploadedFile()"></i>
@@ -46,7 +44,7 @@
 
     </div>
 
-    <div class="form-group">
+    <div class="form-group tag-completion">
       <label for="Sender">Sender</label>
       <p-autoComplete id="Sender"
         [(ngModel)]="senders"
@@ -62,7 +60,7 @@
       </p-autoComplete>
     </div>
 
-    <div class="form-group">
+    <div class="form-group tag-completion">
       <label for="Tags" class="optional">Tags</label>
       <p-autoComplete id="Tags"
         [(ngModel)]="tags"
@@ -86,11 +84,11 @@
 <footer class="footer">
   <div class="container">
     <div class="pull-left">
-      <button type="button" class="btn btn-default" (click)="onCancel()" >Cancel</button>
+      <button md-raised-button (click)="onCancel()">Cancel</button>
     </div>
 
     <div class="pull-right">
-      <button type="submit" class="btn btn-success" [disabled]="!isFormValid()" (click)="onSave()" >Save</button>
+      <button md-raised-button [disabled]="!isFormValid()" class="save" (click)="onSave()">Save</button>
     </div>
   </div>
 </footer>
