@@ -11,6 +11,6 @@ public class UserInfo extends User {
 	}
 	
 	public UserInfo(User user) {
-		super(user.getUserId(),user.getUserName(),user.getDisplayName(),user.getEmail(),null);
+		super(user.getUserId(),user.getUserName(),user.getDisplayName(),user.getEmail(), user.getClaims());
 	}
 }

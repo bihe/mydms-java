@@ -84,7 +84,7 @@ logging:
   # Logger-specific levels.
   loggers:
 
-    # Sets the level for ' net.binggl.mydms' to DEBUG.
+    # Sets the level for 'net.binggl.mydms' to DEBUG.
     net.binggl.mydms: DEBUG
 
     "io.dropwizard": INFO
