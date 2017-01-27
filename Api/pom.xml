@@ -161,6 +161,12 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.192</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>6.0.5</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ru.vyarus</groupId>
