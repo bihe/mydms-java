@@ -1,0 +1,118 @@
+application:
+  initialData: ${MYDMS_CREATE_INITIAL_DATA:-false}
+  
+  applicationStartUrl: /ui/index.html
+  
+  security:
+    tokenSecret: ${MYDMS_JWT_TOKEN_SECRET}
+    cookieName: login_token
+    appName: mydms
+    appUrl: https://mydms.binggl.net/
+    requiredRole: User
+    loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=https://mydms.binggl.net/
+  
+  # specify upload settings
+  # path, maxsize, extenstions
+  uploadPath: /var/www/java/mydms/uploads
+  maxUploadSize: 512000
+  allowedFileTypes:
+    - application/pdf
+    - image/jpeg
+    - image/png
+    - image/gif
+
+  google:
+    clientId: ${MYDMS_GOOGLE_CLIENT_ID}
+    clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET}
+    redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
+    encryptionKey: ${MYDMS_GOOGLE_ENCRYPTION_KEY}
+    parentDrivePath: ${MYDMS_GOOGLE_DRIVE_PARENT_ID}
+    storePath: /var/www/java/mydms/store
+    successUrl: /  
+
+server:
+  rootPath: /
+  applicationConnectors:
+    - type: http
+      port: 8080
+      bindHost: 127.0.0.1 # only bind to loopback
+  adminConnectors:
+    - type: http
+      port: 8081
+      bindHost: 127.0.0.1 # only bind to loopback
+
+
+
+# Database settings.
+database:
+
+  # the name of your JDBC driver
+  driverClass: org.mariadb.jdbc.Driver
+
+  # the username
+  user: ${DB_USER}
+
+  # the password
+  password: ${DB_PASS}
+
+  # the JDBC URL
+  url: jdbc:mariadb://localhost/mydms?autoReconnect=true&useUnicode=yes
+  
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.MySQLDialect
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* Mydms Health Check */ SELECT 1"
+
+  # the minimum number of connections to keep open
+  minSize: 3 
+
+  # the maximum number of connections to keep open
+  maxSize: 10
+
+  # Whether or not connections will be validated before being borrowed from the pool. If the connection fails to validate, it will be dropped from the pool, and another will be borrowed.
+  checkConnectionOnBorrow: true  
+
+  
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'net.binggl.mydms' to DEBUG.
+    net.binggl.mydms: DEBUG
+
+    "io.dropwizard": INFO
+    "org.hibernate.SQL":
+      level: INFO
+      additive: false
+      appenders:
+        - type: file
+          currentLogFilename: /var/www/java/mydms/logs/mydms-sql.log
+          archivedLogFilenamePattern: /var/www/java/mydms/logs/mydms-sql-%d.log.gz
+          archivedFileCount: 5
+        - type: console
+
+# Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log.gz
+# Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz
+# Logback's Fixed Window Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%i.log.gz
+
+  appenders:
+#    - type: console
+    - type: file
+      threshold: INFO
+      logFormat: "%-6level [%d{HH:mm:ss.SSS}] [%t] %logger{5} - %X{code} %msg %n"
+      currentLogFilename: /var/www/java/mydms/logs/mydms.log
+      archivedLogFilenamePattern: /var/www/java/mydms/logs/mydms-%d{yyyy-MM-dd}-%i.log.gz
+      archivedFileCount: 7
+      timeZone: UTC
+      maxFileSize: 10MB
