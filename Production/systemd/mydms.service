@@ -1,0 +1,13 @@
+[Unit]
+Description=mydms Application
+After=local-fs.target network.target
+
+[Service]
+User=java
+EnvironmentFile=/var/www/java/mydms/etc/environment
+WorkingDirectory=/var/www/java/mydms/bin
+ExecStart=/usr/bin/java -jar -server $JVM_OPTIONS mydms.jar server /var/www/java/mydms/etc/mydms.yml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

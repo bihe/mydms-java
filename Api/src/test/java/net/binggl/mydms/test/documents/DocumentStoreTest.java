@@ -41,9 +41,9 @@ public class DocumentStoreTest {
         .addEntityClass(Document.class)
         .addEntityClass(DocumentsTags.class)
         .addEntityClass(DocumentsSenders.class)
-        .setConnectionDriverClass(org.h2.Driver.class)
-        .setConnectionUrl("jdbc:h2:/tmp/mydms.integration")
-        .setConnectionUsername("sa")
+//        .setConnectionDriverClass(org.h2.Driver.class)
+//        .setConnectionUrl("jdbc:h2:/tmp/mydms.integration")
+//        .setConnectionUsername("sa")
         .build();
 
     private DocumentStore documentStore;

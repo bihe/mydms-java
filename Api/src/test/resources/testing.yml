@@ -26,7 +26,7 @@ application:
     redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
     encryptionKey: ${MYDMS_GOOGLE_ENCRYPTION_KEY}
     parentDrivePath: ${MYDMS_GOOGLE_DRIVE_PARENT_ID}
-    storePath: /tmp
+    storePath: ${MYDMS_TMP_PATH:-/tmp}
     successUrl: /
 
 server:
@@ -45,7 +45,7 @@ database:
   password: sa
 
   # the JDBC URL
-  url: jdbc:h2:/tmp/mydms.integration
+  url: jdbc:h2:./target/mydms.integration
   
   # any properties specific to your JDBC driver:
   properties:

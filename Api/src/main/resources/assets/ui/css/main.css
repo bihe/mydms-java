@@ -3036,6 +3036,25 @@ button.ui-button::-moz-focus-inner {
   display: inline;
 }
 
+.ui-inputtext {
+  margin: 0;
+  outline: medium none;
+  padding: .25em;
+}
+
+.ui-inputtext,
+.ui-widget-content .ui-inputtext,
+.ui-widget-header .ui-inputtext {
+  font-weight: 400;
+}
+
+.ui-fluid .ui-inputtext {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
 .ui-inputswitch {
   padding: 0;
   position: relative;
@@ -3093,25 +3112,6 @@ button.ui-button::-moz-focus-inner {
   height: 100%;
   border-top: 0 none;
   border-bottom: 0 none;
-}
-
-.ui-inputtext {
-  margin: 0;
-  outline: medium none;
-  padding: .25em;
-}
-
-.ui-inputtext,
-.ui-widget-content .ui-inputtext,
-.ui-widget-header .ui-inputtext {
-  font-weight: 400;
-}
-
-.ui-fluid .ui-inputtext {
-  width: 100%;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
 }
 
 .ui-inputtextarea-resizable {
