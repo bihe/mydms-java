@@ -17,3 +17,5 @@ integration.*
 .settings/
 
 import/
+
+.idea/
