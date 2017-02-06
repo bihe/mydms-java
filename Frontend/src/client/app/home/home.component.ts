@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit {
             doc.amount = a.amount;
             doc.fileName = a.fileName;
             //doc.encodedFilename = btoa(a.fileName);
-            doc.encodedFilename = btoa(a.fileName);
+            doc.encodedFilename = btoa(encodeURI(a.fileName));
             doc.id = a.id;
             doc.tags = a.tags;
             doc.senders = a.senders;

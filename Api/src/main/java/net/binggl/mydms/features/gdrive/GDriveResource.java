@@ -1,6 +1,8 @@
 package net.binggl.mydms.features.gdrive;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
@@ -37,6 +39,9 @@ import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore;
 import net.binggl.mydms.features.shared.JsonUtils;
 import net.binggl.mydms.features.shared.models.ActionResult;
 import net.binggl.mydms.features.shared.models.SimpleResult;
+
+import static net.binggl.commons.util.ExceptionHelper.logEx;
+import static net.binggl.commons.util.ExceptionHelper.wrapEx;
 
 @Path("/api/gdrive")
 @RolesAllowed("User")
@@ -138,7 +143,7 @@ public class GDriveResource implements Globals {
 		Response result = Response.noContent().status(Status.NOT_FOUND).build();
 		try {
 			boolean isBrowserRequest = JsonUtils.isBrowserRequest(request);
-			
+
 			if (!this.store.isCredentialAvailable(USER_TOKEN))
 				throw new MydmsException(String.format("Could not get files: Account is not linked!"),
 						Response.Status.UNAUTHORIZED).browserRequest(isBrowserRequest);
@@ -148,7 +153,7 @@ public class GDriveResource implements Globals {
 			// the path is supplied in BASE64 Encoding
 			byte[] decodedPathPayload = Base64.decodeBase64(path);
 			String decodedPath = new String(decodedPathPayload, StandardCharsets.UTF_8);
-
+			decodedPath = URLDecoder.decode(decodedPath, "UTF-8");
 			LOGGER.debug("Decoded path {}", decodedPath);
 
 			Optional<GDriveFile> filePayload = this.client.getFile(cred(), decodedPath,
@@ -157,7 +162,10 @@ public class GDriveResource implements Globals {
 				result = Response.ok(filePayload.get().getPayload(), filePayload.get().getMimeType())
 						.header("content-disposition", "attachment; filename = " + filePayload.get().getName()).build();
 			}
-
+		} catch (UnsupportedEncodingException encEx) {
+			LOGGER.error("Wrong encoding supplied {}", encEx.getMessage());
+			throw new WebApplicationException(String.format("Could not get file: %s!", encEx.getMessage()),
+					Status.NOT_ACCEPTABLE);
 		} catch (GDriveRuntimeException EX) {
 			LOGGER.error("Could not get files {}", EX.getMessage(), EX);
 			throw new WebApplicationException(String.format("Could not get file: %s!", EX.getMessage()),
