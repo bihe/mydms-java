@@ -1,0 +1,24 @@
+<div class="navmenu">
+    <div class="navcontent">
+        <!-- LOGO -->
+        <div class="navlogo">
+            <a href="/"><img alt="Henrik.Binggl" src="/assets/img/logo.png"></a>
+        </div>
+
+        <!-- INFO -->
+        <div class="navinfo">
+            <span class="hidden-sm hidden-md hidden-xs app-title">mydms.ui application</span>
+            <input type="text" placeholder="Search for documents, senders, tags" class="searchBox"/>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="navactions">
+
+            <!-- USER -->
+            <span *ngIf="appData" title="{{ appData?.userInfo?.userName }}" class="hidden-xs">
+             <i class="fa fa-sign-out" aria-hidden="true"></i> <a class="link" href="https://login.binggl.net" mdTooltip="{{ appData?.userInfo?.userName }} ({{ appData?.userInfo?.email }})">{{ appData?.userInfo?.displayName }}</a>
+            </span>
+
+        </div>
+    </div>
+</div>

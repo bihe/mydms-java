@@ -1,0 +1,24 @@
+<app-nav-bar></app-nav-bar>
+
+
+<div class="appcontent container-fluid" style="height:100%">
+    <div class="row contentArea">
+        <div class='col-sm-12 body-content'>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+
+
+<footer class="footer ">
+    <div class="container-fluid">
+        <p class="text-muted"> 
+            <i class="fa fa-copyright" aria-hidden="true"></i> {{ year }} Henrik.Binggl 
+            <span class="hidden-xs">| <b>mydms.ui application</b> | <i class="fa fa-code-fork"></i> <small>{{ version }}</small> </span>
+            <span class="pull-right visiable-xs hidden-sm hidden-md hidden-lg"><strong><i class="fa fa-hashtag" aria-hidden="true"></i>
+ {{ displayName }}</strong></span>
+        </p>
+            
+        </div>
+</footer>

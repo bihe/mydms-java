@@ -1,0 +1,53 @@
+<div class="row documents">
+
+    <div class="document" *ngFor="let item of documents">
+        <div class="card" (click)="editSelectedUser(item)">
+
+            <div *ngIf="item.selected === true" class="corner-ribbon bottom-right">
+                <i class="fa fa-check" aria-hidden="true"></i> selected
+            </div>
+
+            <div class="cardheader">
+              <h4 mdTooltip="{{ item.title }}" mdTooltipPosition="below">
+                  
+                <i class="fa fa-file-o" aria-hidden="true"></i>
+                {{ item.title | ellipsis:20 }}</h4>
+            </div>
+
+            <div class="senders">
+                <md-chip-list>
+                    <md-chip *ngFor="let sender of item.senders"><i class="fa fa-truck" aria-hidden="true"></i> {{ sender | ellipsis: 15 }}</md-chip>
+                </md-chip-list>
+            </div>
+            <div class="tags">
+                <md-chip-list>
+                    <md-chip *ngFor="let tag of item.tags"><i class="fa fa-hashtag" aria-hidden="true"></i> {{ tag | ellipsis: 15 }}</md-chip>
+                </md-chip-list>
+            </div>
+
+            <div class="rightInfo" >
+                <span class="infoElement">
+                    <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
+                </span>
+            </div>
+            <div class="leftInfo">
+                <span class="infoElement">
+                    <span *ngIf="item.modified"><i class="fa fa-calendar" aria-hidden="true"></i> <span class="date">M: {{ item.modified | dfmt:"DD.MM.YYYY" }}</span>
+                    <br/>
+                    </span>
+                    <i class="fa fa-calendar" aria-hidden="true"></i> <span class="date">C: {{ item.created | dfmt:"DD.MM.YYYY" }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+</div>
+  
+
+<div class="masterdata" *ngIf="isAdmin === true">
+    <button md-fab (click)="navigateToMasterData()"><i class="fa fa-database fa-2x" aria-hidden="true" mdTooltip="Edit the masterdata" [mdTooltipPosition]="before"></i></button>
+</div>
+
+<div class="select" *ngIf="isAdmin === true">
+    <button md-fab (click)="selectRandomUser()"><i class="fa fa-crosshairs fa-3x" aria-hidden="true" mdTooltip="Select a random user" [mdTooltipPosition]="before"></i></button>
+</div>

@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "http://devel.binggl.net:8080",
+    "secure": false
+  }
+}
