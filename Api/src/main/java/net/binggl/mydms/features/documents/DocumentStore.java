@@ -83,7 +83,6 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 		
 		// parameters
 		
-		
 		if (title.isPresent()) {
 			query.setParameter("title", String.format("%%%s%%", title.get().toLowerCase()));
 		}

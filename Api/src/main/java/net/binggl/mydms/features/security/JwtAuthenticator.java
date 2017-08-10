@@ -10,7 +10,10 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Singleton;
@@ -32,7 +35,6 @@ public class JwtAuthenticator implements Authenticator<String, User> {
 	private static final String CLAIMS = "Claims";
 	private static final String TYPE = "Type";
 	private static final String TYPE_VALUE = "login.User";
-	private static final List<String> KEYS = Arrays.asList(USER_ID, USERNAME, DISPLAYNAME, EMAIL, CLAIMS, TYPE);
 
 	private final Cache<String, User> userCache = CacheBuilder.newBuilder()
 		       .maximumSize(10)
@@ -59,22 +61,24 @@ public class JwtAuthenticator implements Authenticator<String, User> {
 
 	@SuppressWarnings("unchecked")
 	private User verifyToken(String token) {
-		User result = null;
-		JWTVerifier jwtVerifier = new JWTVerifier(this.tokenSecret);
+		User result = wrapEx(() -> {
 
-		result = wrapEx(() -> {
-			Map<String, Object> payload = jwtVerifier.verify(token);
-			if (payload != null) {
-				if (payload.size() == KEYS.size() && payload.get(TYPE) != null
-						&& TYPE_VALUE.equals(payload.get(TYPE))) {
+            Algorithm algorithm = Algorithm.HMAC256(this.tokenSecret);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    //.withIssuer("auth0") might be useful - needs to be implemented in login.binggl.net
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(token);
+            Map<String, com.auth0.jwt.interfaces.Claim> tokenClaims = jwt.getClaims();
+			if (tokenClaims != null) {
 
-					List<Claim> claims = this.parseClaims((List<String>) payload.get(CLAIMS));
-					
+				if (tokenClaims.size() >= 6 && tokenClaims.get(TYPE) != null
+						&& TYPE_VALUE.equals(tokenClaims.get(TYPE).asString())) {
+					List<Claim> claims = this.parseClaims(tokenClaims.get(CLAIMS).asList(String.class));
 					User jwtUser = new UserBuilder()
-							.userId((String) payload.get(USER_ID))
-							.userName((String) payload.get(USERNAME))
-							.displayName((String) payload.get(DISPLAYNAME))
-							.email((String) payload.get(EMAIL))
+							.userId(tokenClaims.get(USER_ID).asString())
+							.userName(tokenClaims.get(USERNAME).asString())
+							.displayName(tokenClaims.get(DISPLAYNAME).asString())
+							.email(tokenClaims.get(EMAIL).asString())
 							.claims(claims)
 							.build();
 					

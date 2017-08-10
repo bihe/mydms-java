@@ -6,10 +6,10 @@ application:
   security:
     tokenSecret: ${MYDMS_JWT_TOKEN_SECRET}
     cookieName: login_token
-    appName: mydms
-    appUrl: https://mydms.binggl.net/
+    appName: mydms-dev
+    appUrl: http://devel.binggl.net:8080/
     requiredRole: User
-    loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=https://mydms.binggl.net/
+    loginUrl: https://login.binggl.net/auth/flow?~site=mydms-dev&~url=http://devel.binggl.net:8080/
   
   # specify upload settings
   # path, maxsize, extenstions
