@@ -3,8 +3,8 @@
     <div class="document" *ngFor="let item of documents">
         <div class="card" (click)="editSelectedUser(item)">
 
-            <div *ngIf="item.selected === true" class="corner-ribbon bottom-right">
-                <i class="fa fa-check" aria-hidden="true"></i> selected
+            <div *ngIf="item.amount" class="corner-ribbon bottom-right">
+                <i class="fa fa-eur" aria-hidden="true"></i> {{ item.amount }}
             </div>
 
             <div class="cardheader">
@@ -12,6 +12,11 @@
                   
                 <i class="fa fa-file-o" aria-hidden="true"></i>
                 {{ item.title | ellipsis:20 }}</h4>
+
+            </div>
+
+            <div class="download">
+                <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
             </div>
 
             <div class="senders">
@@ -27,7 +32,7 @@
 
             <div class="rightInfo" >
                 <span class="infoElement">
-                    <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
+
                 </span>
             </div>
             <div class="leftInfo">

@@ -11,12 +11,12 @@ import 'rxjs/add/observable/throw';
 
 import { ApplicationData } from '../models/application.data';
 import { BaseService } from '../services/_base.service';
-import { UserInfo } from '../models/user.info';
+import { AppInfo } from '../models/app.info';
 
 @Injectable()
 export class AppDataService extends BaseService {
   private readonly SEARCH_DOCUMENTS: string = '/api/documents/search';
-  private readonly USER_INFO_URL: string = '/api/userinfo';
+  private readonly APP_INFO_URL: string = '/api/appinfo';
   private readonly SEARCH_SENDERS_URL: string = '/api/senders/search';
   private readonly SEARCH_TAGS_URL: string = '/api/tags/search';
   private readonly SAVE_DOCUMENTS_URL: string = '/api/documents/';
@@ -28,11 +28,11 @@ export class AppDataService extends BaseService {
     super();
   }
 
-  getUserInfo(): Observable<UserInfo> {
-    return this.http.get(this.USER_INFO_URL, this.getRequestOptions())
+  getApplicationInfo(): Observable<AppInfo> {
+    return this.http.get(this.APP_INFO_URL, this.getRequestOptions())
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
-        return this.extractData<UserInfo>(res);
+        return this.extractData<AppInfo>(res);
       })
       .catch(this.handleError);
   }
@@ -53,7 +53,6 @@ export class AppDataService extends BaseService {
 
     return this.http.get(url, this.getRequestOptions())
       .distinctUntilChanged()   // ignore if next search term is same as previous
-      .debounceTime(300)        // wait for 300ms pause in events
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
         return this.extractData<any[]>(res);

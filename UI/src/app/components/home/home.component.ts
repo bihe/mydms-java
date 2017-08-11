@@ -26,6 +26,12 @@ export class HomeComponent implements OnInit {
     private service: AppDataService,
     private router: Router,
     private snackBar: MdSnackBar) {
+
+    this.state.getSearchInput().subscribe(x => {
+      console.log('Search for: ' + x);
+      this.documents = [];
+      this.searchDocuments(x, 0);
+    });
   }
 
   ngOnInit() {
@@ -38,6 +44,8 @@ export class HomeComponent implements OnInit {
     this.service.searchDocuments(title, this.InitialPageSize, skipEntries)
       .subscribe(
         result => {
+          this.documents = [];
+          console.log('Result from search: ' + result.length);
           this.pagedDocuments = new Array<Document>();
           result.forEach(a => {
             const doc = new Document();
@@ -69,10 +77,10 @@ export class HomeComponent implements OnInit {
 }
 
 function arrayUnique(array: any) {
-    const a = array.concat();
+    let a = array.concat();
     for (let i = 0; i < a.length; ++i) {
         for (let j = i + 1; j < a.length; ++j) {
-            if (a[i] === a[j]) {
+            if (a[i].id === a[j].id) {
               a.splice(j--, 1);
             }
         }

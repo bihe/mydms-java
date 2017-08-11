@@ -92,15 +92,7 @@
   padding-bottom: 10px;
   padding-left: 10px;
   color: white;
-  background-color: #2E86C1;
-}
-
-.card .toselect {
-  background-color: #616A6B;
-}
-
-.cardOwner .toselect {
-  background-color: #1976D2;
+  background-color: #1B4F72;
 }
 
 .card .topic {
@@ -206,11 +198,18 @@
 }
 
 .senders .mat-chip:not(.mat-basic-chip) {
-    background-color: #F1948A;
-    color: rgba(0,0,0,.87);
+    background-color: #E64A19;
+    color: white;
 }
 
 .tags .mat-chip:not(.mat-basic-chip) {
-    background-color: #AED6F1;
+    background-color: #F1C40F  ;
     color: rgba(0,0,0,.87);
+}
+
+.download {
+    top: 7px;
+    position: absolute;
+    right: 10px;
+    color: #AED6F1;
 }

@@ -14,7 +14,8 @@ export class AppComponent {
 
   constructor(private state: ApplicationState) {
     this.state.getAppData().subscribe(x => {
-      this.displayName = x.userInfo.displayName;
+      this.displayName = x.appInfo.userInfo.displayName;
+      this.version = x.appInfo.versionInfo.versionString;
     });
     this.year = new Date().getFullYear();
   }

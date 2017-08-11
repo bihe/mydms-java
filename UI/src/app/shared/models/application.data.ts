@@ -1,5 +1,5 @@
-import { UserInfo } from './user.info';
+import { AppInfo } from './app.info';
 
 export class ApplicationData {
-    userInfo: UserInfo;
+    appInfo: AppInfo;
 }
