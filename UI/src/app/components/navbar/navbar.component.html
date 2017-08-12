@@ -3,6 +3,12 @@
         <!-- LOGO -->
         <div class="navlogo">
             <!-- <a href="/"><img alt="Henrik.Binggl" src="/assets/img/logo.png"></a> -->
+            
+            <md-spinner 
+                *ngIf="showProgress"
+                class="progress" 
+                color="warn">
+            </md-spinner>
 
             <span class="header__icon" (click)="toggleMenu(true)">
                 <svg class="" width="24px" height="24px" viewBox="0 0 48 48" fill="#fff">
@@ -15,7 +21,7 @@
         <!-- INFO -->
         <div class="navinfo">
             <span class="hidden-sm hidden-md hidden-xs app-title">mydms.ui application</span>
-            <input type="text" placeholder="Search for documents, senders, tags" class="searchBox" #search (keyup)="onSearch(search.value)"/>
+            <input type="text" placeholder="Search for documents, senders, tags" class="searchBox" [(ngModel)]="searchText" #search (keyup)="onSearch(search.value)"/>
         </div>
 
         <!-- ACTIONS -->

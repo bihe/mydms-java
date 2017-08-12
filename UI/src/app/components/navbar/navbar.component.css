@@ -78,7 +78,7 @@ div.navinfo {
     padding-left: 10px;
     padding-right: 10px;
     background-color: rgba(86, 101, 115, .5);
-    color: #1C2833;
+    color: white;
 }
 
 .searchBox::-webkit-input-placeholder { /* WebKit, Blink, Edge */
@@ -91,6 +91,7 @@ div.navinfo {
 
 .searchBox:focus {
     background-color: #F0F3F4;
+    color: black;
 }
 
 @media (max-width: 1200px) {
@@ -200,4 +201,14 @@ div.navinfo {
   position: absolute;
   font-size: 14pt;
   font-weight: bold;
+}
+
+.progress {
+    position: absolute;
+    top: 9px;
+    left: 16px;
+    height: 50px;
+    width: 50px;
+    background-color: transparent;
+    color: yellow;
 }

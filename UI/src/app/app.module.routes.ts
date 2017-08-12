@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-
-// import { AuthComponent } from "app/components/auth/auth.component";
-// import { MasterDataComponent } from "app/components/masterdata/masterdata.component";
+import { SettingsComponent } from './components/settings/settings.component';
 
  const routes: Routes = [
-    { path: '', component: HomeComponent, pathMatch: 'full' },
-    { path: '**', component: HomeComponent }
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent },
+    { path: 'settings', component: SettingsComponent },
+    { path: '**', redirectTo: 'home', }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
   })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

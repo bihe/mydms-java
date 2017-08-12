@@ -16,6 +16,8 @@ import * as moment from 'moment';
 export class HomeComponent implements OnInit {
 
   documents: Array<Document> = new Array<Document>();
+  totalEntries = 0;
+  shownResults = 0;
 
   readonly InitialPageSize: number = 20;
   private pagedDocuments: Array<Document> = null;
@@ -27,10 +29,13 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private snackBar: MdSnackBar) {
 
-    this.state.getSearchInput().subscribe(x => {
-      console.log('Search for: ' + x);
-      this.documents = [];
-      this.searchDocuments(x, 0);
+    this.state.getSearchInput()
+      .debounceTime(300)
+      .subscribe(x => {
+        console.log('Search for: ' + x);
+        this.searchString = x;
+        this.documents = [];
+        this.searchDocuments(x, 0);
     });
   }
 
@@ -38,16 +43,26 @@ export class HomeComponent implements OnInit {
     this.searchDocuments(null, 0);
   }
 
-  searchDocuments(title: string, skipEntries: number) {
-    // this.data.setIsActive(true);
+  showMoreResults() {
+    this.searchDocuments(this.searchString, this.shownResults);
+  }
 
+  clearSearch() {
+    this.state.setSearchInput('');
+  }
+
+  searchDocuments(title: string, skipEntries: number) {
+    this.state.setProgress(true);
     this.service.searchDocuments(title, this.InitialPageSize, skipEntries)
       .subscribe(
         result => {
-          this.documents = [];
-          console.log('Result from search: ' + result.length);
+          this.totalEntries = result.totalEntries;
+          this.shownResults = skipEntries + result.entries;
+
+          const doucmentResult = result.documents;
+          console.log('Result from search: ' + result.entries);
           this.pagedDocuments = new Array<Document>();
-          result.forEach(a => {
+          doucmentResult.forEach(a => {
             const doc = new Document();
             doc.title = a.title;
             doc.created = a.created;
@@ -62,14 +77,12 @@ export class HomeComponent implements OnInit {
 
             this.pagedDocuments.push(doc);
           });
-
           this.documents = this.documents.concat(this.pagedDocuments);
           this.documents = arrayUnique(this.documents);
-
-          // this.data.setIsActive(false);
+          this.state.setProgress(false);
         },
         error => {
-          // this.data.setIsActive(false);
+          this.state.setProgress(false);
           new MessageUtils().showError(this.snackBar, error);
         }
       );
@@ -77,7 +90,7 @@ export class HomeComponent implements OnInit {
 }
 
 function arrayUnique(array: any) {
-    let a = array.concat();
+    const a = array.concat();
     for (let i = 0; i < a.length; ++i) {
         for (let j = i + 1; j < a.length; ++j) {
             if (a[i].id === a[j].id) {

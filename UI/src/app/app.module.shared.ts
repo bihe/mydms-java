@@ -10,18 +10,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { ApplicationState } from './shared/services/app.state';
 import { AppDataService } from './shared/services/app.data.service';
-
-// import { HomeComponent } from './components/home/home.component';
-// import { UserEditDialogComponent } from "./components/home/home.useredit.component";
-// import { DateFormatPipe } from "app/shared/pipes/date.format";
-// import { DateValidator } from "app/shared/validators/date.validator";
-// import { MyDatePickerModule } from 'mydatepicker';
-// import { UserService } from "app/shared/services/user.service";
-// import { AppDataService } from "app/shared/services/appdata.service";
-// import { AuthComponent } from "app/components/auth/auth.component";
-// import { MasterDataComponent } from "app/components/masterdata/masterdata.component";
-// import { EllipsisPipe } from "app/shared/pipes/ellipsis";
-
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   imports: [ MaterialModule ],
@@ -37,6 +26,7 @@ export const sharedConfig: NgModule = {
         AppComponent,
         NavbarComponent,
         HomeComponent,
+        SettingsComponent,
         DateFormatPipe,
         EllipsisPipe
     ],

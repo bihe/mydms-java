@@ -7,6 +7,8 @@ import { MdSnackBar } from '@angular/material';
 import { MessageUtils } from '../../shared/utils/message.utils';
 import { AppDataService } from '../../shared/services/app.data.service';
 
+import 'rxjs/add/operator/mergeMap';
+
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './navbar.component.html',
@@ -15,6 +17,8 @@ import { AppDataService } from '../../shared/services/app.data.service';
 export class NavbarComponent implements OnInit {
 
   menuVisible = false;
+  showProgress = false;
+  searchText = '';
 
   public A: ApplicationData;
 
@@ -28,11 +32,20 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.service.getApplicationInfo()
+      .mergeMap(data => {
+        this.A = new ApplicationData();
+        this.A.appInfo = data;
+        this.state.setAppData(this.A);
+
+        return this.state.getSearchInput();
+      })
+      .mergeMap(data => {
+        this.searchText = data;
+        return this.state.getProgress();
+      })
       .subscribe(
         data => {
-          this.A = new ApplicationData();
-          this.A.appInfo = data;
-          this.state.setAppData(this.A);
+          this.showProgress = data;
         },
         error => {
           new MessageUtils().showError(this.snackBar, error);
@@ -44,12 +57,12 @@ export class NavbarComponent implements OnInit {
     this.state.setSearchInput(searchText);
   }
 
-  toggleMenu(visible:boolean) {
+  toggleMenu(visible: boolean) {
     this.menuVisible = visible;
   }
 
   menuTransform() {
-    if(this.menuVisible) {
+    if (this.menuVisible) {
       return this.sanitizer.bypassSecurityTrustStyle('translateX(0)');
     } else {
       return this.sanitizer.bypassSecurityTrustStyle('translateX(-110%)');

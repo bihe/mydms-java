@@ -145,7 +145,7 @@
 
 
 
-.select {
+.add {
     border-radius: 50%;
     box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
     display: -webkit-box;
@@ -212,4 +212,13 @@
     position: absolute;
     right: 10px;
     color: #AED6F1;
+}
+
+.more__results {
+    background-color: #FF9800;
+}
+
+.clear__search {
+    background-color: #6C3483;
+    color: white;
 }

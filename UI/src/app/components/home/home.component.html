@@ -1,5 +1,7 @@
 <div class="row documents">
 
+    
+
     <div class="document" *ngFor="let item of documents">
         <div class="card" (click)="editSelectedUser(item)">
 
@@ -46,13 +48,21 @@
         </div>
     </div>
 
+    <div *ngIf="totalEntries == 0">
+        <h4>No results found - either nothing is there, or your search did not return any results!</h4>
+        <p>
+            <button md-raised-button class="clear__search" (click)="clearSearch()"><i class="fa fa-recycle" aria-hidden="true"></i> clear the search!</button>
+        </p>
+    </div>
+
+    <div *ngIf="shownResults < totalEntries">
+        <p>Currently showing {{ shownResults }} result<span *ngIf="shownResults > 1">s</span> of total {{ totalEntries }}</p>
+        <button md-icon-button class="more__results" (click)="showMoreResults()" mdTooltip="Load more results"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></button>
+    </div>
+
 </div>
   
 
-<div class="masterdata" *ngIf="isAdmin === true">
-    <button md-fab (click)="navigateToMasterData()"><i class="fa fa-database fa-2x" aria-hidden="true" mdTooltip="Edit the masterdata" [mdTooltipPosition]="before"></i></button>
-</div>
-
-<div class="select" *ngIf="isAdmin === true">
-    <button md-fab (click)="selectRandomUser()"><i class="fa fa-crosshairs fa-3x" aria-hidden="true" mdTooltip="Select a random user" [mdTooltipPosition]="before"></i></button>
+<div class="add" >
+    <button md-fab><i class="fa fa-plus fa-2x" aria-hidden="true" mdTooltip="Add a new document" mdTooltipPosition="before"></i></button>
 </div>
