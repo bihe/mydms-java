@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import net.binggl.mydms.features.documents.viewmodels.PagedDocuments;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
@@ -26,11 +27,13 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<DocumentViewModel> searchDocuments(Optional<String> title, Optional<String> tag, Optional<String> sender,
+	public PagedDocuments searchDocuments(Optional<String> title, Optional<String> tag, Optional<String> sender,
 			Optional<Date> dateFrom, Optional<Date> dateUntil, Optional<Integer> limit, Optional<Integer> skip,
 			OrderBy... order) {
-		
-		StringBuffer sqlQuery = new StringBuffer("SELECT d.* FROM DOCUMENTS d %JOIN% %WHERE% ");
+
+        PagedDocuments documents = new PagedDocuments();
+
+		StringBuffer sqlQuery = new StringBuffer("SELECT %SELECT% FROM DOCUMENTS d %JOIN% %WHERE%");
 		StringBuffer sqlJoin = new StringBuffer();
 		boolean hasWhere = false;
 		boolean hasJoin = false;
@@ -61,8 +64,8 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 			sqlQuery.append(" AND d.created <= :dateUntil");
 			hasWhere = true;
 		}
-		
-		sqlQuery.append(this.getOrderByClause(order));
+
+		sqlQuery = sqlQuery.append("%ORDERBY%");
 		String sql = sqlQuery.toString();
 		
 		if(hasWhere) {
@@ -76,30 +79,43 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 		} else {
 			sql = sql.replace("%JOIN%", "");
 		}
-		
-				
-		Query query = this.currentSession().createSQLQuery(sql)
+
+		String fullSQL = sql.replaceAll("%SELECT%","d.*");
+		fullSQL = fullSQL.replaceAll("%ORDERBY%", this.getOrderByClause(order));
+
+		String countSQL = sql.replaceAll("%SELECT%","count(d.id)");
+		countSQL = countSQL.replaceAll("%ORDERBY%", "");
+
+		Query queryCount = this.currentSession().createNativeQuery(countSQL);
+		Query query = this.currentSession().createNativeQuery(fullSQL)
 				.setResultTransformer(new DocumentViewModelResultTransformer());
 		
 		// parameters
 		
 		if (title.isPresent()) {
 			query.setParameter("title", String.format("%%%s%%", title.get().toLowerCase()));
+            queryCount.setParameter("title", String.format("%%%s%%", title.get().toLowerCase()));
 		}
 		if (tag.isPresent()) {
 			query.setParameter("tagName", tag.get());
+            queryCount.setParameter("tagName", tag.get());
 		}
 		if (sender.isPresent()) {
 			query.setParameter("senderName", sender.get());
+            queryCount.setParameter("senderName", sender.get());
 		}
 		if (dateFrom.isPresent()) {
 			query.setParameter("dateFrom", dateFrom.get());
+            queryCount.setParameter("dateFrom", dateFrom.get());
 		}
 		if (dateUntil.isPresent()) {
 			query.setParameter("dateUntil", dateUntil.get());
+            queryCount.setParameter("dateUntil", dateUntil.get());
 		}
-		
-		
+
+		Number numberOfEntries = (Number) queryCount.getSingleResult();
+        documents.setTotalEntries(numberOfEntries.longValue());
+
 		// post
 		
 		if (limit.isPresent()) {
@@ -108,9 +124,10 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 		if (skip.isPresent()) {
 			query = query.setFirstResult(skip.get());
 		}
-		
-		List<DocumentViewModel> result = (List<DocumentViewModel>)query.list();
-		return result;	
+
+		documents.setDocuments((List<DocumentViewModel>)query.list());
+
+		return documents;
 	}
 
 	@Override
@@ -140,7 +157,7 @@ public class DocumentStore extends AbstractHibernateStore<Document> {
 		String sqlQuery = "SELECT d.* FROM DOCUMENTS d ";
 		sqlQuery += this.getOrderByClause(order);
 				
-		Query query = this.currentSession().createSQLQuery(sqlQuery)
+		Query query = this.currentSession().createNativeQuery(sqlQuery)
 						.setResultTransformer(new DocumentViewModelResultTransformer());
 		
 		@SuppressWarnings("unchecked")

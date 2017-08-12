@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import net.binggl.mydms.features.documents.viewmodels.PagedDocuments;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -104,7 +105,7 @@ public class DocumentResource {
 	@Path("search")
 	@UnitOfWork
 	@Timed
-	public List<DocumentViewModel> searchDocuments(@QueryParam("title") Optional<String> search,
+	public PagedDocuments searchDocuments(@QueryParam("title") Optional<String> search,
 			@QueryParam("tag") Optional<String> byTag, @QueryParam("sender") Optional<String> bySender,
 			@QueryParam("from") Optional<String> fromDateString, @QueryParam("to") Optional<String> toDateString,
 			@QueryParam("limit") Optional<Integer> limitResults, @QueryParam("skip") Optional<Integer> skipResults) {
@@ -134,7 +135,7 @@ public class DocumentResource {
 			}
 		}
 
-		List<DocumentViewModel> searchResults = this.store.searchDocuments(search, byTag, bySender, fromDate, toDate,
+		PagedDocuments searchResults = this.store.searchDocuments(search, byTag, bySender, fromDate, toDate,
 				limitResults, skipResults, new OrderBy("created", SortOrder.Descending),
 				new OrderBy("title", SortOrder.Ascending));
 

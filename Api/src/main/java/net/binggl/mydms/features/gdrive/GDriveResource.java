@@ -100,6 +100,9 @@ public class GDriveResource implements Globals {
 		try {
 
 			HttpSession session = request.getSession(false);
+			if(session == null)
+                throw new WebApplicationException("The correlation token does not match!", Response.Status.FORBIDDEN);
+
 			String token = (String) session.getAttribute(SESSION_CORRELATION_TOKEN);
 			if (StringUtils.isNotEmpty(token) && token.equals(correlationToken)) {
 

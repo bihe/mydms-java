@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
 
+import net.binggl.mydms.features.documents.viewmodels.PagedDocuments;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
@@ -205,71 +206,71 @@ public class DocumentStoreTest {
     	List<Document> all = documentStore.findAll();
     	assertNotNull(all);
     	
-    	List<DocumentViewModel> search = documentStore.searchDocuments(Optional.empty(), Optional.of(tag1.getName()), Optional.empty(), 
+    	PagedDocuments search = documentStore.searchDocuments(Optional.empty(), Optional.of(tag1.getName()), Optional.empty(),
     			Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(1, search.size());
+    	assertEquals(1, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.empty(), Optional.of("__"), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(0, search.size());
+    	assertEquals(0, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(10, search.size());
+    	assertEquals(10, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.of(tag1.getName()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(1, search.size());
-    	assertEquals("document1", search.get(0).getTitle());
+    	assertEquals(1, search.getEntries());
+    	assertEquals("document1", search.getDocuments().get(0).getTitle());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(1, search.size());
-    	assertEquals("document5", search.get(0).getTitle());
+    	assertEquals(1, search.getEntries());
+    	assertEquals("document5", search.getDocuments().get(0).getTitle());
     	
     	DateTime from = new DateTime();
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.minusHours(1).toDate()), Optional.empty(), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(1, search.size());
+    	assertEquals(1, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.empty(), Optional.of(from.plusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(1, search.size());
+    	assertEquals(1, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.minusHours(1).toDate()), Optional.of(from.plusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(1, search.size());
+    	assertEquals(1, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.plusHours(1).toDate()), Optional.of(from.plusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(0, search.size());
+    	assertEquals(0, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.of(sender5.getName()), 
     			Optional.of(from.minusHours(1).toDate()), Optional.of(from.minusMinutes(1).toDate()), Optional.empty(), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(0, search.size());
+    	assertEquals(0, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.empty(), Optional.empty(), 
     			Optional.empty(), Optional.of(5), Optional.empty());
     	assertNotNull(search);
-    	assertEquals(5, search.size());
+    	assertEquals(5, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.empty(), Optional.empty(), 
     			Optional.empty(), Optional.of(10), Optional.of(5));
     	assertNotNull(search);
-    	assertEquals(5, search.size());
+    	assertEquals(5, search.getEntries());
     	
     	search = documentStore.searchDocuments(Optional.of("DOCUMENT"), Optional.empty(), Optional.empty(), Optional.empty(), 
     			Optional.empty(), Optional.of(1), Optional.of(1), new OrderBy("title", SortOrder.Ascending));
     	assertNotNull(search);
-    	assertEquals(1, search.size());
-    	assertEquals("document10", search.get(0).getTitle());
+    	assertEquals(1, search.getEntries());
+    	assertEquals("document10", search.getDocuments().get(0).getTitle());
     }
     
     
