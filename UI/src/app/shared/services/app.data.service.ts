@@ -13,6 +13,7 @@ import { ApplicationData } from '../models/application.data';
 import { BaseService } from '../services/_base.service';
 import { AppInfo } from '../models/app.info';
 import { Result } from '../models/result.model';
+import { Document } from '../models/document.model';
 import { DocumentResult } from '../models/document.result.model';
 
 @Injectable()

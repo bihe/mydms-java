@@ -1,0 +1,9 @@
+.document__icon {
+    top: 10px;
+    position: relative;
+}
+
+.save {
+    background-color: #239B56;
+    color: white;
+}

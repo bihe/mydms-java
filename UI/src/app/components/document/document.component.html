@@ -1,0 +1,31 @@
+<md-card>
+
+    <md-card-header>
+        <div md-card-avatar class="document__icon"><i class="fa fa-file-pdf-o fa-2x" aria-hidden="true"></i></div>
+        <md-card-title>
+            <md-input-container color="warn" hintLabel="Specify the name of the document">
+                <input mdInput placeholder="Document title" [(ngModel)]="document.title">
+            </md-input-container>
+        </md-card-title>
+    
+    </md-card-header>
+    <div>
+        <p>Upload zone</p>
+    </div>
+    <md-card-content>
+        <div>
+
+            <md-input-container color="warn" hintLabel="Optional amount">
+                <input type="number" mdInput placeholder="Amount" [(ngModel)]="document.amount">
+            </md-input-container>
+           
+
+        </div>
+    </md-card-content>
+
+    <md-card-actions>
+        <button md-raised-button (click)="onCancel()">Cancel</button>
+        <button md-raised-button class="pull-right save" (click)="onSave()">Save</button>
+    </md-card-actions>
+
+</md-card>

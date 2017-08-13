@@ -11,14 +11,13 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ApplicationState } from './shared/services/app.state';
 import { AppDataService } from './shared/services/app.data.service';
 import { SettingsComponent } from './components/settings/settings.component';
+import { DocumentComponent } from './components/document/document.component';
 
 @NgModule({
   imports: [ MaterialModule ],
   exports: [ MaterialModule ],
 })
 export class AppMaterialModule { }
-
-
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
@@ -27,6 +26,7 @@ export const sharedConfig: NgModule = {
         NavbarComponent,
         HomeComponent,
         SettingsComponent,
+        DocumentComponent,
         DateFormatPipe,
         EllipsisPipe
     ],
