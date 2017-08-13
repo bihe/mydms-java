@@ -41,6 +41,9 @@ export class AppDataService extends BaseService {
 
   searchDocuments(title: string, pageSize: number, skipEntries: number): Observable<DocumentResult> {
     const searchUrl = 'title=%TITLE%&limit=%LIMIT%&skip=%SKIP%';
+    if (title && title !== '') {
+      title = encodeURIComponent(title);
+    }
     let url = this.SEARCH_DOCUMENTS + '?' + searchUrl.replace('%TITLE%', title || '');
     if (!pageSize) {
       url = url.replace('%LIMIT%', '');

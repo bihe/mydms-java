@@ -271,6 +271,11 @@ public class DocumentStoreTest {
     	assertNotNull(search);
     	assertEquals(1, search.getEntries());
     	assertEquals("document10", search.getDocuments().get(0).getTitle());
+
+		search = documentStore.searchDocuments(Optional.of("#"), Optional.empty(), Optional.of(sender5.getName()),
+				Optional.of(from.minusHours(1).toDate()), Optional.empty(), Optional.empty(), Optional.empty());
+		assertNotNull(search);
+		assertEquals(0, search.getEntries());
     }
     
     
