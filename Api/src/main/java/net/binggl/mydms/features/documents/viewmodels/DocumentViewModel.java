@@ -1,9 +1,12 @@
 package net.binggl.mydms.features.documents.viewmodels;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -93,11 +96,8 @@ public class DocumentViewModel {
 	}
 
 	public String getPreviewLink() {
-		return previewLink;
-	}
-
-	public void setPreviewLink(String previewLink) {
-		this.previewLink = previewLink;
+        byte[] fileNameBytes = this.fileName.getBytes(StandardCharsets.UTF_8);
+        return Base64.encodeBase64String(fileNameBytes);
 	}
 
 	public double getAmount() {

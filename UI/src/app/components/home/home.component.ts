@@ -51,6 +51,14 @@ export class HomeComponent implements OnInit {
     this.state.setSearchInput('');
   }
 
+  addDocument() {
+    this.router.navigate(['/document/-1']);
+  }
+
+  editDocument(doc: Document) {
+    this.router.navigate(['/document/' + doc.id]);
+  }
+
   searchDocuments(title: string, skipEntries: number) {
     this.state.setProgress(true);
     this.service.searchDocuments(title, this.InitialPageSize, skipEntries)
@@ -70,6 +78,7 @@ export class HomeComponent implements OnInit {
             doc.amount = a.amount;
             doc.fileName = a.fileName;
             doc.encodedFilename = btoa(encodeURI(a.fileName));
+            doc.previewLink = a.previewLink;
             doc.id = a.id;
             doc.tags = a.tags;
             doc.senders = a.senders;

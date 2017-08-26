@@ -32,8 +32,6 @@ public class DocumentViewModelResultTransformer implements org.hibernate.transfo
             result.setFileName((String) object);
         } else if (string.equalsIgnoreCase("alternativeId")) {
             result.setAlternativeId((String) object);
-        } else if (string.equalsIgnoreCase("previewLink")) {
-            result.setPreviewLink((String) object);
         } else if (string.equalsIgnoreCase("amount")) {
         	double amount = 0.0;
         	if(object instanceof Double) {
@@ -53,11 +51,14 @@ public class DocumentViewModelResultTransformer implements org.hibernate.transfo
 	            result.setTags(tags);
             }
         } else if (string.equalsIgnoreCase("senderlist")) {
-            String list = (String)object;
-            if(StringUtils.isNotEmpty(list)) {
-	            List<String> senders = Arrays.asList(list.split(";"));
-	            result.setSenders(senders);
+            String list = (String) object;
+            if (StringUtils.isNotEmpty(list)) {
+                List<String> senders = Arrays.asList(list.split(";"));
+                result.setSenders(senders);
             }
+        } else if (string.equalsIgnoreCase("previewlink")) {
+            // ignore
+            ;
         } else {
             throw new RuntimeException("unknown field");
         }

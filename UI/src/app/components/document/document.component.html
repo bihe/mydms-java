@@ -4,20 +4,70 @@
         <div md-card-avatar class="document__icon"><i class="fa fa-file-pdf-o fa-2x" aria-hidden="true"></i></div>
         <md-card-title>
             <md-input-container color="warn" hintLabel="Specify the name of the document">
-                <input mdInput placeholder="Document title" [(ngModel)]="document.title">
+                <input mdInput placeholder="Document title" [(ngModel)]="documentTitle">
             </md-input-container>
         </md-card-title>
     
     </md-card-header>
-    <div>
-        <p>Upload zone</p>
+    <div class="upload__zone">
+            <div class="drop-container" [hidden]="uploadFileName != ''"
+                ngFileDrop 
+                (uploadOutput)="onUploadOutput($event)" 
+                [uploadInput]="uploadInput" 
+                [ngClass]="{ 'is-drop-over': dragOver }">
+                <span class="upload__zone_dd_text">Upload Drag &amp; Drop Zone</span>
+
+
+                <div class="upload__file">
+                    <input type="file" #fileUpload
+                        ngFileSelect (uploadOutput)="onUploadOutput($event)" 
+                        [uploadInput]="uploadInput" style="display: none;">
+                    <span (click)="fileUpload.click()" >or <span style="text-decoration:underline">choose</span> a file</span>
+                </div>
+
+            </div>
+
+            <div class="uploadfile" *ngIf="uploadFileName != ''">
+                <div class="pull-left">
+                  <i class="fa fa-cloud-download" aria-hidden="true"></i> <a href="/api/gdrive/file/?path={{ encodedUploadFileName }}">{{ uploadFileName | ellipsis:25 }}</a>
+                </div>
+                <div class="pull-right">
+                  <i class="fa fa-times" aria-hidden="true" (click)="onClearUploadedFile()"></i>
+                </div>
+                <br/>
+            </div>
     </div>
+
+    
+
     <md-card-content>
         <div>
 
             <md-input-container color="warn" hintLabel="Optional amount">
-                <input type="number" mdInput placeholder="Amount" [(ngModel)]="document.amount">
+                <input type="number" mdInput placeholder="Amount" [(ngModel)]="documentAmount">
             </md-input-container>
+           
+        </div>
+        <div class="tags">
+
+            <tag-input [(ngModel)]='selectedSenders' required
+            secondaryPlaceholder="Add a sender"
+            placeholder="+senders"
+            >
+                <tag-input-dropdown 
+                [autocompleteObservable]='searchForSenders'></tag-input-dropdown>
+                
+            </tag-input>
+
+            <tag-input [(ngModel)]='selectedTags'
+            secondaryPlaceholder="Add a tag"
+            placeholder="+tags"
+            >
+                <tag-input-dropdown 
+                [autocompleteObservable]='searchForTags'></tag-input-dropdown>
+                
+            </tag-input>
+
            
 
         </div>
@@ -25,7 +75,7 @@
 
     <md-card-actions>
         <button md-raised-button (click)="onCancel()">Cancel</button>
-        <button md-raised-button class="pull-right save" (click)="onSave()">Save</button>
+        <button md-raised-button class="pull-right save" (click)="onSave()" [disabled]="!isFormValid()" >Save</button>
     </md-card-actions>
 
 </md-card>

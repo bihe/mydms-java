@@ -3,13 +3,13 @@
     
 
     <div class="document" *ngFor="let item of documents">
-        <div class="card" (click)="editSelectedUser(item)">
+        <div class="card">
 
             <div *ngIf="item.amount" class="corner-ribbon bottom-right">
                 <i class="fa fa-eur" aria-hidden="true"></i> {{ item.amount }}
             </div>
 
-            <div class="cardheader">
+            <div class="cardheader"  (click)="editDocument(item)">
               <h4 mdTooltip="{{ item.title }}" mdTooltipPosition="below">
                   
                 <i class="fa fa-file-o" aria-hidden="true"></i>
@@ -18,7 +18,8 @@
             </div>
 
             <div class="download">
-                <i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i>
+                <a href="/api/gdrive/file/?path={{ item.previewLink }}"><i class="fa fa-cloud-download fa-3x" aria-hidden="true"></i></a>
+                
             </div>
 
             <div class="senders">
@@ -64,5 +65,5 @@
   
 
 <div class="add" >
-    <button md-fab><i class="fa fa-plus fa-2x" aria-hidden="true" mdTooltip="Add a new document" mdTooltipPosition="before"></i></button>
+    <button md-fab (click)="addDocument()"><i class="fa fa-plus fa-2x" aria-hidden="true" mdTooltip="Add a new document" mdTooltipPosition="before"></i></button>
 </div>

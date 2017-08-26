@@ -384,7 +384,6 @@ public class DocumentResource {
 			model.setCreated(document.get().getCreated());
 			model.setFileName(document.get().getFileName());
 			model.setModified(document.get().getModified());
-			model.setPreviewLink(document.get().getPreviewLink());
 			model.setTitle(document.get().getTitle());
 			
 			model.setTags(document.get().getTags().stream().map(a -> a.getTag().getName()).collect(Collectors.toList()));

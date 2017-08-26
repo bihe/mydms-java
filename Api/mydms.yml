@@ -13,7 +13,7 @@ application:
   
   # specify upload settings
   # path, maxsize, extenstions
-  uploadPath: /tmp
+  uploadPath: ${MYDMS_TMP_PATH:-/tmp}
   maxUploadSize: 512000
   allowedFileTypes:
     - application/pdf

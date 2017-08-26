@@ -89,7 +89,6 @@ export class AppDataService extends BaseService {
     const url = this.SEARCH_SENDERS_URL + '?' + searchUrl.replace('%NAME%', name || '');
 
     return this.http.get(url, this.getRequestOptions())
-      .debounceTime(300)        // wait for 300ms pause in events
       .distinctUntilChanged()   // ignore if next search term is same as previous
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
@@ -98,12 +97,11 @@ export class AppDataService extends BaseService {
       .catch(this.handleError);
   }
 
-  searchTags(name:string): Observable<any[]> {
+  searchTags(name: string): Observable<any[]> {
     const searchUrl = 'name=%NAME%';
     const url = this.SEARCH_TAGS_URL + '?' + searchUrl.replace('%NAME%', name || '');
 
     return this.http.get(url, this.getRequestOptions())
-      .debounceTime(300)        // wait for 300ms pause in events
       .distinctUntilChanged()   // ignore if next search term is same as previous
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
@@ -112,7 +110,7 @@ export class AppDataService extends BaseService {
       .catch(this.handleError);
   }
 
-  saveDocument(document:Document) : Observable<Result> {
+  saveDocument(document: Document): Observable<Result> {
     return this.http.post(this.SAVE_DOCUMENTS_URL, JSON.stringify(document), this.getRequestOptions())
               .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
               .map(this.extractData)
@@ -121,7 +119,7 @@ export class AppDataService extends BaseService {
   }
 
   getDocument(id: string): Observable<Document> {
-    const url = this.LOAD_DOCUMENT_URL.replace('%ID%', id || '');
+    const url = this.LOAD_DOCUMENT_URL.replace('%ID%', id || '-1');
 
     return this.http.get(url, this.getRequestOptions())
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))

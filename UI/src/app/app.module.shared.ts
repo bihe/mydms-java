@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MaterialModule, MdNativeDateModule } from '@angular/material';
+import { TagInputModule } from 'ngx-chips';
+import { NgUploaderModule } from 'ngx-uploader';
 
 import { AppComponent } from './components/app/app.component';
 import { EllipsisPipe } from './shared/pipes/ellipsis';
@@ -31,7 +33,9 @@ export const sharedConfig: NgModule = {
         EllipsisPipe
     ],
     imports: [
-        AppMaterialModule
+        AppMaterialModule,
+        TagInputModule,
+        NgUploaderModule
     ],
     providers: [ ApplicationState, AppDataService ],
     entryComponents: []

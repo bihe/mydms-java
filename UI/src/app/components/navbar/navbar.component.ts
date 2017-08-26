@@ -32,17 +32,28 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.service.getApplicationInfo()
-      .mergeMap(data => {
-        this.A = new ApplicationData();
-        this.A.appInfo = data;
-        this.state.setAppData(this.A);
+      .subscribe(
+        data => {
+          this.A = new ApplicationData();
+          this.A.appInfo = data;
+          this.state.setAppData(this.A);
+        },
+        error => {
+          new MessageUtils().showError(this.snackBar, error);
+        }
+      );
 
-        return this.state.getSearchInput();
-      })
-      .mergeMap(data => {
-        this.searchText = data;
-        return this.state.getProgress();
-      })
+    this.state.getSearchInput()
+      .subscribe(
+        data => {
+          this.searchText = data;
+        },
+        error => {
+          new MessageUtils().showError(this.snackBar, error);
+        }
+      );
+
+    this.state.getProgress()
       .subscribe(
         data => {
           this.showProgress = data;
@@ -51,6 +62,7 @@ export class NavbarComponent implements OnInit {
           new MessageUtils().showError(this.snackBar, error);
         }
       );
+
   }
 
   onSearch(searchText: string) {
