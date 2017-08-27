@@ -1,9 +1,9 @@
 @echo off
 
-cd ./Frontend
+cd ./UI
 call npm install 
-call npm run build.prod -- --base /ui/
+call npm run build -- --prod --bh /ui/
 cd ../
-cp -R ./Frontend/dist/prod/* ./Api/src/main/resources/assets/ui/
+cp -R ./UI/dist/* ./Api/src/main/resources/assets/ui/
 cd ./Api
 call mvn clean package

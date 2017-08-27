@@ -1,70 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <base href="/ui/">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Welcome to angular2-seed!</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="assets/favicon/favicon-PROD.ico" type="image/x-icon">
-
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <!-- inject:css -->
-  <link rel="stylesheet" href="/ui/css/main.css?1486298195518">
-  <!-- endinject -->
-
-  <style type="text/css">
-  #inner,#outer{position:relative}body,html{margin:0;height:100%}#outer{height:100%;overflow:hidden;width:100%}#outer[id]{display:table;position:static}#middle{position:absolute;top:50%;width:100%;text-align:center}#middle[id]{display:table-cell;vertical-align:middle;position:static}#inner{top:-50%;text-align:left;margin-left:auto;margin-right:auto;width:300px}.sk-cube-grid{width:40px;height:40px;margin:15px auto}.sk-cube-grid .sk-cube{width:33%;height:33%;background-color:#fff;float:left;-webkit-animation:sk-cubeGridScaleDelay 1.3s infinite ease-in-out;animation:sk-cubeGridScaleDelay 1.3s infinite ease-in-out}.sk-cube-grid .sk-cube1{-webkit-animation-delay:.2s;animation-delay:.2s}.sk-cube-grid .sk-cube2{-webkit-animation-delay:.3s;animation-delay:.3s}.sk-cube-grid .sk-cube3{-webkit-animation-delay:.4s;animation-delay:.4s}.sk-cube-grid .sk-cube4{-webkit-animation-delay:.1s;animation-delay:.1s}.sk-cube-grid .sk-cube5{-webkit-animation-delay:.2s;animation-delay:.2s}.sk-cube-grid .sk-cube6{-webkit-animation-delay:.3s;animation-delay:.3s}.sk-cube-grid .sk-cube7{-webkit-animation-delay:0s;animation-delay:0s}.sk-cube-grid .sk-cube8{-webkit-animation-delay:.1s;animation-delay:.1s}.sk-cube-grid .sk-cube9{-webkit-animation-delay:.2s;animation-delay:.2s}@-webkit-keyframes sk-cubeGridScaleDelay{0%,100%,70%{-webkit-transform:scale3D(1,1,1);transform:scale3D(1,1,1)}35%{-webkit-transform:scale3D(0,0,1);transform:scale3D(0,0,1)}}@keyframes sk-cubeGridScaleDelay{0%,100%,70%{-webkit-transform:scale3D(1,1,1);transform:scale3D(1,1,1)}35%{-webkit-transform:scale3D(0,0,1);transform:scale3D(0,0,1)}}
-  </style>
-
-</head>
-<body>
-
-  <mydms-app>
-    <div id="outer" style="background: #7f8c8d;">
-        <div id="middle">
-          <div id="inner" style="text-align:center;" >
-                <span align="center" style="font-weight:bold;color:white">Loading mydms</span>
-                <div class="sk-cube-grid">
-                  <div class="sk-cube sk-cube1"></div>
-                  <div class="sk-cube sk-cube2"></div>
-                  <div class="sk-cube sk-cube3"></div>
-                  <div class="sk-cube sk-cube4"></div>
-                  <div class="sk-cube sk-cube5"></div>
-                  <div class="sk-cube sk-cube6"></div>
-                  <div class="sk-cube sk-cube7"></div>
-                  <div class="sk-cube sk-cube8"></div>
-                  <div class="sk-cube sk-cube9"></div>
-                </div>
-
-          </div>
-        </div>
-    </div>
-  </mydms-app>
-
-  <script>
-  // Fixes undefined module function in SystemJS bundle
-  function module() {}
-  </script>
-
-  <!-- shims:js -->
-  <!-- endinject -->
-
-  
-
-  <!-- libs:js -->
-  <!-- endinject -->
-
-  <!-- inject:js -->
-  <script src="/ui/js/shims.js?1486298195515"></script>
-  <script src="/ui/js/app.js?1486298195516"></script>
-  <!-- endinject -->
-
-
-
-  
-
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>mydms application</title><base href="/ui/"><link rel="apple-touch-icon" sizes="76x76" href="assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png"><link rel="manifest" href="assets/manifest.json"><link rel="icon" type="image/x-icon" href="assets/favicon.ico"><meta name="theme-color" content="#ffffff"><meta name="viewport" content="width=device-width,initial-scale=1"><style type="text/css">html, body { margin: 0; padding: 0; height: 100%; font-family: monospace; }
+    #outer {height: 100%; overflow: hidden; position: relative; width: 100%;}
+    #outer[id] {display: table; position: static;}
+    #middle {position: absolute; top: 50%; width: 100%; text-align: center;}
+    #middle[id] {display: table-cell; vertical-align: middle; position: static;}
+    #inner {position: relative; top: -50%; text-align: left;}
+    #inner {margin-left: auto; margin-right: auto;}
+    #inner {width: 300px; }
+    .spinner{margin:100px auto 0;width:70px;text-align:center}.spinner>div{width:18px;height:18px;background-color:#fff;border-radius:100%;display:inline-block;-webkit-animation:sk-bouncedelay 1.4s infinite ease-in-out both;animation:sk-bouncedelay 1.4s infinite ease-in-out both}.spinner .bounce1{-webkit-animation-delay:-.32s;animation-delay:-.32s}.spinner .bounce2{-webkit-animation-delay:-.16s;animation-delay:-.16s}@-webkit-keyframes sk-bouncedelay{0%,100%,80%{-webkit-transform:scale(0)}40%{-webkit-transform:scale(1)}}
+    @keyframes sk-bouncedelay{0%,100%,80%{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}</style><link href="styles.ada88658e34c9cc41655.bundle.css" rel="stylesheet"/></head><body><app-root><div id="outer" style="background: linear-gradient(to right, #154360 0%, #1F618D 100%)"><div id="middle"><div id="inner" style="text-align:center"><span align="center" style="font-weight:bold;color:white;font-size:1.4em">mydms.ui</span> <span align="center" style="color:white">application is loading</span><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div></div></div></app-root><script type="text/javascript" src="inline.ecccb7bedc7b6f395777.bundle.js"></script><script type="text/javascript" src="polyfills.0963b44a58b5526cfab7.bundle.js"></script><script type="text/javascript" src="vendor.9ba56c40b54daa84571b.bundle.js"></script><script type="text/javascript" src="main.97a2b5f0aa581a683561.bundle.js"></script></body></html>

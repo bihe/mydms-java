@@ -117,12 +117,27 @@
         </plugins>
         <!--<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>-->
 
+        <!-- https://stackoverflow.com/questions/34037051/spring-boot-font-awesome-ots-parsing-error-failed-to-convert
+             maven resource filtering and font-files!!
+        -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+				<excludes>
+					<exclude>assets/**</exclude>
+				</excludes>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>assets/**</include>
+                </includes>
             </resource>
         </resources>
+
     </build>
 
 	<dependencies>

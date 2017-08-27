@@ -1,10 +1,10 @@
 #!/bin/sh
 
-cd ./Frontend
+cd ./UI
 echo $PWD
-npm run build.prod -- --base /ui/
+npm run build -- --prod --bh /ui/
 cd ../
 echo $PWD
-cp -R ./Frontend/dist/prod/* ./Api/src/main/resources/assets/ui/
+cp -R ./UI/dist/* ./Api/src/main/resources/assets/ui/
 cd ./Api
 mvn clean package

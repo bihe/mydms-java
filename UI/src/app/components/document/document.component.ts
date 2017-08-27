@@ -143,11 +143,11 @@ export class DocumentComponent implements OnInit {
 
   }
 
-  onCancel() {
+  public onCancel() {
     this.router.navigate(['/home']);
   }
 
-  onSave() {
+  public onSave() {
     if (this.isFormValid()) {
       this.convertSenderAndTags();
 
@@ -188,7 +188,7 @@ export class DocumentComponent implements OnInit {
     }
   }
 
-  onUploadOutput(output: UploadOutput): void {
+  public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') { // when all files added in queue
       this.state.setProgress(true);
       const event: UploadInput = {
@@ -255,7 +255,7 @@ export class DocumentComponent implements OnInit {
     this.uploadFileName = '';
   }
 
-  private isFormValid() {
+  public isFormValid() {
     if (this.documentTitle !== '' && this.uploadFileName !== '' && this.uploadToken !== ''
       && this.selectedSenders.length > 0) {
         return true;
