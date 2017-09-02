@@ -128,4 +128,13 @@ export class AppDataService extends BaseService {
       })
       .catch(this.handleError);
   }
+
+  deleteDocument(id: string): Observable<Result> {
+    const url = this.LOAD_DOCUMENT_URL.replace('%ID%', id || '-1');
+
+    return this.http.delete(url, this.getRequestOptions())
+      .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
 }

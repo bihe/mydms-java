@@ -2,12 +2,13 @@ import { Component, OnInit, EventEmitter  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApplicationState } from '../../shared/services/app.state';
 import { ApplicationData } from '../../shared/models/application.data';
-import { MdSnackBar } from '@angular/material';
+import { MdSnackBar, MdDialog, MdDialogConfig } from '@angular/material';
 import { MessageUtils } from '../../shared/utils/message.utils';
 import { AppDataService } from '../../shared/services/app.data.service';
 import { Document } from '../../shared/models/document.model';
 import { Sender } from '../../shared/models/sender.model';
 import { Tag } from '../../shared/models/tag.model';
+import { ConfirmationDialogComponent } from '../../shared/confirmation/confirmation.component';
 import { AutoCompleteModel, TagType } from '../../shared/models/autocomplete.model';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
 import { TagModel } from 'ngx-chips/dist/modules/core';
@@ -19,7 +20,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
-
 
 @Component({
   selector: 'app-document',
@@ -54,6 +54,7 @@ export class DocumentComponent implements OnInit {
     private state: ApplicationState,
     private snackBar: MdSnackBar,
     private route: ActivatedRoute,
+    private dialog: MdDialog,
     private router: Router) {
       this.files = []; // local uploading files array
       this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
@@ -186,6 +187,36 @@ export class DocumentComponent implements OnInit {
     } else {
       new MessageUtils().showError(this.snackBar, 'The form is not valid!');
     }
+  }
+
+  public onDelete() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, ConfirmationDialogComponent.getDialogConfig(this.documentTitle));
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        console.log('Delete confirmed!');
+        this.state.setProgress(true);
+        this.service.deleteDocument(this.document.id)
+          .subscribe(
+            r => {
+              if (r.result === 'Deleted') {
+                this.state.setProgress(false);
+                console.log(r.message);
+                this.router.navigate(['/']);
+                return;
+              } else {
+                this.state.setProgress(false);
+                new MessageUtils().showError(this.snackBar, result.message);
+              }
+            },
+            error => {
+              this.state.setProgress(false);
+              new MessageUtils().showError(this.snackBar, error);
+            }
+          );
+
+      }
+    });
   }
 
   public onUploadOutput(output: UploadOutput): void {

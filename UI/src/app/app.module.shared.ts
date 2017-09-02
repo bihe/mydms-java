@@ -14,6 +14,7 @@ import { ApplicationState } from './shared/services/app.state';
 import { AppDataService } from './shared/services/app.data.service';
 import { SettingsComponent } from './components/settings/settings.component';
 import { DocumentComponent } from './components/document/document.component';
+import { ConfirmationDialogComponent } from './shared/confirmation/confirmation.component';
 
 @NgModule({
   imports: [ MaterialModule ],
@@ -28,6 +29,7 @@ export const sharedConfig: NgModule = {
         NavbarComponent,
         HomeComponent,
         SettingsComponent,
+        ConfirmationDialogComponent,
         DocumentComponent,
         DateFormatPipe,
         EllipsisPipe
@@ -38,5 +40,5 @@ export const sharedConfig: NgModule = {
         NgUploaderModule
     ],
     providers: [ ApplicationState, AppDataService ],
-    entryComponents: []
+    entryComponents: [ ConfirmationDialogComponent ]
 };

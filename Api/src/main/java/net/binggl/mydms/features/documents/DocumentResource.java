@@ -99,7 +99,6 @@ public class DocumentResource {
 				new OrderBy("created", SortOrder.Descending),
 				new OrderBy("title", SortOrder.Ascending));
 	}
-
 	
 	@GET
 	@Path("search")
@@ -141,7 +140,6 @@ public class DocumentResource {
 
 		return searchResults;
 	}
-
 	
 	@GET
 	@UnitOfWork
@@ -170,7 +168,6 @@ public class DocumentResource {
 
 		return this.toModel(document);
 	}
-
 	
 	@DELETE
 	@UnitOfWork
@@ -193,7 +190,6 @@ public class DocumentResource {
 		throw new WebApplicationException(String.format("Could not find the given document (%s)", documentId),
 				Status.NOT_FOUND);
 	}
-
 	
 	@POST
 	@UnitOfWork
@@ -204,7 +200,7 @@ public class DocumentResource {
 		try {
 			Document document = null;
 
-			if (docItem.getId() == null || EMPTY.equals(docItem.getId())) {
+			if (docItem.getId() == null || EMPTY.toString().equals(docItem.getId())) {
 				LOGGER.debug("Will create a new document useing {}", docItem);
 				document = this.newIntance();
 			} else {

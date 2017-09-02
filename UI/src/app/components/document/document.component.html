@@ -76,6 +76,7 @@
     <md-card-actions>
         <button md-raised-button (click)="onCancel()">Cancel</button>
         <button md-raised-button class="pull-right save" (click)="onSave()" [disabled]="!isFormValid()" >Save</button>
+        <button *ngIf="!isNewDocument" md-raised-button class="pull-right delete" (click)="onDelete()">Delete</button>
     </md-card-actions>
 
 </md-card>

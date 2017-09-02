@@ -8,6 +8,11 @@
     color: white;
 }
 
+.delete {
+    background-color: #CB4335;
+    color: white;
+}
+
 div.tags {
     margin-top: 10px;
 }
