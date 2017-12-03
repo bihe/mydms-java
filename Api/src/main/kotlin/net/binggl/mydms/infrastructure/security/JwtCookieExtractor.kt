@@ -1,6 +1,6 @@
 package net.binggl.mydms.infrastructure.security
 
-import net.binggl.mydms.shared.exceptions.MydmsException
+import net.binggl.mydms.infrastructure.exceptions.MydmsException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletRequest
 @Component
 class JwtCookieExtractor(@Value("\${jwt.cookieName}") private val cookieName: String,
                          @Autowired private val request: HttpServletRequest) {
-
-//    @Autowired
-//    var request: HttpServletRequest? = null
 
     fun extractToken(): String {
         val cookies = request.cookies

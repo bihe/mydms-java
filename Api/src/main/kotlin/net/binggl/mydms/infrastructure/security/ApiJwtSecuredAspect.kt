@@ -1,5 +1,17 @@
 package net.binggl.mydms.infrastructure.security
 
+import org.apache.commons.lang3.StringUtils
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.Around
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Pointcut
+import org.aspectj.lang.reflect.MethodSignature
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.ResponseStatus
+import javax.servlet.http.HttpServletRequest
+
 // https://github.com/gothinkster/kotlin-spring-realworld-example-app/blob/master/src/main/kotlin/io/realworld/jwt/ApiKeySecuredAspect.kt
 
 /**
@@ -12,102 +24,65 @@ package net.binggl.mydms.infrastructure.security
  * otherwise the response is set with an UNAUTHORIZED status and the annotated
  * method is not executed.
  */
-//@Aspect
-//@Component
-//class ApiJwtSecuredAspect(@Autowired val userService: UserService) {
-//
-//    @Autowired
-//    var request: HttpServletRequest? = null
-//
-//    @Pointcut(value = "execution(@net.binggl.mydms.infrastructure.security.ApiJwtSecured * *.*(..))")
-//    fun securedApiPointcut() {
-//    }
-//
-//    @Around("securedApiPointcut()")
-//    @Throws(Throwable::class)
-//    fun aroundSecuredApiPointcut(joinPoint: ProceedingJoinPoint): Any? {
-//        if (request!!.method == "OPTIONS")
-//            return joinPoint.proceed()
-//
-//        // check for needed roles
-//        val signature = joinPoint.signature as MethodSignature
-//        val method = signature.method
-//        val annotation = method.getAnnotation(ApiJwtSecured::class.java)
-//
-//        val apiKey = request!!.getHeader("Authorization")?.replace("Token ", "")
-//
-//        if (StringUtils.isEmpty(apiKey) && annotation.mandatory) {
-//            LOG.info("No Authorization part of the request header/parameters, returning {}.", HttpServletResponse.SC_UNAUTHORIZED)
-//
-//            issueError(response)
-//            return null
-//        }
-//
-//        // find the user associated to the given api key.
-//        var user = userService.findByToken(apiKey ?: "")
-//        LOG.info("user by token: ${user?.email}")
-//        if (user == null && anno.mandatory) {
-//            LOG.info("No user with Authorization: {}, returning {}.", apiKey, HttpServletResponse.SC_UNAUTHORIZED)
-//
-//            issueError(response)
-//            return null
-//        } else {
-//            // validate JWT
-//            try {
-//                LOG.info("Validating JWT")
-//                if (!userService.validToken(apiKey ?: "", user ?: User())) {
-//                    LOG.info("JWT invalid")
-//                    if (!anno.mandatory && user == null) {
-//                        LOG.info("No problem because not mandatory")
-//                        user = User()
-//                    } else { // error
-//                        LOG.info("Authorization: {} is an invalid JWT.", apiKey, HttpServletResponse.SC_UNAUTHORIZED)
-//
-//                        issueError(response)
-//                        return null
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                if (anno.mandatory) {
-//                    issueError(response)
-//                    return null
-//                } else
-//                    user = User()
-//            }
-//        }
-//
-//        LOG.info("User is: ${user?.email}")
-//        userService.setCurrentUser(user ?: User())
-//
-//        LOG.info("OK accessing resource, proceeding.")
-//
-//        // execute
-//        try {
-//            val result = joinPoint.proceed()
-//
-//            // remove user from thread local
-//            userService.clearCurrentUser()
-//
-//            LOG.info("DONE accessing resource.")
-//
-//            return result
-//        } catch (e: Throwable) {
-//            // check for custom exception
-//            val rs = e.javaClass.getAnnotation(ResponseStatus::class.java)
-//            if (rs != null) {
-//                LOG.error("ERROR accessing resource, reason: '{}', status: {}.",
-//                        if (StringUtils.isEmpty(e.message)) rs.reason else e.message,
-//                        rs.value)
-//            } else {
-//                LOG.error("ERROR accessing resource")
-//            }
-//            throw e
-//        }
-//
-//    }
-//
-//
-//    companion object {
-//        private val LOG = LoggerFactory.getLogger(ApiJwtSecuredAspect::class.java)
-//    }
-//}
+@Aspect
+@Component
+class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
+                          @Autowired private val jwtAuthenticator: JwtAuthenticator,
+                          @Autowired private val jwtCookieExtractor: JwtCookieExtractor,
+                          @Autowired private val request: HttpServletRequest) {
+
+    @Pointcut(value = "execution(@net.binggl.mydms.infrastructure.security.ApiJwtSecured * *.*(..))")
+    fun securedApiPointcut() {
+    }
+
+    @Around("securedApiPointcut()")
+    @Throws(Throwable::class)
+    fun aroundSecuredApiPointcut(joinPoint: ProceedingJoinPoint): Any? {
+        if (request!!.method == "OPTIONS")
+            return joinPoint.proceed()
+
+        val signature = joinPoint.signature as MethodSignature
+        val method = signature.method
+        val annotation = method.getAnnotation(ApiJwtSecured::class.java)
+
+        val user = jwtAuthenticator.authenticate(jwtCookieExtractor.extractToken())
+        if(!user.isPresent) {
+            throw InvalidAuthenticationException("Could not authenticate user!")
+        }
+
+        // verify the annotations
+        val desiredUrl = annotation.url
+        val requiredRole = annotation.requiredRole
+
+        user.get().claims.find { it.url == desiredUrl && it.role == requiredRole }
+                ?: throw InvalidAuthorizationException("Required role for given url not available!")
+
+        // execute
+        try {
+            LOG.debug("Set user into request-holder: ${user.get().displayName}")
+            userService.setCurrentUser(user.get())
+
+            val result = joinPoint.proceed()
+
+            userService.clearCurrentUser()
+            LOG.debug("Cleanup user from request-holder.")
+            return result
+        } catch (e: Throwable) {
+            userService.clearCurrentUser()
+
+            val rs = e.javaClass.getAnnotation(ResponseStatus::class.java)
+            if (rs != null) {
+                LOG.error("ERROR accessing resource, reason: '{}', status: {}.",
+                        if (StringUtils.isEmpty(e.message)) rs.reason else e.message,
+                        rs.value)
+            } else {
+                LOG.error("ERROR accessing resource")
+            }
+            throw e
+        }
+    }
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger(ApiJwtSecuredAspect::class.java)
+    }
+}

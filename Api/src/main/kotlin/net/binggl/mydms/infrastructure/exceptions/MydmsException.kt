@@ -1,4 +1,4 @@
-package net.binggl.mydms.shared.exceptions
+package net.binggl.mydms.infrastructure.exceptions
 
 import java.lang.RuntimeException
 

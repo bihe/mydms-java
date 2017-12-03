@@ -3,6 +3,7 @@ package net.binggl.mydms.infrastructure.security
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
@@ -35,10 +36,15 @@ class JwtAuthenticator(@Value("\${jwt.tokenSecret}")val tokenSecret: String) {
                 //.withIssuer("auth0") might be useful - needs to be implemented in login.binggl.net
                 .build() //Reusable verifier instance
 
-        val jwt: DecodedJWT = verifier.verify(token)
+        val jwt: DecodedJWT
+        try {
+            jwt = verifier.verify(token)
+        } catch (sigEx: SignatureVerificationException) {
+            throw InvalidAuthorizationException("Could not verify the token checksum!")
+        }
+
         val tokenClaims: Map<String, com.auth0.jwt.interfaces.Claim> = jwt.claims
         if (tokenClaims != null) {
-
             if (tokenClaims.size >= 6 && tokenClaims[TYPE] != null
                     && TYPE_VALUE == tokenClaims[TYPE]!!.asString()) {
 
@@ -52,6 +58,7 @@ class JwtAuthenticator(@Value("\${jwt.tokenSecret}")val tokenSecret: String) {
                 ))
             }
         }
+
         return Optional.empty()
     }
 
