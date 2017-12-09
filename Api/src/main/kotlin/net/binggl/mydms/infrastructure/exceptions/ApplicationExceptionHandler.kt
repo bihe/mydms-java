@@ -1,7 +1,5 @@
 package net.binggl.mydms.infrastructure.exceptions
 
-import net.binggl.mydms.infrastructure.security.InvalidAuthenticationException
-import net.binggl.mydms.infrastructure.security.InvalidAuthorizationException
 import net.binggl.mydms.shared.api.ApiUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+import java.net.URI
 
 
 @ControllerAdvice
@@ -21,7 +20,7 @@ class ApplicationExceptionHandler : ResponseEntityExceptionHandler() {
         InvalidAuthorizationException::class,
         InvalidAuthenticationException::class
     ])
-    protected fun handleConflict(ex: RuntimeException, request: WebRequest): ResponseEntity<Any> {
+    protected fun handle(ex: RuntimeException, request: WebRequest): ResponseEntity<Any> {
 
         var response:  ResponseEntity<Any>
 
@@ -32,12 +31,16 @@ class ApplicationExceptionHandler : ResponseEntityExceptionHandler() {
 
         when(ex) {
             is InvalidAuthorizationException -> {
-                response = handleExceptionInternal(ex, ex.message,
-                        HttpHeaders(), HttpStatus.UNAUTHORIZED, request)
+                response = if(isBrowserRequest) {
+                    ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login")).build()
+                } else
+                    handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.UNAUTHORIZED, request)
             }
             is InvalidAuthenticationException -> {
-                response = handleExceptionInternal(ex, ex.message,
-                        HttpHeaders(), HttpStatus.FORBIDDEN, request)
+                response = if(isBrowserRequest) {
+                    ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login")).build()
+                } else
+                    handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.FORBIDDEN, request)
             }
             is MydmsException -> {
                 response = handleExceptionInternal(ex, ex.message,

@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import net.binggl.commons.crypto.HashHelper
+import net.binggl.mydms.infrastructure.exceptions.InvalidAuthorizationException
 import net.binggl.mydms.shared.models.Claim
 import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.User
@@ -17,7 +18,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Component
-class JwtAuthenticator(@Value("\${jwt.tokenSecret}")val tokenSecret: String) {
+class JwtAuthenticator(@Value("\${auth.tokenSecret}")val tokenSecret: String) {
 
     private val userCache : Cache<String, Optional<User>> = CacheBuilder.newBuilder()
 		       .maximumSize(10)

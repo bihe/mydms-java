@@ -1,0 +1,12 @@
+## jwt security settings
+auth:
+  cookieName: login_token
+  tokenSecret: ${MYDMS_JWT_TOKEN_SECRET:secret}
+  name: mydms
+  url: https://mydms.binggl.net/
+  loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=http://devel.binggl.net:8080/
+
+application:
+  url: http://devel.binggl.net:8080/app/index.html
+
+

@@ -1,6 +1,6 @@
 package net.binggl.mydms.infrastructure.security
 
-import net.binggl.mydms.infrastructure.exceptions.MydmsException
+import net.binggl.mydms.infrastructure.exceptions.InvalidAuthenticationException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletRequest
 
 @Component
-class JwtCookieExtractor(@Value("\${jwt.cookieName}") private val cookieName: String,
+class JwtCookieExtractor(@Value("\${auth.cookieName}") private val cookieName: String,
                          @Autowired private val request: HttpServletRequest) {
 
     fun extractToken(): String {
@@ -18,14 +18,14 @@ class JwtCookieExtractor(@Value("\${jwt.cookieName}") private val cookieName: St
         if(jwtCookie == null) {
             LOG.warn("No cookies available. Cannot authenticate!")
 			val message = "No authentication cookies available!"
-			throw MydmsException(message)
+			throw InvalidAuthenticationException(message)
         }
 
         val cookieValue = jwtCookie.value
         if(cookieValue.isEmpty()) {
             LOG.warn("The authentication cookie is empty!")
             val message = "The authentication cookie is empty!"
-            throw MydmsException(message)
+            throw InvalidAuthenticationException(message)
         }
         return cookieValue
     }

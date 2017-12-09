@@ -6,7 +6,6 @@ object ApiUtils {
 
     private const val JSON_MEDIA_TYPE = "application/json"
     private const val XML_MEDIA_TYPE = "text/xml"
-    private const val HTML_MEDIA_TYPE = "text/html"
 
     fun isBrowserRequest(request: HttpServletRequest): Boolean {
 
@@ -14,8 +13,6 @@ object ApiUtils {
 
         if(request.contentType == JSON_MEDIA_TYPE || request.contentType == XML_MEDIA_TYPE) {
             !treatAsBrowser
-        } else if(request.contentType == HTML_MEDIA_TYPE) {
-            treatAsBrowser = true
         }
 
         return treatAsBrowser;

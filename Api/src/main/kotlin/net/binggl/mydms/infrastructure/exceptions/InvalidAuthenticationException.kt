@@ -1,3 +1,3 @@
-package net.binggl.mydms.infrastructure.security
+package net.binggl.mydms.infrastructure.exceptions
 
 class InvalidAuthenticationException(message: String?) : RuntimeException(message)
