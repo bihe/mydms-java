@@ -1,6 +1,5 @@
 package net.binggl.mydms.shared.application
 
-import net.binggl.mydms.features.appinfo.AppInfoController
 import net.binggl.mydms.shared.models.VersionInfo
 import java.util.*
 
@@ -15,7 +14,7 @@ object AppVersionInfo {
                     || !properties.containsKey("build.number")
                     || !properties.containsKey("version")
                     ) {
-                properties.load(AppInfoController::class.java.classLoader.getResourceAsStream("version.properties"))
+                properties.load(AppVersionInfo::class.java.classLoader.getResourceAsStream("version.properties"))
             }
 
             return VersionInfo(artifactId = artifactId,

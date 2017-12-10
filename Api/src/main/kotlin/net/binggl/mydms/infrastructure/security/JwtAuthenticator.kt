@@ -18,7 +18,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Component
-class JwtAuthenticator(@Value("\${auth.tokenSecret}")val tokenSecret: String) {
+class JwtAuthenticator(@Value("\${auth.tokenSecret}") private val tokenSecret: String) {
 
     private val userCache : Cache<String, Optional<User>> = CacheBuilder.newBuilder()
 		       .maximumSize(10)

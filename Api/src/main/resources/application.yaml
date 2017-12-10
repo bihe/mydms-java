@@ -7,6 +7,24 @@ auth:
   loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=http://devel.binggl.net:8080/
 
 application:
+  security:
+    # define the path for CORS - allowed from
+    cors: http://devel.binggl.net:8080/
+  # the url used to redirect for /
   url: http://devel.binggl.net:8080/app/index.html
+
+
+---
+spring:
+  profiles: rest
+
+  application:
+    name: mydms
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${MYDMS_DB_HOST}/mydms-test
+    username: ${MYDMS_DB_USER:mydms}
+    password: ${MYDMS_DB_PASS:mydms}
+
 
 
