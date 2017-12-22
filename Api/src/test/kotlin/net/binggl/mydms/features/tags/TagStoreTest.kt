@@ -18,7 +18,7 @@ class TagStoreTest {
     @Test
     fun getAllTest() {
         val t1 = this.store.save(Tag("tag1"))
-        Assert.assertTrue(t1?.id ?: 0 > -1)
+        Assert.assertTrue(t1.id ?: 0 > -1)
         this.store.save(Tag("tag2"))
 
         val result = this.store.findAll()

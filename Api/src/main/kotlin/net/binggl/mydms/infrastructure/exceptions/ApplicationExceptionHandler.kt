@@ -1,6 +1,7 @@
 package net.binggl.mydms.infrastructure.exceptions
 
 import net.binggl.mydms.shared.api.ApiUtils
+import net.binggl.mydms.shared.util.toBase64
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -32,13 +33,13 @@ class ApplicationExceptionHandler : ResponseEntityExceptionHandler() {
         when(ex) {
             is InvalidAuthorizationException -> {
                 response = if(isBrowserRequest) {
-                    ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login")).build()
+                    ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login/${ex.message?.toBase64()}")).build()
                 } else
                     handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.UNAUTHORIZED, request)
             }
             is InvalidAuthenticationException -> {
                 response = if(isBrowserRequest) {
-                    ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login")).build()
+                    ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login/${ex.message?.toBase64()}")).build()
                 } else
                     handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.FORBIDDEN, request)
             }

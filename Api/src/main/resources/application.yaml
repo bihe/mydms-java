@@ -2,6 +2,8 @@
 auth:
   cookieName: login_token
   tokenSecret: ${MYDMS_JWT_TOKEN_SECRET:secret}
+  tokenIssuer: login.binggl.net
+  tokenSubject: login.User
   name: mydms
   url: https://mydms.binggl.net/
   loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=http://devel.binggl.net:8080/
@@ -22,7 +24,7 @@ spring:
     name: mydms
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${MYDMS_DB_HOST}/mydms-test
+    url: jdbc:mariadb://${MYDMS_DB_HOST}:3307/mydms-test
     username: ${MYDMS_DB_USER:mydms}
     password: ${MYDMS_DB_PASS:mydms}
 

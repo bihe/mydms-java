@@ -4,9 +4,11 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.SignatureVerificationException
+import com.auth0.jwt.exceptions.TokenExpiredException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
+import com.google.common.util.concurrent.UncheckedExecutionException
 import net.binggl.commons.crypto.HashHelper
 import net.binggl.mydms.infrastructure.exceptions.InvalidAuthorizationException
 import net.binggl.mydms.shared.models.Claim
@@ -18,7 +20,9 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Component
-class JwtAuthenticator(@Value("\${auth.tokenSecret}") private val tokenSecret: String) {
+class JwtAuthenticator(@Value("\${auth.tokenIssuer}") private val tokenIssuer: String,
+                       @Value("\${auth.tokenSubject}") private val tokenSubject: String,
+                       @Value("\${auth.tokenSecret}") private val tokenSecret: String) {
 
     private val userCache : Cache<String, Optional<User>> = CacheBuilder.newBuilder()
 		       .maximumSize(10)
@@ -26,15 +30,20 @@ class JwtAuthenticator(@Value("\${auth.tokenSecret}") private val tokenSecret: S
 		       .build()
 
     fun authenticate(token: String) : Optional<User> {
-        return userCache.get(this.getKey(token), {
-            this.verifyToken(token)
-        })
+        try {
+            return userCache.get(this.getKey(token), {
+                this.verifyToken(token)
+            })
+        } catch (ex: UncheckedExecutionException) {
+            throw ex.cause ?: ex
+        }
     }
 
     protected fun verifyToken(token: String) : Optional<User> {
         val algorithm: Algorithm = Algorithm.HMAC256(this.tokenSecret)
         val verifier: JWTVerifier = JWT.require(algorithm)
-                //.withIssuer("auth0") might be useful - needs to be implemented in login.binggl.net
+                .withIssuer(tokenIssuer)
+                .withSubject(tokenSubject)
                 .build() //Reusable verifier instance
 
         val jwt: DecodedJWT
@@ -42,12 +51,14 @@ class JwtAuthenticator(@Value("\${auth.tokenSecret}") private val tokenSecret: S
             jwt = verifier.verify(token)
         } catch (sigEx: SignatureVerificationException) {
             throw InvalidAuthorizationException("Could not verify the token checksum!")
+        } catch (expEx: TokenExpiredException) {
+            throw InvalidAuthorizationException("The token has expired!")
         }
 
         val tokenClaims: Map<String, com.auth0.jwt.interfaces.Claim> = jwt.claims
         if (tokenClaims != null) {
             if (tokenClaims.size >= 6 && tokenClaims[TYPE] != null
-                    && TYPE_VALUE == tokenClaims[TYPE]!!.asString()) {
+                    && tokenSubject == tokenClaims[TYPE]!!.asString()) {
 
                 val claims: List<Claim> = this.parseClaims(tokenClaims[CLAIMS]!!.asList(String::class.java))
                 return Optional.of(User(
@@ -81,6 +92,5 @@ class JwtAuthenticator(@Value("\${auth.tokenSecret}") private val tokenSecret: S
         private const val EMAIL = "Email"
         private const val CLAIMS = "Claims"
         private const val TYPE = "Type"
-        private const val TYPE_VALUE = "login.User"
     }
 }

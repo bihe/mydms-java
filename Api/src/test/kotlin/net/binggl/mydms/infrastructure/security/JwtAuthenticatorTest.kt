@@ -1,13 +1,14 @@
 package net.binggl.mydms.infrastructure.security
 
+import com.auth0.jwt.exceptions.InvalidClaimException
 import net.binggl.mydms.shared.models.Claim
 import net.binggl.mydms.shared.models.Role
 import org.junit.Assert
 import org.junit.Test
 
-class JwtAuthenticatorTest : JwtAuthenticator("secret") {
+class JwtAuthenticatorTest : JwtAuthenticator(tokenIssuer = "login.binggl.net", tokenSubject = "login.User", tokenSecret = "secret") {
 
-    val payload = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJUeXBlIjoibG9naW4uVXNlciIsIlVzZXJOYW1lIjoiYmloZSIsIkVtYWlsIjoiYS5iQGMuZGUiLCJDbGFpbXMiOlsiYXxodHRwczovL2EuYi5kZS98dXNlciJdLCJVc2VySWQiOiIxMjM0IiwiRGlzcGxheU5hbWUiOiJIZW5yaWsgQmluZ2dsIn0.p2O9xFt_FZJoJrEtV2nu4vYrqIAcbxV2P-DnuhYf9Ig"
+    val payload = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOWExZTRjY2QwOWE0Y2Y4YWE0YzEzM2U5YjM5NjkyNSIsImlhdCI6MTUxMzk2NTM0NiwiaXNzIjoibG9naW4uYmluZ2dsLm5ldCIsInN1YiI6ImxvZ2luLlVzZXIiLCJUeXBlIjoibG9naW4uVXNlciIsIlVzZXJOYW1lIjoiYmloZSIsIkVtYWlsIjoiYS5iQGMuZGUiLCJDbGFpbXMiOlsiYXxodHRwczovL2EuYi5kZS98dXNlciJdLCJVc2VySWQiOiIxMjM0IiwiRGlzcGxheU5hbWUiOiJIZW5yaWsgQmluZ2dsIn0._Fj1RRUnh_2HBfVmLPvtTD9CAOMoyQZS24v8Qlgll8s"
 
     @Test
     fun parseClaims() {
@@ -17,6 +18,18 @@ class JwtAuthenticatorTest : JwtAuthenticator("secret") {
         Assert.assertEquals("a", claims[0].name)
         Assert.assertEquals("https://a.b.de/", claims[0].url)
         Assert.assertEquals(Role.User, claims[0].role)
+    }
+
+    @Test(expected = InvalidClaimException::class)
+    fun verifyTokenFailIssuer() {
+        val failIssuer = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOWExZTRjY2QwOWE0Y2Y4YWE0YzEzM2U5YjM5NjkyNSIsImlhdCI6MTUxMzk2NTM0NiwiaXNzIjoiLSIsInN1YiI6ImxvZ2luLlVzZXIiLCJUeXBlIjoibG9naW4uVXNlciIsIlVzZXJOYW1lIjoiYmloZSIsIkVtYWlsIjoiYS5iQGMuZGUiLCJDbGFpbXMiOlsiYXxodHRwczovL2EuYi5kZS98dXNlciJdLCJVc2VySWQiOiIxMjM0IiwiRGlzcGxheU5hbWUiOiJIZW5yaWsgQmluZ2dsIn0.gKbacz6gN9BX18VfKhFYMGtPPhjyL7uiD1DNulMGLnE"
+        this.verifyToken(failIssuer)
+    }
+
+    @Test(expected = InvalidClaimException::class)
+    fun verifyTokenFailSub() {
+        val failSub = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOWExZTRjY2QwOWE0Y2Y4YWE0YzEzM2U5YjM5NjkyNSIsImlhdCI6MTUxMzk2NTM0NiwiaXNzIjoibG9naW4uYmluZ2dsLm5ldCIsInN1YiI6Ii0iLCJUeXBlIjoibG9naW4uVXNlciIsIlVzZXJOYW1lIjoiYmloZSIsIkVtYWlsIjoiYS5iQGMuZGUiLCJDbGFpbXMiOlsiYXxodHRwczovL2EuYi5kZS98dXNlciJdLCJVc2VySWQiOiIxMjM0IiwiRGlzcGxheU5hbWUiOiJIZW5yaWsgQmluZ2dsIn0.y9LTlAVfmjpxKFUnN3SfgGH7fC9ETM-9vQNgaZVtn78"
+        this.verifyToken(failSub)
     }
 
     @Test

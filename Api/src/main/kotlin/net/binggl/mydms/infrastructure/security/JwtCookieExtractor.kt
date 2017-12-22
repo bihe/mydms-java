@@ -15,14 +15,14 @@ class JwtCookieExtractor(@Value("\${auth.cookieName}") private val cookieName: S
         val cookies = request.cookies
 
         val jwtCookie = cookies?.filter({ it.name == cookieName })?.first()
-        if(jwtCookie == null) {
+        if (jwtCookie == null) {
             LOG.warn("No cookies available. Cannot authenticate!")
 			val message = "No authentication cookies available!"
 			throw InvalidAuthenticationException(message)
         }
 
         val cookieValue = jwtCookie.value
-        if(cookieValue.isEmpty()) {
+        if (cookieValue.isEmpty()) {
             LOG.warn("The authentication cookie is empty!")
             val message = "The authentication cookie is empty!"
             throw InvalidAuthenticationException(message)
