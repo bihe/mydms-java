@@ -12,6 +12,8 @@ application:
   security:
     # define the path for CORS - allowed from
     cors: http://devel.binggl.net:8080/
+    # secret key for hashing operations
+    secret: 12345678
   # the url used to redirect for /
   url: http://devel.binggl.net:8080/app/index.html
 

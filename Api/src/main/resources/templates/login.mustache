@@ -25,10 +25,16 @@
 
 <div class="container">
 
-
     <div class="row" style="padding-bottom: 40px; text-align:center;">
         <div class="col-md-3"></div>
         <div class="col-md-6">
+
+    {{#loginInfo}}
+            <div class="alert alert-warning" role="alert">
+                You need to login to access the resource. Reason: <strong>{{ loginInfo }}</strong>
+            </div>
+    {{/loginInfo}}
+
             <h1>Login with Google Account</h1>
 
         </div>

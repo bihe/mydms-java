@@ -3,7 +3,9 @@ package net.binggl.mydms.features.startpage
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.application.AppVersionInfo
 import net.binggl.mydms.shared.models.Role
+import net.binggl.mydms.shared.util.MessageIntegrity
 import net.binggl.mydms.shared.util.fromBase64
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -15,7 +17,8 @@ import java.util.*
 
 @Controller
 class HomeController(@Value("\${auth.loginUrl}") private val loginUrl: String,
-        @Value("\${application.url}") private val applicationUrl: String) {
+                     @Value("\${application.url}") private val applicationUrl: String,
+                     @Autowired private val msgIntegrity: MessageIntegrity) {
 
 
     @ApiSecured(requiredRole = Role.User)
@@ -27,8 +30,10 @@ class HomeController(@Value("\${auth.loginUrl}") private val loginUrl: String,
     @GetMapping("/login/{message}", "/login")
     fun login(model: Model, @PathVariable message: Optional<String>): String {
         if (message.isPresent) {
-            // TODO: need to check that the message has no malicious contents!
-            model.addAttribute("message", message.get().fromBase64())
+            val msg = msgIntegrity.deserialize(message.get().fromBase64())
+            if (msg.isPresent) {
+                model.addAttribute("loginInfo", msg.get().message)
+            }
         }
         model.addAttribute("year", Year.now())
         model.addAttribute("appName", AppVersionInfo.versionInfo.artifactId)
