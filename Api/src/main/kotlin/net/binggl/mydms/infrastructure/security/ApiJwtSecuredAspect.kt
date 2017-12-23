@@ -1,8 +1,6 @@
 package net.binggl.mydms.infrastructure.security
 
 import net.binggl.mydms.infrastructure.exceptions.InvalidAuthenticationException
-import net.binggl.mydms.infrastructure.exceptions.InvalidAuthorizationException
-import net.binggl.mydms.shared.models.Role
 import org.apache.commons.lang3.StringUtils
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -11,10 +9,8 @@ import org.aspectj.lang.annotation.Pointcut
 import org.aspectj.lang.reflect.MethodSignature
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.ResponseStatus
-import java.net.URL
 import javax.servlet.http.HttpServletRequest
 
 
@@ -34,10 +30,9 @@ import javax.servlet.http.HttpServletRequest
 @Component
 class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
                           @Autowired private val jwtAuthenticator: JwtAuthenticator,
+                          @Autowired private val roleAuthorizer: RoleAuthorizer,
                           @Autowired private val jwtCookieExtractor: JwtCookieExtractor,
-                          @Autowired private val request: HttpServletRequest,
-                          @Value("\${auth.url}") private val applicationUrl: String,
-                          @Value("\${auth.name}") private val applicationName: String) {
+                          @Autowired private val request: HttpServletRequest) {
 
     @Pointcut(value = "execution(@net.binggl.mydms.infrastructure.security.ApiSecured * *.*(..))")
     fun securedApiPointcut() {
@@ -58,12 +53,7 @@ class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
             throw InvalidAuthenticationException("Could not authenticate user!")
         }
 
-        // verify the annotations
-        val requiredRole = annotation.requiredRole
-
-        user.get().claims.find {
-            this.compareUrls(it.url, applicationUrl) && it.name == applicationName && (it.role == requiredRole || requiredRole == Role.None)
-        } ?: throw InvalidAuthorizationException("Required role for given url not available!")
+        roleAuthorizer.authorize(user.get(), annotation.requiredRole)
 
         // execute
         try {
@@ -88,28 +78,6 @@ class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
             }
             throw e
         }
-    }
-
-    private fun compareUrls(urlA: String, urlB: String): Boolean {
-
-        val a = URL(urlA)
-        val b = URL(urlB)
-
-        if (a.protocol == b.protocol
-                && a.host == b.host
-                && a.port == b.port) {
-
-            LOG.debug("Matching of url succeeded for protocol/host/port urlA: {}, urlB: {}", a, b)
-
-            if (StringUtils.isEmpty(a.path)) {
-                return true
-            }
-            if (b.path.startsWith(a.path)) {
-                LOG.debug("The urlB starts with the same path as the urlA. urlA: {}, urlB: {}", a.path, b.path)
-                return true
-            }
-        }
-        return false
     }
 
     companion object {
