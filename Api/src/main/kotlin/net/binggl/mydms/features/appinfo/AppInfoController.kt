@@ -16,7 +16,6 @@ class AppInfoController() : BaseResource() {
     @GetMapping("/api/v1/appinfo")
     fun applicationInfo() : AppInfo {
         val userInfo = UserInfo(this.user.userId, this.user.userName, this.user.displayName, this.user.claims)
-
         return AppInfo(userInfo, AppVersionInfo.versionInfo)
     }
 }

@@ -19,6 +19,12 @@ application:
   # the url used to redirect for /
   url: http://devel.binggl.net:8080/app/index.html
 
+google:
+  clientId: ${MYDMS_GOOGLE_CLIENT_ID}
+  clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET}
+  redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL}
+  encryptionKey: ${MYDMS_GOOGLE_ENCRYPTION_KEY}
+  storePath: ${MYDMS_TMP_PATH:-/tmp}
 
 ---
 spring:
