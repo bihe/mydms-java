@@ -26,6 +26,6 @@ class SenderStore(private val jdbcT: NamedParameterJdbcTemplate) {
         this.jdbcT.update("INSERT INTO SENDERS (name) VALUES(:name)",
                 MapSqlParameterSource("name", tag.name),
                 holder)
-        return Sender(holder.key.toLong(), tag.name)
+        return Sender(holder.key?.toLong(), tag.name)
     }
 }

@@ -56,19 +56,17 @@ class JwtAuthenticator(@Value("\${auth.tokenIssuer}") private val tokenIssuer: S
         }
 
         val tokenClaims: Map<String, com.auth0.jwt.interfaces.Claim> = jwt.claims
-        if (tokenClaims != null) {
-            if (tokenClaims.size >= 6 && tokenClaims[TYPE] != null
-                    && tokenSubject == tokenClaims[TYPE]!!.asString()) {
+        if (tokenClaims.size >= 6 && tokenClaims[TYPE] != null
+                && tokenSubject == tokenClaims[TYPE]!!.asString()) {
 
-                val claims: List<Claim> = this.parseClaims(tokenClaims[CLAIMS]!!.asList(String::class.java))
-                return Optional.of(User(
-                        userId = tokenClaims[USER_ID]!!.asString(),
-                        userName = tokenClaims[USERNAME]!!.asString(),
-                        displayName = tokenClaims[DISPLAYNAME]!!.asString(),
-                        email = tokenClaims[EMAIL]!!.asString(),
-                        claims = claims
-                ))
-            }
+            val claims: List<Claim> = this.parseClaims(tokenClaims[CLAIMS]!!.asList(String::class.java))
+            return Optional.of(User(
+                    userId = tokenClaims[USER_ID]!!.asString(),
+                    userName = tokenClaims[USERNAME]!!.asString(),
+                    displayName = tokenClaims[DISPLAYNAME]!!.asString(),
+                    email = tokenClaims[EMAIL]!!.asString(),
+                    claims = claims
+            ))
         }
 
         return Optional.empty()

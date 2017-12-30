@@ -26,6 +26,6 @@ class TagStore(private val jdbcT: NamedParameterJdbcTemplate) {
         this.jdbcT.update("INSERT INTO TAGS (name) VALUES(:name)",
                 MapSqlParameterSource("name", tag.name),
                 holder)
-        return Tag(holder.key.toLong(), tag.name)
+        return Tag(holder.key?.toLong(), tag.name)
     }
 }

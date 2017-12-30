@@ -1,6 +1,7 @@
 package net.binggl.mydms.infrastructure.security
 
 import net.binggl.mydms.infrastructure.exceptions.InvalidAuthorizationException
+import net.binggl.mydms.shared.models.Claim
 import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.User
 import org.apache.commons.lang3.StringUtils
@@ -14,7 +15,7 @@ class RoleAuthorizer(@Value("\${auth.url}") private val applicationUrl: String,
                      @Value("\${auth.name}") private val applicationName: String) {
 
     fun authorize(user: User, requiredRole: Role): Boolean {
-        val authorized = user.claims.find {
+        val authorized: Claim? = user.claims.find {
             this.compareUrls(it.url, applicationUrl) && it.name == applicationName && (it.role == requiredRole || requiredRole == Role.None)
         } ?: throw InvalidAuthorizationException("Required role for given url not available!")
         return authorized != null
