@@ -1,5 +1,6 @@
 package net.binggl.mydms.infrastructure.exceptions
 
+import net.binggl.mydms.features.gdrive.GDriveRuntimeException
 import net.binggl.mydms.shared.api.ApiUtils
 import net.binggl.mydms.shared.util.MessageIntegrity
 import net.binggl.mydms.shared.util.toBase64
@@ -20,7 +21,9 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
     @ExceptionHandler(value = [
         MydmsException::class,
         InvalidAuthorizationException::class,
-        InvalidAuthenticationException::class
+        InvalidAuthenticationException::class,
+        GDriveRuntimeException::class,
+        Exception::class
     ])
     protected fun handle(ex: RuntimeException, request: WebRequest): ResponseEntity<Any> {
 
@@ -56,13 +59,23 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
                 } else
                     handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.FORBIDDEN, request)
             }
+            is GDriveRuntimeException -> {
+
+                // TODO: provide information if this is a browser-request
+
+                response = handleExceptionInternal(ex, ex.message,
+                        HttpHeaders(), HttpStatus.BAD_GATEWAY, request)
+            }
             is MydmsException -> {
+
+                // TODO: provide information if this is a browser-request
+
                 response = handleExceptionInternal(ex, ex.message,
                         HttpHeaders(), HttpStatus.BAD_REQUEST, request)
             }
             else -> {
                 response = handleExceptionInternal(ex, ex.cause?.message ?: ex.message,
-                        HttpHeaders(), HttpStatus.BAD_REQUEST, request)
+                        HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request)
             }
         }
         return response
