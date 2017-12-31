@@ -39,20 +39,23 @@ class GDriveController(@Autowired private val client: GDriveClient,
 
     @ApiSecured(requiredRole = Role.Admin)
     @GetMapping("/link")
-    fun link(request: HttpServletRequest): String {
+    fun link(request: HttpServletRequest): ResponseEntity<Any> {
         val correlationToken = HashHelper.getSHA(USER_TOKEN, Date().toString())
         val session = request.getSession(true) // ensure a new session
         session.setAttribute(SESSION_CORRELATION_TOKEN, correlationToken)
         val redirect = this.client.getRedirectUrl(correlationToken)
 
-        return "redirect:$redirect"
+        return ResponseEntity
+                .status(HttpStatus.TEMPORARY_REDIRECT)
+                .header("location", redirect)
+                .build()
     }
 
     @ApiSecured(requiredRole = Role.Admin)
     @GetMapping("/oauth2callback")
     fun callback(@RequestParam("code") authorizationCode: String,
                  @RequestParam("state") correlationToken: String,
-                 request: HttpServletRequest): String {
+                 request: HttpServletRequest): ResponseEntity<Any> {
         val session = request.getSession(false)
         if (session.isNew) {
             throw MydmsException("Could not reuse session for correlation!")
@@ -69,7 +72,10 @@ class GDriveController(@Autowired private val client: GDriveClient,
         LOG.debug("Got credentials: $credentials")
         this.credentialStore.save(USER_TOKEN, credentials)
 
-        return "redirect:$successUrl"
+        return ResponseEntity
+                .status(HttpStatus.TEMPORARY_REDIRECT)
+                .header("location", successUrl)
+                .build()
     }
 
     @ApiSecured(requiredRole = Role.Admin)

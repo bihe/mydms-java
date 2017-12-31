@@ -1,23 +1,17 @@
 package net.binggl.mydms.shared.models
 
-enum class Role constructor(val text: String) {
-    None("none"), User("user"), Admin("admin");
+enum class Role(val precedence: Int) {
+    None(-1),
+    User(1),
+    Admin(99);
 
     companion object {
-
         fun fromString(text: String?): Role {
-            try {
-                if (text != null && "" != text) {
-                    for (b in Role.values()) {
-                        if (text.equals(b.text, ignoreCase = true)) {
-                            return b
-                        }
-                    }
-                }
-            } catch (EX: Exception) {
-
+            if (text != null && "" != text) {
+                Role.values()
+                        .filter { text.equals(it.name, ignoreCase = true) }
+                        .forEach { return it }
             }
-
             return Role.None
         }
     }

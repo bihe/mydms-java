@@ -26,7 +26,7 @@ class JwtAuthenticator(@Value("\${auth.tokenIssuer}") private val tokenIssuer: S
 
     private val userCache : Cache<String, Optional<User>> = CacheBuilder.newBuilder()
 		       .maximumSize(10)
-		       .expireAfterWrite(60, TimeUnit.MINUTES)
+		       .expireAfterWrite(15, TimeUnit.MINUTES)
 		       .build()
 
     fun authenticate(token: String) : Optional<User> {
