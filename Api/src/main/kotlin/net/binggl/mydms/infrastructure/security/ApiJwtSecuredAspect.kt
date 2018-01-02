@@ -1,6 +1,6 @@
 package net.binggl.mydms.infrastructure.security
 
-import net.binggl.mydms.infrastructure.exceptions.InvalidAuthenticationException
+import net.binggl.mydms.infrastructure.error.InvalidAuthenticationException
 import org.apache.commons.lang3.StringUtils
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around

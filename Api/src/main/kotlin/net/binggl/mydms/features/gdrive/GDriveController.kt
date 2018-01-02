@@ -4,7 +4,7 @@ import net.binggl.commons.crypto.HashHelper
 import net.binggl.mydms.features.gdrive.client.GDriveClient
 import net.binggl.mydms.features.gdrive.models.GDriveCredential
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore
-import net.binggl.mydms.infrastructure.exceptions.MydmsException
+import net.binggl.mydms.infrastructure.error.MydmsException
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.ActionResult
@@ -34,13 +34,13 @@ class GDriveController(@Autowired private val client: GDriveClient,
     @ApiSecured(requiredRole = Role.User)
     @GetMapping()
     fun isLinked(): Boolean {
-        return this.credentialStore.isCredentialAvailable("")
+        return this.credentialStore.isCredentialAvailable(Contants.USER_TOKEN)
     }
 
     @ApiSecured(requiredRole = Role.Admin)
     @GetMapping("/link")
     fun link(request: HttpServletRequest): ResponseEntity<Any> {
-        val correlationToken = HashHelper.getSHA(USER_TOKEN, Date().toString())
+        val correlationToken = HashHelper.getSHA(Contants.USER_TOKEN, Date().toString())
         val session = request.getSession(true) // ensure a new session
         session.setAttribute(SESSION_CORRELATION_TOKEN, correlationToken)
         val redirect = this.client.getRedirectUrl(correlationToken)
@@ -68,9 +68,9 @@ class GDriveController(@Autowired private val client: GDriveClient,
 
         // cleanup
         session.removeAttribute(SESSION_CORRELATION_TOKEN)
-        val credentials = this.client.getCredentials(authorizationCode, USER_TOKEN)
+        val credentials = this.client.getCredentials(authorizationCode, Contants.USER_TOKEN)
         LOG.debug("Got credentials: $credentials")
-        this.credentialStore.save(USER_TOKEN, credentials)
+        this.credentialStore.save(Contants.USER_TOKEN, credentials)
 
         return ResponseEntity
                 .status(HttpStatus.TEMPORARY_REDIRECT)
@@ -81,13 +81,14 @@ class GDriveController(@Autowired private val client: GDriveClient,
     @ApiSecured(requiredRole = Role.Admin)
     @DeleteMapping()
     fun unlinkAccount(): SimpleResult {
-        this.credentialStore.clearCredentials(USER_TOKEN)
+        this.credentialStore.clearCredentials(Contants.USER_TOKEN)
         return SimpleResult(message = "Stored credentials where deleted.", result = ActionResult.Deleted)
     }
 
     @ApiSecured(requiredRole = Role.User)
+    @GetMapping("/file")
     fun getFile(@RequestParam("path") path: String): ResponseEntity<Any> {
-        if (!this.credentialStore.isCredentialAvailable(USER_TOKEN)) {
+        if (!this.credentialStore.isCredentialAvailable(Contants.USER_TOKEN)) {
             throw MydmsException("Could not get files: Account is not linked!")
         }
 
@@ -119,14 +120,11 @@ class GDriveController(@Autowired private val client: GDriveClient,
 
     private val credentials: GDriveCredential
             get() {
-                val cred = this.credentialStore.load(USER_TOKEN)
-                LOG.debug("Got credential: $cred")
-                return cred
+                return this.credentialStore.load(Contants.USER_TOKEN)
             }
 
 
     companion object {
-        private const val USER_TOKEN = "mydms.user.gdrive"
         private const val SESSION_CORRELATION_TOKEN = "session.mydms.correlation"
         private val LOG = LoggerFactory.getLogger(GDriveController::class.java)
     }

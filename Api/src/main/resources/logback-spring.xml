@@ -3,8 +3,7 @@
 
     <property name="LOG_PATH" value="logs"/>
 
-    <root level="info">
-    </root>
+    <root level="info" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -19,8 +18,7 @@
             <appender-ref ref="STDOUT"/>
         </root>
 
-        <logger name="net.binggl.mydms" level="debug">
-        </logger>
+        <logger name="net.binggl.mydms" level="debug" />
 
     </springProfile>
 

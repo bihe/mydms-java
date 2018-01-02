@@ -4,7 +4,7 @@ import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import com.google.common.util.concurrent.UncheckedExecutionException
 import net.binggl.commons.crypto.HashHelper
-import net.binggl.mydms.infrastructure.exceptions.InvalidAuthorizationException
+import net.binggl.mydms.infrastructure.error.InvalidAuthorizationException
 import net.binggl.mydms.shared.models.Claim
 import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.User

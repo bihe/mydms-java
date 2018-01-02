@@ -1,6 +1,6 @@
 package net.binggl.mydms.infrastructure.security
 
-import net.binggl.mydms.infrastructure.exceptions.InvalidAuthenticationException
+import net.binggl.mydms.infrastructure.error.InvalidAuthenticationException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

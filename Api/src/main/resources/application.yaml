@@ -18,6 +18,7 @@ application:
     swagger: User, Admin
   # the url used to redirect for /
   url: http://devel.binggl.net:8080/app/index.html
+  detailedErrors: ${MYDMS_DETAILED_ERRORS:false}
 
 google:
   clientId: ${MYDMS_GOOGLE_CLIENT_ID:-}

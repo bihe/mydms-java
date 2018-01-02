@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.files
+package net.binggl.mydms.shared.files
 
 interface FileService {
     /**

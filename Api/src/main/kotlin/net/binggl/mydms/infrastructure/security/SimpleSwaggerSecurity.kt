@@ -1,7 +1,7 @@
 package net.binggl.mydms.infrastructure.security
 
-import net.binggl.mydms.infrastructure.exceptions.InvalidAuthenticationException
-import net.binggl.mydms.infrastructure.exceptions.InvalidAuthorizationException
+import net.binggl.mydms.infrastructure.error.InvalidAuthenticationException
+import net.binggl.mydms.infrastructure.error.InvalidAuthorizationException
 import net.binggl.mydms.shared.models.Role
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

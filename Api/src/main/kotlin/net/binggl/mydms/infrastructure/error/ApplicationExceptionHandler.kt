@@ -1,4 +1,4 @@
-package net.binggl.mydms.infrastructure.exceptions
+package net.binggl.mydms.infrastructure.error
 
 import net.binggl.mydms.features.gdrive.GDriveRuntimeException
 import net.binggl.mydms.shared.api.ApiUtils

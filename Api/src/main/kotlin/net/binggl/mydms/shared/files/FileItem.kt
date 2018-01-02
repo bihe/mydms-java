@@ -1,7 +1,7 @@
-package net.binggl.mydms.features.files
+package net.binggl.mydms.shared.files
 
-data class FileItem(private val fileName: String, private val mimeType: String,
-                    private val payload: Array<Byte>, private val folderName: String) {
+data class FileItem(val fileName: String, val mimeType: String,
+                    val payload: Array<Byte>, val folderName: String) {
 
     override fun equals(other: Any?): Boolean {
         if (other is FileItem) {
