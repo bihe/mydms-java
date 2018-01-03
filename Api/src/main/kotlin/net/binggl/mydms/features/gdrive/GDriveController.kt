@@ -34,13 +34,13 @@ class GDriveController(@Autowired private val client: GDriveClient,
     @ApiSecured(requiredRole = Role.User)
     @GetMapping()
     fun isLinked(): Boolean {
-        return this.credentialStore.isCredentialAvailable(Contants.USER_TOKEN)
+        return this.credentialStore.isCredentialAvailable(Constants.USER_TOKEN)
     }
 
     @ApiSecured(requiredRole = Role.Admin)
     @GetMapping("/link")
     fun link(request: HttpServletRequest): ResponseEntity<Any> {
-        val correlationToken = HashHelper.getSHA(Contants.USER_TOKEN, Date().toString())
+        val correlationToken = HashHelper.getSHA(Constants.USER_TOKEN, Date().toString())
         val session = request.getSession(true) // ensure a new session
         session.setAttribute(SESSION_CORRELATION_TOKEN, correlationToken)
         val redirect = this.client.getRedirectUrl(correlationToken)
@@ -68,9 +68,9 @@ class GDriveController(@Autowired private val client: GDriveClient,
 
         // cleanup
         session.removeAttribute(SESSION_CORRELATION_TOKEN)
-        val credentials = this.client.getCredentials(authorizationCode, Contants.USER_TOKEN)
+        val credentials = this.client.getCredentials(authorizationCode, Constants.USER_TOKEN)
         LOG.debug("Got credentials: $credentials")
-        this.credentialStore.save(Contants.USER_TOKEN, credentials)
+        this.credentialStore.save(Constants.USER_TOKEN, credentials)
 
         return ResponseEntity
                 .status(HttpStatus.TEMPORARY_REDIRECT)
@@ -81,14 +81,14 @@ class GDriveController(@Autowired private val client: GDriveClient,
     @ApiSecured(requiredRole = Role.Admin)
     @DeleteMapping()
     fun unlinkAccount(): SimpleResult {
-        this.credentialStore.clearCredentials(Contants.USER_TOKEN)
+        this.credentialStore.clearCredentials(Constants.USER_TOKEN)
         return SimpleResult(message = "Stored credentials where deleted.", result = ActionResult.Deleted)
     }
 
     @ApiSecured(requiredRole = Role.User)
     @GetMapping("/file")
     fun getFile(@RequestParam("path") path: String): ResponseEntity<Any> {
-        if (!this.credentialStore.isCredentialAvailable(Contants.USER_TOKEN)) {
+        if (!this.credentialStore.isCredentialAvailable(Constants.USER_TOKEN)) {
             throw MydmsException("Could not get files: Account is not linked!")
         }
 
@@ -120,7 +120,7 @@ class GDriveController(@Autowired private val client: GDriveClient,
 
     private val credentials: GDriveCredential
             get() {
-                return this.credentialStore.load(Contants.USER_TOKEN)
+                return this.credentialStore.load(Constants.USER_TOKEN)
             }
 
 

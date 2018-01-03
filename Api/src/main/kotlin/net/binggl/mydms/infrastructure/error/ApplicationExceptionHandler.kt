@@ -40,9 +40,9 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
                     val message = msgIntegrity.generateValidMessage(ex.message ?: "")
                     if (message.isPresent) {
                         val msg = msgIntegrity.serialize(message = message.get())
-                        ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login/${msg.toBase64()}")).build()
+                        ResponseEntity.status(HttpStatus.FOUND).location(URI("/login/${msg.toBase64()}")).build()
                     } else {
-                        ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login")).build()
+                        ResponseEntity.status(HttpStatus.FOUND).location(URI("/login")).build()
                     }
                 } else
                     handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.UNAUTHORIZED, request)
@@ -52,9 +52,9 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
                     val message = msgIntegrity.generateValidMessage(ex.message ?: "")
                     if (message.isPresent) {
                         val msg = msgIntegrity.serialize(message = message.get())
-                        ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login/${msg.toBase64()}")).build()
+                        ResponseEntity.status(HttpStatus.FOUND).location(URI("/login/${msg.toBase64()}")).build()
                     } else {
-                        ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).location(URI("/login")).build()
+                        ResponseEntity.status(HttpStatus.FOUND).location(URI("/login")).build()
                     }
                 } else
                     handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.FORBIDDEN, request)

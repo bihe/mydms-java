@@ -32,6 +32,7 @@ class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
                           @Autowired private val jwtAuthenticator: JwtAuthenticator,
                           @Autowired private val roleAuthorizer: RoleAuthorizer,
                           @Autowired private val jwtCookieExtractor: JwtCookieExtractor,
+                          @Autowired private val jwtHeaderExtractor: JwtHeaderExtractor,
                           @Autowired private val request: HttpServletRequest) {
 
     @Pointcut(value = "execution(@net.binggl.mydms.infrastructure.security.ApiSecured * *.*(..))")
@@ -48,7 +49,17 @@ class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
         val method = signature.method
         val annotation = method.getAnnotation(ApiSecured::class.java)
 
-        val user = jwtAuthenticator.authenticate(jwtCookieExtractor.extractToken())
+        var jwtToken: String
+        jwtToken = jwtHeaderExtractor.extractToken()
+        if (StringUtils.isEmpty(jwtToken)) {
+            LOG.debug("No JWT in Authorization header, fallback to cookies.")
+            jwtToken = jwtCookieExtractor.extractToken()
+        }
+        if (StringUtils.isEmpty(jwtToken)) {
+            throw InvalidAuthenticationException("No JWT available in Authorization header or cookie!")
+        }
+
+        val user = jwtAuthenticator.authenticate(jwtToken)
         if(!user.isPresent) {
             throw InvalidAuthenticationException("Could not authenticate user!")
         }

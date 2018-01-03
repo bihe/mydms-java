@@ -15,7 +15,7 @@ import java.time.Year
 class MydmsErrorController(@Autowired private val errorAttributes: ErrorAttributes,
                            @Value("\${application.detailedErrors}") private val detailedErrors: Boolean) : ErrorController {
 
-    @RequestMapping(value = PATH)
+    @RequestMapping(value = [PATH])
     fun error(request: WebRequest): ModelAndView {
         val mv =  ModelAndView("error", this.getErrorAttributes(request, detailedErrors))
         mv.model["year"] = Year.now()

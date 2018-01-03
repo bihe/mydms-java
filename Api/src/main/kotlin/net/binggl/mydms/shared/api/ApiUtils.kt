@@ -11,8 +11,11 @@ object ApiUtils {
 
         var treatAsBrowser = true
 
-        if(request.contentType == JSON_MEDIA_TYPE || request.contentType == XML_MEDIA_TYPE) {
-            !treatAsBrowser
+        if (request.contentType == JSON_MEDIA_TYPE || request.contentType == XML_MEDIA_TYPE) {
+            treatAsBrowser = false;
+        }
+        if (request.getHeader("User-Agent") == "rest-client") {
+            treatAsBrowser = false;
         }
 
         return treatAsBrowser;

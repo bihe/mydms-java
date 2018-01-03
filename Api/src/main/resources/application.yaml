@@ -19,6 +19,15 @@ application:
   # the url used to redirect for /
   url: http://devel.binggl.net:8080/app/index.html
   detailedErrors: ${MYDMS_DETAILED_ERRORS:false}
+  # upload settings
+  upload:
+    maxUploadSize: 512000
+    allowedFileTypes:
+      - application/pdf
+      - image/jpeg
+      - image/png
+      - image/gif
+    uploadPath: ${MYDMS_TMP_PATH:-/tmp}
 
 google:
   clientId: ${MYDMS_GOOGLE_CLIENT_ID:-}

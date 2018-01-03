@@ -9,13 +9,15 @@ import net.binggl.mydms.shared.files.FileService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 import java.util.*
 
+@Service
 class GDriveFileService(@Autowired private val client: GDriveClient,
                         @Autowired private val credentialStore: GDriveCredentialStore,
                         @Value("\${google.parentDrivePath}") private val parentDrivePath: String): FileService {
     override fun saveFile(file: FileItem): Boolean {
-        if (!this.credentialStore.isCredentialAvailable(Contants.USER_TOKEN)) {
+        if (!this.credentialStore.isCredentialAvailable(Constants.USER_TOKEN)) {
             throw MydmsException("Could not save file: Account is not linked!")
         }
 
@@ -43,7 +45,7 @@ class GDriveFileService(@Autowired private val client: GDriveClient,
 
     private val credentials: GDriveCredential
         get() {
-            return this.credentialStore.load(Contants.USER_TOKEN)
+            return this.credentialStore.load(Constants.USER_TOKEN)
         }
 
     companion object {
