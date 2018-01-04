@@ -1,4 +1,4 @@
-package net.binggl.mydms.infrastructure.config
+package net.binggl.mydms.features.upload
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration

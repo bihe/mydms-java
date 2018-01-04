@@ -11,7 +11,6 @@ class AppVersionTest {
     fun testVersion() {
         val version = AppVersionInfo.versionInfo
         Assert.assertTrue(StringUtils.isNotEmpty(version.artifactId))
-        Assert.assertTrue(StringUtils.isNotEmpty(version.buildNumber))
         Assert.assertTrue(StringUtils.isNotEmpty(version.version))
     }
 }

@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.upload
+package net.binggl.mydms.features.upload.data
 
 import net.binggl.mydms.features.upload.models.UploadItem
 import net.binggl.mydms.infrastructure.error.MydmsException
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-class UploadStore(private val jdbcT: NamedParameterJdbcTemplate) {
+class JdbcUploadStore(private val jdbcT: NamedParameterJdbcTemplate) : UploadStore {
 
-    fun findAll(): List<UploadItem> {
+    override fun findAll(): List<UploadItem> {
         return this.jdbcT.query("SELECT id,filename,mimetype,created FROM UPLOADS", { rs, _ ->
             UploadItem(id = rs.getString("id"),
                     fileName = rs.getString("filename"),
@@ -22,7 +22,7 @@ class UploadStore(private val jdbcT: NamedParameterJdbcTemplate) {
         })
     }
 
-    fun findById(token: String): Optional<UploadItem> {
+    override fun findById(token: String): Optional<UploadItem> {
         val result = this.jdbcT.query("SELECT id,filename,mimetype,created FROM UPLOADS WHERE id = :token",
                 MapSqlParameterSource("token", token), { rs, _ ->
             UploadItem(id = rs.getString("id"),
@@ -37,7 +37,7 @@ class UploadStore(private val jdbcT: NamedParameterJdbcTemplate) {
         return Optional.of(result[0])
     }
 
-    fun save(uploadItem: UploadItem): UploadItem {
+    override fun save(uploadItem: UploadItem): UploadItem {
         if (StringUtils.isEmpty(uploadItem.id)) {
             throw MydmsException("The ID has to be assigned to save the element!")
         }
@@ -69,7 +69,7 @@ class UploadStore(private val jdbcT: NamedParameterJdbcTemplate) {
         throw MydmsException("Could not retrieve updated item!")
     }
 
-    fun delete(uploadItem: UploadItem) {
+    override fun delete(uploadItem: UploadItem) {
         if (StringUtils.isEmpty(uploadItem.id)) {
             throw MydmsException("The ID has to be present!")
         }
@@ -92,7 +92,7 @@ class UploadStore(private val jdbcT: NamedParameterJdbcTemplate) {
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(UploadStore::class.java)
+        private val LOG = LoggerFactory.getLogger(JdbcUploadStore::class.java)
     }
 
 }

@@ -27,16 +27,20 @@ application:
       - image/jpeg
       - image/png
       - image/gif
-    uploadPath: ${MYDMS_TMP_PATH:-/tmp}
+    uploadPath: ${MYDMS_TMP_PATH:/tmp}
 
 google:
   clientId: ${MYDMS_GOOGLE_CLIENT_ID:-}
   clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET:-}
   redirectUrl: ${MYDMS_GOOGLE_REDIRECT_URL:/}
   encryptionKey: ${MYDMS_GOOGLE_ENCRYPTION_KEY:-}
-  storePath: ${MYDMS_TMP_PATH:-/tmp}
+  storePath: ${MYDMS_TMP_PATH:/tmp}
   parentDrivePath: ${MYDMS_GOOGLE_DRIVE_PARENT_ID:-}
   successUrl: /
+
+logging:
+  level:
+    root: WARN
 
 ---
 spring:

@@ -1,5 +1,6 @@
 package net.binggl.mydms.features.upload
 
+import net.binggl.mydms.features.upload.data.UploadStore
 import net.binggl.mydms.features.upload.models.UploadItem
 import org.junit.Assert
 import org.junit.Test

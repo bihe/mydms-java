@@ -1,8 +1,8 @@
 package net.binggl.mydms.features.upload
 
+import net.binggl.mydms.features.upload.data.UploadStore
 import net.binggl.mydms.features.upload.models.UploadItem
 import net.binggl.mydms.features.upload.models.UploadResult
-import net.binggl.mydms.infrastructure.config.UploadConfig
 import net.binggl.mydms.infrastructure.error.MydmsException
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
@@ -20,14 +20,13 @@ import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.util.*
 
-
 @RestController
 @RequestMapping("/api/v1/upload")
 class UploadController(@Autowired private val store: UploadStore,
                        @Autowired private val config: UploadConfig): BaseResource() {
 
     @ApiSecured(requiredRole = Role.User)
-    @PostMapping
+    @PostMapping("/file")
     fun uploadFile(@RequestParam("file") file: MultipartFile): UploadResult {
         LOG.debug("Got file: $file")
 
