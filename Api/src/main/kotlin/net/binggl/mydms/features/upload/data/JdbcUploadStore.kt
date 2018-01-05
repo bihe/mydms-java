@@ -39,7 +39,7 @@ class JdbcUploadStore(private val jdbcT: NamedParameterJdbcTemplate) : UploadSto
 
     override fun save(uploadItem: UploadItem): UploadItem {
         if (StringUtils.isEmpty(uploadItem.id)) {
-            throw MydmsException("The ID has to be assigned to save the element!")
+            throw MydmsException("The upload-ID has to be assigned to save the element!")
         }
 
         var operationCount: Int
