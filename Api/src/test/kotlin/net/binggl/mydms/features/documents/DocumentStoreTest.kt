@@ -5,6 +5,7 @@ import net.binggl.mydms.features.documents.models.Document
 import net.binggl.mydms.features.documents.models.OrderBy
 import net.binggl.mydms.features.documents.models.SortOrder
 import net.binggl.mydms.infrastructure.error.MydmsException
+import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import org.junit.Assert
 import org.junit.Test
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import java.util.stream.IntStream
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
@@ -74,7 +76,129 @@ class DocumentStoreTest {
 
         val itemsLeft = this.store.findAllItems()
         Assert.assertTrue(itemsLeft.size == 1)
+    }
 
+    @Transactional
+    @Test
+    fun searchForDocuments() {
+
+        // create 10 documents
+        for(i in IntStream.range(0,10)) {
+            val doc = this.store.save(this.document.copy(id = "document$i", title = "Document #$i",
+                    alternativeId = UUID.randomUUID().toString(), created = Date()))
+            Assert.assertEquals("Document #$i", doc.title)
+        }
+
+        // search for all documents
+        val allDocuments = this.store.searchDocuments(tile = Optional.empty(),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.empty(),
+                skip = Optional.empty())
+
+        Assert.assertEquals(10, allDocuments.totalEntries)
+        Assert.assertEquals(10, allDocuments.documents.size)
+
+        // check limit && skip
+        val documentsOffset = this.store.searchDocuments(tile = Optional.empty(),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.of(5),
+                skip = Optional.empty())
+
+        Assert.assertEquals(10, documentsOffset.totalEntries)
+        Assert.assertEquals(5, documentsOffset.documents.size)
+
+        val documentsOffset1 = this.store.searchDocuments(tile = Optional.empty(),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.of(3),
+                skip = Optional.of(10))
+
+        Assert.assertEquals(10, documentsOffset1.totalEntries)
+        Assert.assertEquals(0, documentsOffset1.documents.size)
+
+        val documentsOffset2 = this.store.searchDocuments(tile = Optional.empty(),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.empty(),
+                skip = Optional.of(8))
+
+        Assert.assertEquals(10, documentsOffset2.totalEntries)
+        Assert.assertEquals(2, documentsOffset2.documents.size)
+
+        val documentsTitle = this.store.searchDocuments(tile = Optional.of("document"),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.empty(),
+                skip = Optional.empty())
+
+        Assert.assertEquals(10, documentsTitle.totalEntries)
+        Assert.assertEquals(10, documentsTitle.documents.size)
+
+        val documentsTitleSingle = this.store.searchDocuments(tile = Optional.of("Document #0"),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.empty(),
+                skip = Optional.empty())
+
+        Assert.assertEquals(1, documentsTitleSingle.totalEntries)
+        Assert.assertEquals(1, documentsTitleSingle.documents.size)
+
+        val documentTitleOrderBy = this.store.searchDocuments(tile = Optional.of("document"),
+                dateFrom = Optional.empty(),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.of(5),
+                skip = Optional.empty(),
+                order = *arrayOf(
+                        OrderBy("DOCUMENTS.id", SortOrder.Descending),
+                        OrderBy("DOCUMENTS.created",SortOrder.Ascending)
+                )
+        )
+
+        Assert.assertEquals(10, documentTitleOrderBy.totalEntries)
+        Assert.assertEquals(5, documentTitleOrderBy.documents.size)
+        Assert.assertEquals("Document #9", documentTitleOrderBy.documents[0].title)
+
+        val documentsByDate = this.store.searchDocuments(tile = Optional.empty(),
+                dateFrom = Optional.of(DateTime().plusDays(1).toDate()),
+                dateUntil = Optional.empty(),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.empty(),
+                skip = Optional.empty())
+
+        Assert.assertEquals(0, documentsByDate.totalEntries)
+        Assert.assertEquals(0, documentsByDate.documents.size)
+
+        val documentsByDate1 = this.store.searchDocuments(tile = Optional.empty(),
+                dateUntil = Optional.of(DateTime().plusDays(1).toDate()),
+                dateFrom = Optional.of(DateTime().minusDays(1).toDate()),
+                sender = Optional.empty(),
+                tag = Optional.empty(),
+                limit = Optional.empty(),
+                skip = Optional.empty(),
+                order = *arrayOf(
+                        OrderBy("DOCUMENTS.created",SortOrder.Ascending)
+                ))
+
+        Assert.assertEquals(10, documentsByDate1.totalEntries)
+        Assert.assertEquals(10, documentsByDate1.documents.size)
+        Assert.assertEquals("Document #0", documentsByDate1.documents[0].title)
     }
 
     companion object {

@@ -42,8 +42,116 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
         return Optional.of(result[0])
     }
 
-    override fun searchDocuments(tile: Optional<String>, tag: Optional<String>, sender: Optional<String>, dateFrom: Optional<Date>, dateUntil: Optional<Date>, limit: Optional<Int>, skip: Optional<Int>, vararg order: OrderBy): PagedDocuments {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun searchDocuments(title: Optional<String>, tag: Optional<String>, sender: Optional<String>,
+                                 dateFrom: Optional<Date>, dateUntil: Optional<Date>, limit: Optional<Int>,
+                                 skip: Optional<Int>, vararg order: OrderBy): PagedDocuments {
+
+        val baseQuery = "SELECT %SELECT% FROM DOCUMENTS %JOIN% %WHERE%"
+        val sqlQuery = StringBuffer(baseQuery)
+        val sqlJoin = StringBuffer()
+        val columns = "DOCUMENTS.id,DOCUMENTS.title,DOCUMENTS.filename,DOCUMENTS.alternativeid,DOCUMENTS.previewlink,DOCUMENTS.amount,DOCUMENTS.created,DOCUMENTS.modified,DOCUMENTS.taglist,DOCUMENTS.senderlist"
+        val count = "COUNT(id)"
+
+        var hasWhere = false
+        var hasJoin = false
+
+        // based on the supplied parameters add SQL to the query
+        val parameters = MapSqlParameterSource()
+
+        if (title.isPresent) {
+            sqlQuery.append(" AND ( lower(DOCUMENTS.title) LIKE :title OR lower(DOCUMENTS.taglist) LIKE :title OR lower(DOCUMENTS.senderlist) LIKE :title ) ")
+            hasWhere = true
+            parameters.addValue("title", "%${title.get().toLowerCase()}%")
+        }
+
+        if (tag.isPresent) {
+            sqlJoin.append(" INNER JOIN DOCUMENTS_TO_TAGS ON DOCUMENTS.id = DOCUMENTS_TO_TAGS.document_id INNER JOIN TAGS on TAGS.id = DOCUMENTS_TO_TAGS.tag_id ")
+            sqlQuery.append(" AND TAGS.name = :tagName ")
+            hasJoin = true
+            hasWhere = true
+            parameters.addValue("tagName", tag.get())
+        }
+
+        if (sender.isPresent) {
+            sqlJoin.append(" INNER JOIN DOCUMENTS_TO_SENDERS ON DOCUMENTS.id = DOCUMENTS_TO_SENDERS.document_id INNER JOIN SENDERS on SENDERS.id = DOCUMENTS_TO_SENDERS.sender_id ")
+            sqlQuery.append(" AND SENDERS.name = :senderName ")
+            hasJoin = true
+            hasWhere = true
+            parameters.addValue("senderName", sender.get())
+        }
+
+        if (dateFrom.isPresent) {
+            sqlQuery.append(" AND DOCUMENTS.created >= :dateFrom ")
+            hasWhere = true
+            parameters.addValue("dateFrom", dateFrom.get())
+        }
+
+        if (dateUntil.isPresent) {
+            sqlQuery.append(" AND DOCUMENTS.created <= :dateUntil ")
+            hasWhere = true
+            parameters.addValue("dateUntil", dateUntil.get())
+        }
+
+        sqlQuery.append(" %ORDERBY%")
+
+        var sql = sqlQuery.toString()
+        sql = if (hasWhere) {
+            sql.replace("%WHERE%", " WHERE 1 = 1 ")
+        } else {
+            sql.replace("%WHERE%", "")
+        }
+
+        sql = if (hasJoin) {
+            sql.replace("%JOIN%", " JOIN ")
+        } else {
+            sql.replace("%JOIN%", sqlJoin.toString())
+        }
+
+        var columnSql = sql.replace("%SELECT%", columns)
+        columnSql = columnSql.replace("%ORDERBY%", this.getDocumentOrderBy(*order))
+
+        var countSql = sql.replace("%SELECT%", count)
+        countSql = countSql.replace("%ORDERBY%", "")
+
+        // first - count the number of results for the given query
+        val numberOfEntries = this.jdbcT.query(countSql, parameters, { rs, _ ->
+            rs.getLong(1)
+        })
+
+        var queryResult: List<Document> = emptyList()
+        // if there are no entries - no need to query again!
+        if (numberOfEntries[0] > 0) {
+            // perform pagination. this is strictly database specific - in this case mysql/mariadb
+            // if other databases should be used, this logic need to be changed
+            columnSql += if (limit.isPresent) {
+                " LIMIT ${limit.get()}"
+            } else {
+                // it is not possible that there is a "standalone" OFFSET statement - this will result
+                // in a SQL error. If the limit value is missing, use the total number of entries as
+                // our limit
+                " LIMIT ${numberOfEntries[0]}"
+            }
+
+            if (skip.isPresent) {
+                columnSql += " OFFSET ${skip.get()}"
+            }
+
+            // second - perform the query to retrieve the result
+            queryResult = this.jdbcT.query(columnSql, parameters, { rs, _ ->
+                Document(id = rs.getString("id"),
+                        title = rs.getString("title"),
+                        fileName = rs.getString("filename"),
+                        alternativeId = rs.getString("alternativeid"),
+                        previewLink = rs.getString("previewlink"),
+                        amount = rs.getDouble("amount"),
+                        created = rs.getTimestamp("created"),
+                        modified = rs.getTimestamp("modified"),
+                        tags = rs.getString("taglist")?.split(";") ?: emptyList(),
+                        senders = rs.getString("senderlist")?.split(";") ?: emptyList())
+            })
+        }
+
+        return PagedDocuments(documents = queryResult, totalEntries = numberOfEntries[0])
     }
 
     override fun save(document: Document): Document {
@@ -144,7 +252,7 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
     }
 
     private fun getDocumentOrderBy(vararg order: OrderBy): String {
-        if (order == null || order.size == 0)
+        if (order.isEmpty())
             return ""
 
         val orderFields = StringBuffer(" ORDER BY ")

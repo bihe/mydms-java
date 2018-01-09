@@ -53,6 +53,3 @@ spring:
     url: jdbc:mariadb://${MYDMS_DB_HOST}:3307/mydms-test
     username: ${MYDMS_DB_USER:mydms}
     password: ${MYDMS_DB_PASS:mydms}
-
-
-
