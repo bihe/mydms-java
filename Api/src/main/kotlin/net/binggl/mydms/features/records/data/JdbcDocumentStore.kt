@@ -1,9 +1,9 @@
-package net.binggl.mydms.features.documents.data
+package net.binggl.mydms.features.records.data
 
-import net.binggl.mydms.features.documents.models.Document
-import net.binggl.mydms.features.documents.models.OrderBy
-import net.binggl.mydms.features.documents.models.PagedDocuments
-import net.binggl.mydms.features.documents.models.SortOrder
+import net.binggl.mydms.features.records.models.Document
+import net.binggl.mydms.features.records.models.OrderBy
+import net.binggl.mydms.features.records.models.PagedDocuments
+import net.binggl.mydms.features.records.models.SortOrder
 import net.binggl.mydms.infrastructure.error.MydmsException
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
@@ -256,14 +256,14 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
             return ""
 
         val orderFields = StringBuffer(" ORDER BY ")
-        for ((index, order) in order.withIndex()) {
+        for ((index, orderBy) in order.withIndex()) {
             if (index > 0)
                 orderFields.append(",")
 
-            if (order.sort === SortOrder.Ascending) {
-                orderFields.append(" DOCUMENTS.${order.field} ASC")
+            if (orderBy.sort === SortOrder.Ascending) {
+                orderFields.append(" DOCUMENTS.${orderBy.field} ASC")
             } else {
-                orderFields.append(" DOCUMENTS.${order.field} DESC")
+                orderFields.append(" DOCUMENTS.${orderBy.field} DESC")
             }
         }
         return orderFields.toString()

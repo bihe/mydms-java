@@ -1,27 +1,29 @@
-package net.binggl.mydms.features.senders
+package net.binggl.mydms.features.records
 
+import net.binggl.mydms.features.records.entities.Sender
+import net.binggl.mydms.features.records.repository.SenderRepository
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 
 @RunWith(SpringRunner::class)
-@SpringBootTest
-class SenderStoreTest {
+@DataJpaTest
+class SenderRepositoryTest {
 
-    @Autowired lateinit private var store: SenderStore
+    @Autowired lateinit private var repository: SenderRepository
 
     @Transactional
     @Test
     fun getAllTest() {
-        val t1 = this.store.save(Sender("sender1"))
+        val t1 = this.repository.save(Sender("sender1"))
         Assert.assertTrue(t1.id ?: 0 > -1)
-        this.store.save(Sender("sender2"))
+        this.repository.save(Sender("sender2"))
 
-        val result = this.store.findAll()
+        val result = this.repository.findAll().toList()
         Assert.assertEquals(2, result.size)
         Assert.assertEquals("sender1", result[0].name)
     }
@@ -29,18 +31,18 @@ class SenderStoreTest {
     @Transactional
     @Test
     fun searchTest() {
-        this.store.save(Sender("sender1"))
-        this.store.save(Sender("sender2"))
+        this.repository.save(Sender("sender1"))
+        this.repository.save(Sender("sender2"))
 
-        var result = this.store.search("sender1")
+        var result = this.repository.findByNameContainingIgnoreCase("sender1")
         Assert.assertEquals(1, result.size)
         Assert.assertEquals("sender1", result[0].name)
 
-        result = this.store.search("sender2")
+        result = this.repository.findByNameContainingIgnoreCase("sender2")
         Assert.assertEquals(1, result.size)
         Assert.assertEquals("sender2", result[0].name)
 
-        result = this.store.search("sender")
+        result = this.repository.findByNameContainingIgnoreCase("sender")
         Assert.assertEquals(2, result.size)
         Assert.assertEquals("sender1", result[0].name)
         Assert.assertEquals("sender2", result[1].name)

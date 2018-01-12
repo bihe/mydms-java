@@ -42,10 +42,20 @@ logging:
   level:
     root: WARN
 
+
+---
+spring:
+  profiles: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  database: H2
+  show-sql: true
+
 ---
 spring:
   profiles: rest
-
   application:
     name: mydms
   datasource:

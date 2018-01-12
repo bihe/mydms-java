@@ -1,8 +1,8 @@
-package net.binggl.mydms.features.documents
+package net.binggl.mydms.features.records
 
 import FixtureHelpers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import net.binggl.mydms.features.documents.models.Document
+import net.binggl.mydms.features.records.models.Document
 import org.joda.time.format.ISODateTimeFormat
 import org.junit.Assert
 import org.junit.Test

@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.documents.models
+package net.binggl.mydms.features.records.models
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.binggl.mydms.shared.util.JsonDateSerializer

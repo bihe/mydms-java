@@ -45,7 +45,7 @@ class UploadIntegrationTest {
                 .exchange("/api/v1/upload/file", HttpMethod.POST, requestEntity, String::class.java)
 
         Assert.assertEquals(HttpStatus.OK, response.statusCode)
-        Assert.assertTrue(response.body.indexOf("File $filename was uploaded and stored using token") > -1)
+        Assert.assertTrue(response!!.body!!.indexOf("File $filename was uploaded and stored using token") > -1)
     }
 
     @Test

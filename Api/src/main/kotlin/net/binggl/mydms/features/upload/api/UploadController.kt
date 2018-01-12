@@ -1,5 +1,6 @@
-package net.binggl.mydms.features.upload
+package net.binggl.mydms.features.upload.api
 
+import net.binggl.mydms.features.upload.UploadConfig
 import net.binggl.mydms.features.upload.data.UploadStore
 import net.binggl.mydms.features.upload.models.UploadItem
 import net.binggl.mydms.features.upload.models.UploadResult

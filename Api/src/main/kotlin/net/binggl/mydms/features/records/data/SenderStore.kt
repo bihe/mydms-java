@@ -1,5 +1,6 @@
-package net.binggl.mydms.features.senders
+package net.binggl.mydms.features.records.data
 
+import net.binggl.mydms.features.records.models.Sender
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder

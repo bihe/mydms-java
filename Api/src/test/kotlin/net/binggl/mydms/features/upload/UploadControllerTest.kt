@@ -1,5 +1,6 @@
 package net.binggl.mydms.features.upload
 
+import net.binggl.mydms.features.upload.api.UploadController
 import net.binggl.mydms.features.upload.data.UploadStore
 import net.binggl.mydms.testinfrastructure.BaseIntegrationTest
 import org.hamcrest.CoreMatchers

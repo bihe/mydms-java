@@ -1,8 +1,8 @@
-package net.binggl.mydms.features.documents.data
+package net.binggl.mydms.features.records.data
 
-import net.binggl.mydms.features.documents.models.Document
-import net.binggl.mydms.features.documents.models.OrderBy
-import net.binggl.mydms.features.documents.models.PagedDocuments
+import net.binggl.mydms.features.records.models.Document
+import net.binggl.mydms.features.records.models.OrderBy
+import net.binggl.mydms.features.records.models.PagedDocuments
 import java.util.*
 
 interface DocumentStore {
@@ -15,7 +15,7 @@ interface DocumentStore {
     fun findById(id: String): Optional<Document>
 
     /**
-     * search for documents by a number of arguments
+     * search for records by a number of arguments
      * @param title search by title
      * @param tag search by tagname
      * @param sender search by sendername
@@ -24,7 +24,7 @@ interface DocumentStore {
      * @param limit limit the number of results returned
      * @param skip use an offset
      * @param order sort the result by
-     * @return object containing documents used for paging view
+     * @return object containing records used for paging view
      */
     fun searchDocuments(tile: Optional<String>, tag: Optional<String>, sender: Optional<String>,
                         dateFrom: Optional<Date>, dateUntil: Optional<Date>, limit: Optional<Int>, skip: Optional<Int>,
@@ -45,9 +45,9 @@ interface DocumentStore {
     fun delete(document: Document): Boolean
 
     /**
-     * retrieve all documents from the store
+     * retrieve all records from the store
      * @param order order by arguments
-     * @return list of documents
+     * @return list of records
      */
     fun findAllItems(vararg order: OrderBy): List<Document>
 

@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.tags
+package net.binggl.mydms.features.records.models
 
 data class Tag(val id: Long?, val name: String) {
     constructor(name: String) : this(null, name)

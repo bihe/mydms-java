@@ -1,8 +1,8 @@
-package net.binggl.mydms.features.senders
+package net.binggl.mydms.features.records
 
 import FixtureHelpers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import net.binggl.mydms.features.senders.Sender
+import net.binggl.mydms.features.records.models.Sender
 import org.junit.Assert
 import org.junit.Test
 

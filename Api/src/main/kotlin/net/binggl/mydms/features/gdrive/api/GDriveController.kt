@@ -1,6 +1,7 @@
-package net.binggl.mydms.features.gdrive
+package net.binggl.mydms.features.gdrive.api
 
 import net.binggl.commons.crypto.HashHelper
+import net.binggl.mydms.features.gdrive.Constants
 import net.binggl.mydms.features.gdrive.client.GDriveClient
 import net.binggl.mydms.features.gdrive.models.GDriveCredential
 import net.binggl.mydms.features.gdrive.store.GDriveCredentialStore

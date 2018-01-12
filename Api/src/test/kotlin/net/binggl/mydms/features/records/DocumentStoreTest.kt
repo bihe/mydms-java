@@ -1,9 +1,9 @@
-package net.binggl.mydms.features.documents
+package net.binggl.mydms.features.records
 
-import net.binggl.mydms.features.documents.data.DocumentStore
-import net.binggl.mydms.features.documents.models.Document
-import net.binggl.mydms.features.documents.models.OrderBy
-import net.binggl.mydms.features.documents.models.SortOrder
+import net.binggl.mydms.features.records.data.DocumentStore
+import net.binggl.mydms.features.records.data.SenderStore
+import net.binggl.mydms.features.records.data.TagStore
+import net.binggl.mydms.features.records.models.*
 import net.binggl.mydms.infrastructure.error.MydmsException
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
@@ -22,6 +22,8 @@ import java.util.stream.IntStream
 class DocumentStoreTest {
 
     @Autowired lateinit private var store: DocumentStore
+    @Autowired lateinit private var tagStore: TagStore
+    @Autowired lateinit private var senderStore: SenderStore
 
     private val document: Document
         get() {
@@ -35,7 +37,7 @@ class DocumentStoreTest {
     @Transactional
     @Test(expected = MydmsException::class)
     fun findByInvalidId() {
-        val notfound = this.store.findById(id = "")
+        this.store.findById(id = "")
     }
 
     @Transactional
@@ -82,14 +84,24 @@ class DocumentStoreTest {
     @Test
     fun searchForDocuments() {
 
-        // create 10 documents
+        // create 5 tags
+        for(i in IntStream.range(0, 5)) {
+            this.tagStore.save(Tag(id = 1, name = "tag$i"))
+        }
+
+        // create 5 senders
+        for(i in IntStream.range(0, 5)) {
+            this.senderStore.save(Sender(id = 1, name = "tag$i"))
+        }
+
+        // create 10 records
         for(i in IntStream.range(0,10)) {
             val doc = this.store.save(this.document.copy(id = "document$i", title = "Document #$i",
                     alternativeId = UUID.randomUUID().toString(), created = Date()))
             Assert.assertEquals("Document #$i", doc.title)
         }
 
-        // search for all documents
+        // search for all records
         val allDocuments = this.store.searchDocuments(tile = Optional.empty(),
                 dateFrom = Optional.empty(),
                 dateUntil = Optional.empty(),
