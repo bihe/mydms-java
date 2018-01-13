@@ -1,11 +1,11 @@
-package net.binggl.mydms.features.records.entities
+package net.binggl.mydms.features.records.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
-@Table(name = "SENDERS")
-internal data class Sender(
+@Table(name = "TAGS")
+internal data class Tag(
 
         @Id
         @Column(name = "id")
@@ -16,7 +16,7 @@ internal data class Sender(
         val name: String,
 
         @JsonIgnore
-        @ManyToMany(mappedBy = "senders")
+        @ManyToMany(mappedBy = "tags")
         val documents: List<Document> = emptyList()
 ) {
     constructor(name: String) : this(null, name, emptyList())

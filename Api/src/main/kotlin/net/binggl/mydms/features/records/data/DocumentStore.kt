@@ -1,8 +1,8 @@
 package net.binggl.mydms.features.records.data
 
-import net.binggl.mydms.features.records.models.Document
-import net.binggl.mydms.features.records.models.OrderBy
-import net.binggl.mydms.features.records.models.PagedDocuments
+import net.binggl.mydms.features.records.model.Document
+import net.binggl.mydms.features.records.model.OrderBy
+import net.binggl.mydms.features.records.model.PagedDocuments
 import java.util.*
 
 interface DocumentStore {

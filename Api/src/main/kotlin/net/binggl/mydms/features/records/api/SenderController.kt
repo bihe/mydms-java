@@ -1,7 +1,7 @@
 package net.binggl.mydms.features.records.api
 
 import net.binggl.mydms.features.records.data.SenderStore
-import net.binggl.mydms.features.records.models.Sender
+import net.binggl.mydms.features.records.model.Sender
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.Role

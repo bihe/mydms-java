@@ -1,6 +1,6 @@
 package net.binggl.mydms.features.records.repository
 
-import net.binggl.mydms.features.records.entities.Tag
+import net.binggl.mydms.features.records.entity.Tag
 import org.springframework.data.repository.CrudRepository
 
 internal interface TagRepository : CrudRepository<Tag, Long> {

@@ -1,9 +1,9 @@
 package net.binggl.mydms.features.upload.api
 
 import net.binggl.mydms.features.upload.UploadConfig
-import net.binggl.mydms.features.upload.data.UploadStore
-import net.binggl.mydms.features.upload.models.UploadItem
-import net.binggl.mydms.features.upload.models.UploadResult
+import net.binggl.mydms.features.upload.entity.Upload
+import net.binggl.mydms.features.upload.model.UploadResult
+import net.binggl.mydms.features.upload.repository.UploadRepository
 import net.binggl.mydms.infrastructure.error.MydmsException
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
@@ -23,7 +23,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/upload")
-class UploadController(@Autowired private val store: UploadStore,
+class UploadController(@Autowired private val repository: UploadRepository,
                        @Autowired private val config: UploadConfig): BaseResource() {
 
     @ApiSecured(requiredRole = Role.User)
@@ -40,7 +40,7 @@ class UploadController(@Autowired private val store: UploadStore,
         }
 
         val id = UUID.randomUUID().toString()
-        val uploadQueueItem = UploadItem(id, file.originalFilename, file.contentType)
+        val uploadQueueItem = Upload(id, file.originalFilename, file.contentType)
 
         LOG.debug("Will save the given file ${file.originalFilename} using the created token $id")
 
@@ -48,7 +48,7 @@ class UploadController(@Autowired private val store: UploadStore,
         val outputPath: java.nio.file.Path = FileSystems.getDefault().getPath(config.uploadPath,"$id.$fileExtension")
         Files.copy(file.inputStream, outputPath)
 
-        this.store.save(uploadQueueItem)
+        this.repository.save(uploadQueueItem)
         return UploadResult(token = uploadQueueItem.id,
                 message = "File ${file.originalFilename} was uploaded and stored using token $id",
                 result = ActionResult.Created)

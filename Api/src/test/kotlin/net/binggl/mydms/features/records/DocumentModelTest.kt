@@ -1,11 +1,13 @@
 package net.binggl.mydms.features.records
 
 import FixtureHelpers
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import net.binggl.mydms.features.records.models.Document
-import org.joda.time.format.ISODateTimeFormat
+import net.binggl.mydms.features.records.model.Document
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DocumentModelTest {
 
@@ -23,14 +25,14 @@ class DocumentModelTest {
     private val document: Document
         get() {
             return Document(id = "id", title = "document", fileName = "filename", alternativeId = "alternativeId",
-                    previewLink = "previewLink", amount = 0.0, created = fmt.parseDateTime("2018-01-01T00:00:00.000+01:00").toDate(),
-                    modified = fmt.parseDateTime("2018-01-01T00:00:00.000+01:00").toDate(), tags = emptyList(),
+                    previewLink = "previewLink", amount = 0.0, created = LocalDateTime.parse("2018-01-01T00:00:00.000", fmt),
+                    modified = LocalDateTime.parse("2018-01-01T00:00:00.000", fmt), tags = emptyList(),
                     senders = emptyList(), uploadFileToken = null)
         }
 
     companion object {
         // https://github.com/FasterXML/jackson-module-kotlin
-        private val MAPPER = jacksonObjectMapper()
-        private val fmt =  ISODateTimeFormat.dateTimeParser()
+        private val MAPPER = jacksonObjectMapper().registerModule(JavaTimeModule())
+        private val fmt = DateTimeFormatter.ISO_DATE_TIME
     }
 }

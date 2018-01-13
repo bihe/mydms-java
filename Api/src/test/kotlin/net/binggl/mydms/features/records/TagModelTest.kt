@@ -2,7 +2,7 @@ package net.binggl.mydms.features.records
 
 import FixtureHelpers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import net.binggl.mydms.features.records.models.Tag
+import net.binggl.mydms.features.records.model.Tag
 import org.junit.Assert
 import org.junit.Test
 

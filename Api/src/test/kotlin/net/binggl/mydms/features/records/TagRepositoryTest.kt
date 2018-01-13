@@ -1,6 +1,6 @@
 package net.binggl.mydms.features.records
 
-import net.binggl.mydms.features.records.entities.Tag
+import net.binggl.mydms.features.records.entity.Tag
 import net.binggl.mydms.features.records.repository.TagRepository
 import org.junit.Assert
 import org.junit.Test

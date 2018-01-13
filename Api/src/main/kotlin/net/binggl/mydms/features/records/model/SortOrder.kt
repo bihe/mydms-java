@@ -1,4 +1,4 @@
-package net.binggl.mydms.features.records.models
+package net.binggl.mydms.features.records.model
 
 enum class SortOrder {
     Ascending,

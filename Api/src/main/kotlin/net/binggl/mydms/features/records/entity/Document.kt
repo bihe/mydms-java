@@ -1,8 +1,6 @@
-package net.binggl.mydms.features.records.entities
+package net.binggl.mydms.features.records.entity
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.binggl.mydms.shared.util.JsonDateSerializer
-import java.util.*
+import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 
@@ -31,12 +29,10 @@ internal data class Document(
         val amount: Double,
 
         @Column(name = "created")
-        @JsonSerialize(using = JsonDateSerializer::class)
-        val created: Date,
+        val created: LocalDateTime,
 
         @Column(name = "modified")
-        @JsonSerialize(using = JsonDateSerializer::class)
-        val modified: Date,
+        val modified: LocalDateTime,
 
         @Column(name = "taglist")
         val tagList: String,

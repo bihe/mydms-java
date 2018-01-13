@@ -2,7 +2,7 @@ package net.binggl.mydms.features.upload
 
 import FixtureHelpers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import net.binggl.mydms.features.upload.models.UploadResult
+import net.binggl.mydms.features.upload.model.UploadResult
 import net.binggl.mydms.shared.models.ActionResult
 import org.junit.Assert
 import org.junit.Test

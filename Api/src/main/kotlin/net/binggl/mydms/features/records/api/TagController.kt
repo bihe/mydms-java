@@ -1,7 +1,7 @@
 package net.binggl.mydms.features.records.api
 
 import net.binggl.mydms.features.records.data.TagStore
-import net.binggl.mydms.features.records.models.Tag
+import net.binggl.mydms.features.records.model.Tag
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.Role

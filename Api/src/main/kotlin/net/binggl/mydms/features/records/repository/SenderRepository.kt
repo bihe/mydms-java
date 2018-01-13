@@ -1,8 +1,7 @@
 package net.binggl.mydms.features.records.repository
 
-import net.binggl.mydms.features.records.entities.Sender
+import net.binggl.mydms.features.records.entity.Sender
 import org.springframework.data.repository.CrudRepository
-import java.util.stream.Stream
 
 internal interface SenderRepository : CrudRepository<Sender, Long> {
 

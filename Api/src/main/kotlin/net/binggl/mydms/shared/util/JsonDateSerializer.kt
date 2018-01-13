@@ -4,21 +4,19 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
 import java.io.IOException
-import java.util.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class JsonDateSerializer : JsonSerializer<Date>() {
+class JsonDateSerializer : JsonSerializer<LocalDateTime>() {
 
     @Throws(IOException::class, JsonProcessingException::class)
-    override fun serialize(value: Date, gen: JsonGenerator, arg2: SerializerProvider) {
-        gen.writeString(formatter.print(DateTime(value)))
+    override fun serialize(value: LocalDateTime, gen: JsonGenerator, arg2: SerializerProvider) {
+        gen.writeString(formatter.format(value))
     }
 
     companion object {
-
-        private val formatter = ISODateTimeFormat.dateTime()
+        private val formatter = DateTimeFormatter.ISO_DATE_TIME
     }
 
 }

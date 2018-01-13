@@ -1,9 +1,9 @@
 package net.binggl.mydms.features.records.data
 
-import net.binggl.mydms.features.records.models.Document
-import net.binggl.mydms.features.records.models.OrderBy
-import net.binggl.mydms.features.records.models.PagedDocuments
-import net.binggl.mydms.features.records.models.SortOrder
+import net.binggl.mydms.features.records.model.Document
+import net.binggl.mydms.features.records.model.OrderBy
+import net.binggl.mydms.features.records.model.PagedDocuments
+import net.binggl.mydms.features.records.model.SortOrder
 import net.binggl.mydms.infrastructure.error.MydmsException
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
@@ -30,8 +30,8 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
                     alternativeId = rs.getString("alternativeid"),
                     previewLink = rs.getString("previewlink"),
                     amount = rs.getDouble("amount"),
-                    created = rs.getTimestamp("created"),
-                    modified = rs.getTimestamp("modified"),
+                    created = null, //rs.getTimestamp("created"),
+                    modified = null, //rs.getTimestamp("modified"),
                     tags = rs.getString("taglist")?.split(";") ?: emptyList(),
                     senders = rs.getString("senderlist")?.split(";") ?: emptyList())
         })
@@ -144,8 +144,8 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
                         alternativeId = rs.getString("alternativeid"),
                         previewLink = rs.getString("previewlink"),
                         amount = rs.getDouble("amount"),
-                        created = rs.getTimestamp("created"),
-                        modified = rs.getTimestamp("modified"),
+                        created = null, //rs.getTimestamp("created"),
+                        modified = null, //rs.getTimestamp("modified"),
                         tags = rs.getString("taglist")?.split(";") ?: emptyList(),
                         senders = rs.getString("senderlist")?.split(";") ?: emptyList())
             })
@@ -244,8 +244,8 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
                     alternativeId = rs.getString("alternativeid"),
                     previewLink = rs.getString("previewlink"),
                     amount = rs.getDouble("amount"),
-                    created = rs.getTimestamp("created"),
-                    modified = rs.getTimestamp("modified"),
+                    created = null, //rs.getTimestamp("created"),
+                    modified = null, //rs.getTimestamp("modified"),
                     tags = rs.getString("taglist")?.split(";") ?: emptyList(),
                     senders = rs.getString("senderlist")?.split(";") ?: emptyList())
         })

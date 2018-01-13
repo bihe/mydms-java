@@ -1,6 +1,6 @@
 package net.binggl.mydms.features.records
 
-import net.binggl.mydms.features.records.entities.Sender
+import net.binggl.mydms.features.records.entity.Sender
 import net.binggl.mydms.features.records.repository.SenderRepository
 import org.junit.Assert
 import org.junit.Test

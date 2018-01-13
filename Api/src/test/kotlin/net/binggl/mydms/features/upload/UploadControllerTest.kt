@@ -1,7 +1,7 @@
 package net.binggl.mydms.features.upload
 
 import net.binggl.mydms.features.upload.api.UploadController
-import net.binggl.mydms.features.upload.data.UploadStore
+import net.binggl.mydms.features.upload.repository.UploadRepository
 import net.binggl.mydms.testinfrastructure.BaseIntegrationTest
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
@@ -26,7 +26,7 @@ class UploadControllerTest : BaseIntegrationTest() {
     private lateinit var mvc: MockMvc
 
     @MockBean
-    private lateinit var store: UploadStore
+    private lateinit var repository: UploadRepository
 
     @MockBean
     private lateinit var config: UploadConfig
