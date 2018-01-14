@@ -1,14 +1,9 @@
 package net.binggl.mydms.features.records
 
-import org.junit.runner.RunWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit4.SpringRunner
-
 
 /*
 
-import net.binggl.mydms.features.records.data.DocumentStore
+import net.binggl.mydms.features.records.repository.DocumentStore
 import net.binggl.mydms.features.records.data.SenderStore
 import net.binggl.mydms.features.records.data.TagStore
 import org.junit.runner.RunWith
@@ -24,12 +19,12 @@ class DocumentStoreTest {
     @Autowired lateinit private var tagStore: TagStore
     @Autowired lateinit private var senderStore: SenderStore
 
-    private val document: Document
+    private val document: DocumentEntity
         get() {
-            return Document(id = "id", title = "document", fileName = "filename", alternativeId = UUID.randomUUID().toString(),
+            return DocumentEntity(id = "id", title = "document", fileName = "filename", alternativeId = UUID.randomUUID().toString(),
                     previewLink = "previewLink", amount = 0.0, created = fmt.parseDateTime("2018-01-01T00:00:00.000+01:00").toDate(),
-                    modified = null, tags = emptyList(),
-                    senders = emptyList(), uploadFileToken = null)
+                    modified = null, tagEntities = emptyList(),
+                    senderEntities = emptyList(), uploadFileToken = null)
         }
 
 
@@ -83,21 +78,21 @@ class DocumentStoreTest {
     @Test
     fun searchForDocuments() {
 
-        // create 5 tags
+        // create 5 tagEntities
         for(i in IntStream.range(0, 5)) {
-            this.tagStore.save(Tag(id = 1, name = "tag$i"))
+            this.tagStore.save(TagEntity(id = 1, name = "tag$i"))
         }
 
-        // create 5 senders
+        // create 5 senderEntities
         for(i in IntStream.range(0, 5)) {
-            this.senderStore.save(Sender(id = 1, name = "tag$i"))
+            this.senderStore.save(SenderEntity(id = 1, name = "tag$i"))
         }
 
         // create 10 records
         for(i in IntStream.range(0,10)) {
-            val doc = this.store.save(this.document.copy(id = "document$i", title = "Document #$i",
+            val doc = this.store.save(this.document.copy(id = "document$i", title = "DocumentEntity #$i",
                     alternativeId = UUID.randomUUID().toString(), created = Date()))
-            Assert.assertEquals("Document #$i", doc.title)
+            Assert.assertEquals("DocumentEntity #$i", doc.title)
         }
 
         // search for all records
@@ -157,7 +152,7 @@ class DocumentStoreTest {
         Assert.assertEquals(10, documentsTitle.totalEntries)
         Assert.assertEquals(10, documentsTitle.documents.size)
 
-        val documentsTitleSingle = this.store.searchDocuments(tile = Optional.of("Document #0"),
+        val documentsTitleSingle = this.store.searchDocuments(tile = Optional.of("DocumentEntity #0"),
                 dateFrom = Optional.empty(),
                 dateUntil = Optional.empty(),
                 sender = Optional.empty(),
@@ -183,7 +178,7 @@ class DocumentStoreTest {
 
         Assert.assertEquals(10, documentTitleOrderBy.totalEntries)
         Assert.assertEquals(5, documentTitleOrderBy.documents.size)
-        Assert.assertEquals("Document #9", documentTitleOrderBy.documents[0].title)
+        Assert.assertEquals("DocumentEntity #9", documentTitleOrderBy.documents[0].title)
 
         val documentsByDate = this.store.searchDocuments(tile = Optional.empty(),
                 dateFrom = Optional.of(DateTime().plusDays(1).toDate()),
@@ -209,7 +204,7 @@ class DocumentStoreTest {
 
         Assert.assertEquals(10, documentsByDate1.totalEntries)
         Assert.assertEquals(10, documentsByDate1.documents.size)
-        Assert.assertEquals("Document #0", documentsByDate1.documents[0].title)
+        Assert.assertEquals("DocumentEntity #0", documentsByDate1.documents[0].title)
     }
 
     companion object {

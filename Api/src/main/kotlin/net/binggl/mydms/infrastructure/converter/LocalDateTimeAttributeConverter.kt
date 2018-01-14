@@ -16,6 +16,6 @@ class LocalDateTimeAttributeConverter : AttributeConverter<LocalDateTime, Timest
     }
 
     override fun convertToEntityAttribute(sqlTimestamp: Timestamp?): LocalDateTime? {
-        return if (sqlTimestamp == null) null else sqlTimestamp!!.toLocalDateTime()
+        return sqlTimestamp?.toLocalDateTime()
     }
 }

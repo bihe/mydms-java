@@ -1,6 +1,6 @@
 package net.binggl.mydms.features.upload
 
-import net.binggl.mydms.features.upload.entity.Upload
+import net.binggl.mydms.features.upload.entity.UploadEntity
 import net.binggl.mydms.features.upload.repository.UploadRepository
 import org.junit.Assert
 import org.junit.Test
@@ -20,7 +20,7 @@ class UploadRepositoryTest {
     @Transactional
     @Test
     fun saveSearchDelete() {
-        val uploadItem = Upload(id = "id", fileName = "fileName", mimeType = "mimeType")
+        val uploadItem = UploadEntity(id = "id", fileName = "fileName", mimeType = "mimeType")
         val savedUploadItem = this.store.save(uploadItem)
         Assert.assertTrue( LocalDateTime.now().isAfter(savedUploadItem.created))
 

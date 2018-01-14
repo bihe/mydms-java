@@ -1,6 +1,6 @@
 package net.binggl.mydms.features.records
 
-import net.binggl.mydms.features.records.entity.Tag
+import net.binggl.mydms.features.records.entity.TagEntity
 import net.binggl.mydms.features.records.repository.TagRepository
 import org.junit.Assert
 import org.junit.Test
@@ -19,9 +19,9 @@ class TagRepositoryTest {
     @Transactional
     @Test
     fun getAllTest() {
-        val t1 = this.repository.save(Tag("tag1"))
+        val t1 = this.repository.save(TagEntity("tag1"))
         Assert.assertTrue(t1.id ?: 0 > -1)
-        this.repository.save(Tag("tag2"))
+        this.repository.save(TagEntity("tag2"))
 
         val result = this.repository.findAll().toList()
         Assert.assertEquals(2, result.size)
@@ -31,8 +31,8 @@ class TagRepositoryTest {
     @Transactional
     @Test
     fun searchTest() {
-        this.repository.save(Tag("tag1"))
-        this.repository.save(Tag("tag2"))
+        this.repository.save(TagEntity("tag1"))
+        this.repository.save(TagEntity("tag2"))
 
         var result = this.repository.findByNameContainingIgnoreCase("tag1")
         Assert.assertEquals(1, result.size)

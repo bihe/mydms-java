@@ -1,7 +1,7 @@
 package net.binggl.mydms.features.upload.api
 
 import net.binggl.mydms.features.upload.UploadConfig
-import net.binggl.mydms.features.upload.entity.Upload
+import net.binggl.mydms.features.upload.entity.UploadEntity
 import net.binggl.mydms.features.upload.model.UploadResult
 import net.binggl.mydms.features.upload.repository.UploadRepository
 import net.binggl.mydms.infrastructure.error.MydmsException
@@ -40,7 +40,7 @@ class UploadController(@Autowired private val repository: UploadRepository,
         }
 
         val id = UUID.randomUUID().toString()
-        val uploadQueueItem = Upload(id, file.originalFilename, file.contentType)
+        val uploadQueueItem = UploadEntity(id, file.originalFilename, file.contentType)
 
         LOG.debug("Will save the given file ${file.originalFilename} using the created token $id")
 

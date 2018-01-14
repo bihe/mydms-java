@@ -8,7 +8,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "UPLOADS")
-data class Upload(
+data class UploadEntity(
 
         @Id
         @Column(name = "id")

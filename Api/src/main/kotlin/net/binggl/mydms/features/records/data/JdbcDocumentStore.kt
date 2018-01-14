@@ -14,9 +14,9 @@ import java.util.*
 
 
 @Repository
-class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : DocumentStore {
+class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) {
 
-    override fun findById(id: String): Optional<Document> {
+    fun findById(id: String): Optional<Document> {
         if (StringUtils.isEmpty(id)) {
             throw MydmsException("Cannot lookup a document with empty id!")
         }
@@ -42,7 +42,7 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
         return Optional.of(result[0])
     }
 
-    override fun searchDocuments(title: Optional<String>, tag: Optional<String>, sender: Optional<String>,
+    fun searchDocuments(title: Optional<String>, tag: Optional<String>, sender: Optional<String>,
                                  dateFrom: Optional<Date>, dateUntil: Optional<Date>, limit: Optional<Int>,
                                  skip: Optional<Int>, vararg order: OrderBy): PagedDocuments {
 
@@ -154,7 +154,7 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
         return PagedDocuments(documents = queryResult, totalEntries = numberOfEntries[0])
     }
 
-    override fun save(document: Document): Document {
+    fun save(document: Document): Document {
         if (StringUtils.isEmpty(document.id)) {
             throw MydmsException("The document-ID has to be assigned to save the element!")
         }
@@ -205,7 +205,7 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
         throw MydmsException("Could not retrieve document item!")
     }
 
-    override fun delete(document: Document): Boolean {
+    fun delete(document: Document): Boolean {
         if (StringUtils.isEmpty(document.id)) {
             throw MydmsException("The document-ID has to be assigned to delete the element!")
         }
@@ -229,7 +229,7 @@ class JdbcDocumentStore(private val jdbcT: NamedParameterJdbcTemplate) : Documen
         return false
     }
 
-    override fun findAllItems(vararg order: OrderBy): List<Document> {
+    fun findAllItems(vararg order: OrderBy): List<Document> {
 
         val sqlQuery = "SELECT id,title,filename,alternativeid,previewlink," +
                 "amount,created,modified,taglist,senderlist FROM DOCUMENTS"

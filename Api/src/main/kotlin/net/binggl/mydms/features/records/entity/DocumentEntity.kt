@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty
 
 @Entity
 @Table(name = "DOCUMENTS")
-internal data class Document(
+data class DocumentEntity(
         @Id
         @Column(name = "id")
         val id: String,
@@ -47,11 +47,11 @@ internal data class Document(
         @JoinTable(name = "DOCUMENTS_TO_TAGS",
                 joinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "id")],
                 inverseJoinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")])
-        val tags: List<Tag> = emptyList(),
+        val tags: List<TagEntity> = emptyList(),
 
         @ManyToMany(cascade = [CascadeType.ALL])
         @JoinTable(name = "DOCUMENTS_TO_SENDERS",
         joinColumns = [JoinColumn(name = "sender_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")])
-        val senders: List<Sender> = emptyList()
+        val senders: List<SenderEntity> = emptyList()
 )

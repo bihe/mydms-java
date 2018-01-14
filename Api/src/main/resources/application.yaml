@@ -40,26 +40,39 @@ google:
 
 logging:
   level:
-    root: WARN
-
-
----
-spring:
-  profiles: test
-  jpa:
-    hibernate:
-      ddl-auto: update
-      naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
-  database: H2
-  show-sql: true
+    root: INFO
 
 ---
 spring:
   profiles: rest
   application:
     name: mydms
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${MYDMS_DB_HOST}:3307/mydms-test
     username: ${MYDMS_DB_USER:mydms}
     password: ${MYDMS_DB_PASS:mydms}
+
+    hikari:
+      removeAbandoned: true
+      removeAbandonedTimeout: 120
+      # Number of ms to wait before throwing an exception if no connection is available.
+      max-wait: 5000
+      # Maximum number of active connections that can be allocated from this pool at the same time.
+      max-active: 5
+      # Validate the connection before borrowing it from the pool.
+      validationQuery: "select 1"
+      testOnBorrow: true
+      testOnConnect: true

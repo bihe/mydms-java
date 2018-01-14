@@ -1,6 +1,6 @@
 package net.binggl.mydms.features.records
 
-import net.binggl.mydms.features.records.entity.Sender
+import net.binggl.mydms.features.records.entity.SenderEntity
 import net.binggl.mydms.features.records.repository.SenderRepository
 import org.junit.Assert
 import org.junit.Test
@@ -19,9 +19,9 @@ class SenderRepositoryTest {
     @Transactional
     @Test
     fun getAllTest() {
-        val t1 = this.repository.save(Sender("sender1"))
+        val t1 = this.repository.save(SenderEntity("sender1"))
         Assert.assertTrue(t1.id ?: 0 > -1)
-        this.repository.save(Sender("sender2"))
+        this.repository.save(SenderEntity("sender2"))
 
         val result = this.repository.findAll().toList()
         Assert.assertEquals(2, result.size)
@@ -31,8 +31,8 @@ class SenderRepositoryTest {
     @Transactional
     @Test
     fun searchTest() {
-        this.repository.save(Sender("sender1"))
-        this.repository.save(Sender("sender2"))
+        this.repository.save(SenderEntity("sender1"))
+        this.repository.save(SenderEntity("sender2"))
 
         var result = this.repository.findByNameContainingIgnoreCase("sender1")
         Assert.assertEquals(1, result.size)

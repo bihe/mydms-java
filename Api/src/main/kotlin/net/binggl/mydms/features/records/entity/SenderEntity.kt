@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "SENDERS")
-internal data class Sender(
+data class SenderEntity(
 
         @Id
         @Column(name = "id")
@@ -17,7 +17,7 @@ internal data class Sender(
 
         @JsonIgnore
         @ManyToMany(mappedBy = "senders")
-        val documents: List<Document> = emptyList()
+        val documents: List<DocumentEntity> = emptyList()
 ) {
     constructor(name: String) : this(null, name, emptyList())
 }

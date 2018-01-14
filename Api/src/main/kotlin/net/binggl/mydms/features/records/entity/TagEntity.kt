@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "TAGS")
-internal data class Tag(
+data class TagEntity(
 
         @Id
         @Column(name = "id")
@@ -17,7 +17,7 @@ internal data class Tag(
 
         @JsonIgnore
         @ManyToMany(mappedBy = "tags")
-        val documents: List<Document> = emptyList()
+        val documents: List<DocumentEntity> = emptyList()
 ) {
     constructor(name: String) : this(null, name, emptyList())
 }

@@ -1,14 +1,14 @@
 package net.binggl.mydms.features.records.repository
 
-import net.binggl.mydms.features.records.entity.Tag
+import net.binggl.mydms.features.records.entity.TagEntity
 import org.springframework.data.repository.CrudRepository
 
-internal interface TagRepository : CrudRepository<Tag, Long> {
+interface TagRepository : CrudRepository<TagEntity, Long> {
 
     /**
      * search for Tags with the given name
-     * @param name the name of the tags
+     * @param name the name of the tagEntities
      *
      */
-    fun findByNameContainingIgnoreCase(name: String): List<Tag>
+    fun findByNameContainingIgnoreCase(name: String): List<TagEntity>
 }
