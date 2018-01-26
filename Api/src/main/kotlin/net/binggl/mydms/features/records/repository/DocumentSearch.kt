@@ -2,6 +2,7 @@ package net.binggl.mydms.features.records.repository
 
 import net.binggl.mydms.features.records.model.OrderBy
 import net.binggl.mydms.features.records.model.PagedDocuments
+import java.time.LocalDateTime
 import java.util.*
 
 interface DocumentSearch {
@@ -18,7 +19,12 @@ interface DocumentSearch {
      * @param order sort the result by
      * @return object containing records used for paging view
      */
-    fun searchDocuments(tile: Optional<String>, tag: Optional<String>, sender: Optional<String>,
-                        dateFrom: Optional<Date>, dateUntil: Optional<Date>, limit: Optional<Int>, skip: Optional<Int>,
+    fun searchDocuments(title: Optional<String>,
+                        tag: Optional<String>,
+                        sender: Optional<String>,
+                        dateFrom: Optional<LocalDateTime>,
+                        dateUntil: Optional<LocalDateTime>,
+                        limit: Optional<Int>,
+                        skip: Optional<Int>,
                         vararg order: OrderBy): PagedDocuments
 }

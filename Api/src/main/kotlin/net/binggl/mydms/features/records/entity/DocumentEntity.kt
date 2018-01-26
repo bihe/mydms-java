@@ -32,7 +32,7 @@ data class DocumentEntity(
         val created: LocalDateTime,
 
         @Column(name = "modified")
-        val modified: LocalDateTime,
+        val modified: LocalDateTime?,
 
         @Column(name = "taglist")
         val tagList: String,
