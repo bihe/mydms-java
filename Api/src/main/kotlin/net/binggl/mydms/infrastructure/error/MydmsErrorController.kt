@@ -29,7 +29,7 @@ class MydmsErrorController(@Autowired private val errorAttributes: ErrorAttribut
 
 
     private fun getErrorAttributes(request: WebRequest, includeStackTrace: Boolean): Map<String, Any> {
-        return errorAttributes.getErrorAttributes(request, true)
+        return errorAttributes.getErrorAttributes(request, includeStackTrace)
     }
 
     companion object {
