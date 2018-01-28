@@ -19,6 +19,7 @@ application:
   # the url used to redirect for /
   url: http://devel.binggl.net:8080/app/index.html
   detailedErrors: ${MYDMS_DETAILED_ERRORS:false}
+  defaultLimit: 20
   # upload settings
   upload:
     maxUploadSize: 512000
