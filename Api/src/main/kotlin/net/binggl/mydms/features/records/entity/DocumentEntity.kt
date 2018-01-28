@@ -45,13 +45,13 @@ data class DocumentEntity(
 
         @ManyToMany(cascade = [CascadeType.ALL])
         @JoinTable(name = "DOCUMENTS_TO_TAGS",
-                joinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "id")],
-                inverseJoinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")])
+                joinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")],
+                inverseJoinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "id")])
         val tags: List<TagEntity> = emptyList(),
 
         @ManyToMany(cascade = [CascadeType.ALL])
         @JoinTable(name = "DOCUMENTS_TO_SENDERS",
-        joinColumns = [JoinColumn(name = "sender_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")])
+        joinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "sender_id", referencedColumnName = "id")])
         val senders: List<SenderEntity> = emptyList()
 )
