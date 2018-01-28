@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/tag")
+@RequestMapping("/api/v1/tags")
 class TagController(@Autowired private val repository: TagRepository): BaseResource() {
 
     @ApiSecured(requiredRole = Role.User)
