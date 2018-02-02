@@ -1,5 +1,6 @@
-package net.binggl.mydms.features.upload
+package net.binggl.mydms.integration.upload
 
+import net.binggl.mydms.integration.IntegrationHelpers
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
@@ -25,10 +26,6 @@ class UploadIntegrationTest {
 
     @Test
     fun uploadTestEnd2End() {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.MULTIPART_FORM_DATA
-        headers.set("Authorization", "Bearer $jwtToken")
-
         val tempFile = Files.createTempFile("test", ".pdf")
         val filename = tempFile.fileName.toString()
         Files.write(tempFile, "testcontent".toByteArray())
@@ -39,7 +36,7 @@ class UploadIntegrationTest {
         val bodyMap = LinkedMultiValueMap<String, Any>()
         bodyMap.add("file", pdfPart)
 
-        val requestEntity = HttpEntity(bodyMap, headers)
+        val requestEntity = HttpEntity(bodyMap, IntegrationHelpers.headers)
 
         val response = this.restTemplate
                 .exchange("/api/v1/upload/file", HttpMethod.POST, requestEntity, String::class.java)

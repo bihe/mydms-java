@@ -157,7 +157,7 @@ class DocumentController(
     @ApiSecured(requiredRole = Role.User)
     @PostMapping(consumes = ["application/json"], produces = ["application/json"])
     @Transactional()
-    fun saveDocument(@NotNull @Valid documentPayload: Document): ResponseEntity<SimpleResult> {
+    fun saveDocument(@RequestBody @NotNull @Valid documentPayload: Document): ResponseEntity<SimpleResult> {
 
         val tagList = this.processTags(documentPayload.tags)
         val senderList = this.processSenders(documentPayload.senders)
@@ -180,8 +180,8 @@ class DocumentController(
                         modified = LocalDateTime.now(),
                         tags = tagList,
                         senders = senderList,
-                        senderList = senderList.map { it.name }.joinToString { ";" },
-                        tagList = tagList.map { it.name }.joinToString { ";" })
+                        senderList = senderList.joinToString(";") { it.name },
+                        tagList = tagList.joinToString(";") { it.name })
             } else {
                 LOG.debug("No document for id '${documentPayload.id}' - create a new document.")
                 this.newDocumentInstance(documentPayload, fileName, tagList, senderList)
@@ -200,6 +200,8 @@ class DocumentController(
         return ResponseEntity.ok(result)
 
     }
+
+
 
     private fun processUploadFile(uploadToken: String?, fileName: String): String {
         if (uploadToken == null || uploadToken.isEmpty())
@@ -286,8 +288,8 @@ class DocumentController(
                 senders = senderList,
                 tags = tagList,
                 modified = null,
-                senderList = senderList.map { it.name }.joinToString { ";" },
-                tagList = tagList.map { it.name }.joinToString { ";" }
+                senderList = senderList.joinToString(";") { it.name },
+                tagList = tagList.joinToString(";") { it.name }
         )
     }
 

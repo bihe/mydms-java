@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets
 
 @RunWith(SpringRunner::class)
 @WebMvcTest(UploadController::class)
-class UploadEntityControllerTest : BaseIntegrationTest() {
+class UploadControllerTest : BaseIntegrationTest() {
 
     @Autowired
     private lateinit var mvc: MockMvc
