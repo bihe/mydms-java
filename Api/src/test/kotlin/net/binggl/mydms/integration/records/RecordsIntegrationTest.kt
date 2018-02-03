@@ -5,6 +5,7 @@ import net.binggl.mydms.integration.IntegrationHelpers
 import net.binggl.mydms.shared.models.ActionResult
 import net.binggl.mydms.shared.models.SimpleResult
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +19,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-//@Ignore("Run as separate integration test")
+@Ignore("Run as separate integration test")
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RecordsIntegrationTest {
@@ -44,14 +45,11 @@ class RecordsIntegrationTest {
 
     @Test
     fun saveDocument() {
-
         val headers = IntegrationHelpers.headers
-
         headers.contentType = MediaType.APPLICATION_JSON
 
         // payload to write
         val requestEntity = HttpEntity(this.document, headers)
-
         val response = this.restTemplate.postForEntity("/api/v1/documents", requestEntity, SimpleResult::class.java)
 
         Assert.assertEquals(HttpStatus.OK, response.statusCode)
