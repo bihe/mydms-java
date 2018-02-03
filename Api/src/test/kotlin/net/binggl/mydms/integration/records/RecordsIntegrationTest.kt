@@ -5,7 +5,6 @@ import net.binggl.mydms.integration.IntegrationHelpers
 import net.binggl.mydms.shared.models.ActionResult
 import net.binggl.mydms.shared.models.SimpleResult
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +18,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-@Ignore("Run as separate integration test")
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RecordsIntegrationTest {

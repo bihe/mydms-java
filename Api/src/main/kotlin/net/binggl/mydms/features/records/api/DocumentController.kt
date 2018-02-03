@@ -20,6 +20,7 @@ import net.binggl.mydms.shared.files.FileItem
 import net.binggl.mydms.shared.models.ActionResult
 import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.SimpleResult
+import net.binggl.mydms.shared.util.toBase64
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.RandomStringUtils
@@ -175,7 +176,7 @@ class DocumentController(
                 newDoc = false
                 doc.get().copy(title = documentPayload.title,
                         fileName = fileName,
-                        previewLink = documentPayload.previewLink,
+                        previewLink = fileName.toBase64(),
                         amount = documentPayload.amount,
                         modified = LocalDateTime.now(),
                         tags = tagList,
@@ -204,7 +205,7 @@ class DocumentController(
 
 
     private fun processUploadFile(uploadToken: String?, fileName: String): String {
-        if (uploadToken == null || uploadToken.isEmpty())
+        if (uploadToken == null || uploadToken == "-")
             return fileName
 
         val result = this.uploadRepository.findById(uploadToken)
@@ -282,7 +283,7 @@ class DocumentController(
                 title = documentPayload.title,
                 alternativeId = RandomStringUtils.random(8, true, true),
                 fileName = fileName,
-                previewLink = documentPayload.previewLink,
+                previewLink = fileName.toBase64(),
                 amount = documentPayload.amount,
                 created = LocalDateTime.now(),
                 senders = senderList,
