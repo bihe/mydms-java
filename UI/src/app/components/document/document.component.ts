@@ -168,7 +168,7 @@ export class DocumentComponent implements OnInit {
         .subscribe(
           result => {
             if (result) {
-              if (result.result === 'Created') {
+              if (result.result === 'Created' || result.result === 'Updated') {
                 this.state.setProgress(false);
                 console.log(result.message);
                 this.router.navigate(['/']);
@@ -224,7 +224,7 @@ export class DocumentComponent implements OnInit {
       this.state.setProgress(true);
       const event: UploadInput = {
         type: 'uploadAll',
-        url: '/api/upload/file',
+        url: '/api/v1/upload/file',
         method: 'POST',
         // data: { foo: 'bar' },
         concurrency: 0
