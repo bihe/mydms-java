@@ -20,19 +20,20 @@ import java.util.*
 
 @Controller
 class HomeController(@Value("\${auth.loginUrl}") private val loginUrl: String,
-                     @Value("\${application.url}") private val applicationUrl: String,
+                     @Value("\${application.fullUrl}") private val applicationFullUrl: String,
+                     @Value("\${application.spaForwardUrl}") private val spaForwardUrl: String,
                      @Autowired private val msgIntegrity: MessageIntegrity) {
 
     @ApiSecured(requiredRole = Role.User)
-    @RequestMapping(value = "/{path:[^\\.]*}")
+    @RequestMapping(value = "/**/{[path:[^\\.]*}")
     fun redirect(): String {
-        return "redirect:$applicationUrl"
+        return "forward:$spaForwardUrl"
     }
 
     @ApiSecured(requiredRole = Role.User)
     @GetMapping("/")
     fun index(): ModelAndView {
-        return ModelAndView("redirect:$applicationUrl")
+        return ModelAndView("redirect:$applicationFullUrl")
     }
 
     @GetMapping("/login/{message}", "/login")

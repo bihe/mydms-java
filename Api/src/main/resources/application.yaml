@@ -17,7 +17,8 @@ application:
     # roles allowed to access swagger-ui
     swagger: User, Admin
   # the url used to redirect for /
-  url: http://devel.binggl.net:8080/app/index.html
+  fullUrl: http://devel.binggl.net:8080/ui/index.html
+  spaForwardUrl: /ui/index.html
   detailedErrors: ${MYDMS_DETAILED_ERRORS:false}
   defaultLimit: 20
   # upload settings
@@ -62,7 +63,7 @@ spring:
 
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://${MYDMS_DB_HOST}:3307/mydms-test
+    url: jdbc:mariadb://${MYDMS_DB_HOST}:${MYDMS_DB_PORT}/${MYDMS_DB_NAME}
     username: ${MYDMS_DB_USER:mydms}
     password: ${MYDMS_DB_PASS:mydms}
 
