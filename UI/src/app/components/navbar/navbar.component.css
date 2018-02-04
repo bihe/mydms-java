@@ -205,10 +205,8 @@ div.navinfo {
 
 .progress {
     position: absolute;
-    top: 9px;
-    left: 16px;
-    height: 50px;
-    width: 50px;
+    top: 14px;
+    left: 21px;
     background-color: transparent;
-    color: yellow;
+
 }

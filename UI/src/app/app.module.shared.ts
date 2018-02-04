@@ -1,6 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MaterialModule, MdNativeDateModule } from '@angular/material';
+import { MatInputModule, MatSnackBarModule, MatDialogModule, MatNativeDateModule, MatProgressSpinnerModule,
+    MatTooltipModule } from '@angular/material';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+
+
 import { TagInputModule } from 'ngx-chips';
 import { NgUploaderModule } from 'ngx-uploader';
 
@@ -17,8 +24,10 @@ import { DocumentComponent } from './components/document/document.component';
 import { ConfirmationDialogComponent } from './shared/confirmation/confirmation.component';
 
 @NgModule({
-  imports: [ MaterialModule ],
-  exports: [ MaterialModule ],
+  imports: [ MatInputModule, MatSnackBarModule, MatDialogModule, MatNativeDateModule, MatProgressSpinnerModule,
+    MatTooltipModule, MatChipsModule, MatCardModule, MatSlideToggleModule, MatButtonModule ],
+  exports: [ MatInputModule, MatSnackBarModule, MatDialogModule, MatNativeDateModule, MatProgressSpinnerModule,
+    MatTooltipModule, MatChipsModule, MatCardModule, MatSlideToggleModule, MatButtonModule ],
 })
 export class AppMaterialModule { }
 

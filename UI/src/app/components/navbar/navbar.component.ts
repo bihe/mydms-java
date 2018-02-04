@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ApplicationState } from '../../shared/services/app.state';
 import { ApplicationData } from '../../shared/models/application.data';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { MessageUtils } from '../../shared/utils/message.utils';
 import { AppDataService } from '../../shared/services/app.data.service';
 
@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private service: AppDataService,
     private state: ApplicationState,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private sanitizer: DomSanitizer,
     private router: Router) {
   }

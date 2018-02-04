@@ -11,15 +11,23 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
 import java.time.Year
 import java.util.*
+
+
 
 @Controller
 class HomeController(@Value("\${auth.loginUrl}") private val loginUrl: String,
                      @Value("\${application.url}") private val applicationUrl: String,
                      @Autowired private val msgIntegrity: MessageIntegrity) {
 
+    @ApiSecured(requiredRole = Role.User)
+    @RequestMapping(value = "/{path:[^\\.]*}")
+    fun redirect(): String {
+        return "redirect:$applicationUrl"
+    }
 
     @ApiSecured(requiredRole = Role.User)
     @GetMapping("/")

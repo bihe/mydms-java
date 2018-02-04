@@ -1,12 +1,12 @@
-<md-card>
+<mat-card>
 
-    <md-card-header>
-        <div md-card-avatar class="settings__icon"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></div>
-        <md-card-title>Settings</md-card-title>
-        <md-card-subtitle>Backend document storage connection.</md-card-subtitle>
-    </md-card-header>
-    <img md-card-image src="assets/img/settings.jpeg">
-    <md-card-content>
+    <mat-card-header>
+        <div mat-card-avatar class="settings__icon"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></div>
+        <mat-card-title>Settings</mat-card-title>
+        <mat-card-subtitle>Backend document storage connection.</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/img/settings.jpeg">
+    <mat-card-content>
     <div>
 
         <div class="settings">
@@ -19,7 +19,7 @@
             <div class="backend-status">
 
                 <div class="pull-left">
-                    <md-slide-toggle [(ngModel)]="isLinked"><span *ngIf="!backendLinked"> Link</span> Google Drive backend<span *ngIf="backendLinked"> is linked</span>!</md-slide-toggle>
+                    <mat-slide-toggle [(ngModel)]="isLinked"><span *ngIf="!backendLinked"> Link</span> Google Drive backend<span *ngIf="backendLinked"> is linked</span>!</mat-slide-toggle>
                 </div>
                 <div class="pull-right icon">
                     <i *ngIf="backendLinked" class="fa fa-link fa-2x" aria-hidden="true"></i>
@@ -33,11 +33,11 @@
 
         </div>
     </div>
-    </md-card-content>
+    </mat-card-content>
 
-    <md-card-actions>
-        <button md-raised-button (click)="onCancel()">Cancel</button>
-        <button md-raised-button class="pull-right save" (click)="onSave()">Save</button>
-    </md-card-actions>
+    <mat-card-actions>
+        <button mat-raised-button (click)="onCancel()">Cancel</button>
+        <button mat-raised-button class="pull-right save" (click)="onSave()">Save</button>
+    </mat-card-actions>
 
-</md-card>
+</mat-card>
