@@ -6,18 +6,18 @@ auth:
   tokenSubject: login.User
   name: mydms
   url: https://mydms.binggl.net/
-  loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=http://devel.binggl.net:8080/
+  loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
 
 application:
   security:
     # define the path for CORS - allowed from
-    cors: http://devel.binggl.net:8080/
+    cors: ${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
     # secret key for hashing operations
     secret: 12345678
     # roles allowed to access swagger-ui
     swagger: User, Admin
   # the url used to redirect for /
-  fullUrl: http://devel.binggl.net:8080/ui/index.html
+  fullUrl: ${MYDMS_BASE_URL:http://devel.binggl.net:8080/}ui/index.html
   spaForwardUrl: /ui/index.html
   detailedErrors: ${MYDMS_DETAILED_ERRORS:false}
   defaultLimit: 20
