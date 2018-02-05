@@ -4,6 +4,7 @@ import net.binggl.mydms.features.gdrive.GDriveRuntimeException
 import net.binggl.mydms.shared.api.ApiUtils
 import net.binggl.mydms.shared.util.MessageIntegrity
 import net.binggl.mydms.shared.util.toBase64
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -34,6 +35,9 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
             isBrowserRequest = ApiUtils.isBrowserRequest(request.request)
         }
 
+        LOG.debug("The request is a browser-request: '$isBrowserRequest'")
+        LOG.error("Error occured: ${ex.message}", ex)
+
         when(ex) {
             is InvalidAuthorizationException -> {
                 response = if(isBrowserRequest) {
@@ -60,16 +64,11 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
                     handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.FORBIDDEN, request)
             }
             is GDriveRuntimeException -> {
-
-                // TODO: provide information if this is a browser-request
-
                 response = handleExceptionInternal(ex, ex.message,
                         HttpHeaders(), HttpStatus.BAD_GATEWAY, request)
             }
             is MydmsException -> {
-
                 // TODO: provide information if this is a browser-request
-
                 response = handleExceptionInternal(ex, ex.message,
                         HttpHeaders(), HttpStatus.BAD_REQUEST, request)
             }
@@ -79,5 +78,9 @@ class ApplicationExceptionHandler(@Autowired private val msgIntegrity: MessageIn
             }
         }
         return response
+    }
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger(ApplicationExceptionHandler::class.java)
     }
 }

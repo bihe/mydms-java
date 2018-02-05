@@ -10,7 +10,6 @@ import org.aspectj.lang.reflect.MethodSignature
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.ResponseStatus
 import javax.servlet.http.HttpServletRequest
 
 
@@ -78,15 +77,6 @@ class ApiJwtSecuredAspect(@Autowired private val userService: UserService,
             return result
         } catch (e: Throwable) {
             userService.clearCurrentUser()
-
-            val rs = e.javaClass.getAnnotation(ResponseStatus::class.java)
-            if (rs != null) {
-                LOG.error("ERROR accessing resource, reason: '{}', status: {}.",
-                        if (StringUtils.isEmpty(e.message)) rs.reason else e.message,
-                        rs.value)
-            } else {
-                LOG.error("ERROR accessing resource")
-            }
             throw e
         }
     }
