@@ -20,8 +20,6 @@ class UploadIntegrationTest {
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
 
-    private val jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOWExZTRjY2QwOWE0Y2Y4YWE0YzEzM2U5YjM5NjkyNSIsImlhdCI6MTUxMzk2NTM0NiwiaXNzIjoibG9naW4uYmluZ2dsLm5ldCIsInN1YiI6ImxvZ2luLlVzZXIiLCJUeXBlIjoibG9naW4uVXNlciIsIlVzZXJOYW1lIjoiYmloZSIsIkVtYWlsIjoiYS5iQGMuZGUiLCJDbGFpbXMiOlsibXlkbXN8aHR0cHM6Ly9teWRtcy5iaW5nZ2wubmV0L3xVc2VyIl0sIlVzZXJJZCI6IjEyMzQiLCJEaXNwbGF5TmFtZSI6IkhlbnJpayBCaW5nZ2wifQ.gcSWaxT5MQMqXvptqoxUI6PpI5J7sNmLlcMH3fspscE"
-
     @Test
     fun uploadTestEnd2End() {
         val tempFile = Files.createTempFile("test", ".pdf")
@@ -45,10 +43,6 @@ class UploadIntegrationTest {
 
     @Test
     fun uploadTestWrongContentType() {
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.MULTIPART_FORM_DATA
-        headers.set("Authorization", "Bearer $jwtToken")
-
         val tempFile = Files.createTempFile("test", ".pdf")
         Files.write(tempFile, "testcontent".toByteArray())
 
@@ -58,7 +52,7 @@ class UploadIntegrationTest {
         val bodyMap = LinkedMultiValueMap<String, Any>()
         bodyMap.add("file", pdfPart)
 
-        val requestEntity = HttpEntity(bodyMap, headers)
+        val requestEntity = HttpEntity(bodyMap, IntegrationHelpers.headers)
 
         val response = this.restTemplate
                 .exchange("/api/v1/upload/file", HttpMethod.POST, requestEntity, String::class.java)

@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
  * all those services need to be available for an integration test
  * the subclass is responsible to add meaningfull contents to the beans
  */
-abstract class BaseIntegrationTest {
+abstract class BaseControllerTest {
 
     @MockBean
     private lateinit var usrSvc: UserService

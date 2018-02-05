@@ -2,7 +2,7 @@ package net.binggl.mydms.features.upload
 
 import net.binggl.mydms.features.upload.api.UploadController
 import net.binggl.mydms.features.upload.repository.UploadRepository
-import net.binggl.mydms.testinfrastructure.BaseIntegrationTest
+import net.binggl.mydms.testinfrastructure.BaseControllerTest
 import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.Test
@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets
 
 @RunWith(SpringRunner::class)
 @WebMvcTest(UploadController::class)
-class UploadControllerTest : BaseIntegrationTest() {
+class UploadControllerTest : BaseControllerTest() {
 
     @Autowired
     private lateinit var mvc: MockMvc
