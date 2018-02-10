@@ -64,11 +64,12 @@ export class HomeComponent implements OnInit {
     this.service.searchDocuments(title, this.InitialPageSize, skipEntries)
       .subscribe(
         result => {
+          const returnedResults = result.documents.length;
           this.totalEntries = result.totalEntries;
-          this.shownResults = skipEntries + result.entries;
+          this.shownResults = skipEntries + returnedResults;
 
           const doucmentResult = result.documents;
-          console.log('Result from search: ' + result.entries);
+          console.log('Result from search: ' + returnedResults);
           this.pagedDocuments = new Array<Document>();
           doucmentResult.forEach(a => {
             const doc = new Document();
