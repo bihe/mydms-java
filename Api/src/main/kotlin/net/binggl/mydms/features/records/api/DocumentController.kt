@@ -126,8 +126,11 @@ class DocumentController(
             Optional.empty()
         }
 
+        val orderByDateDesc = OrderBy("created", SortOrder.Descending)
+        val orderByName = OrderBy("title", SortOrder.Ascending)
+
         return this.repository.searchDocuments(title, byTag, bySender, fromDate, untilDate,
-                Optional.of(limitResults), skip)
+                Optional.of(limitResults), skip, orderByDateDesc, orderByName)
 
     }
 

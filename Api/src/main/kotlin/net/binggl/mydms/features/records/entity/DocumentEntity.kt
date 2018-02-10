@@ -23,7 +23,7 @@ data class DocumentEntity(
         val alternativeId: String,
 
         @Column(name = "previewlink")
-        val previewLink: String,
+        val previewLink: String?,
 
         @Column(name = "amount")
         val amount: Double,

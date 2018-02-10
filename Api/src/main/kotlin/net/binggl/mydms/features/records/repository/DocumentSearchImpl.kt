@@ -5,6 +5,7 @@ import net.binggl.mydms.features.records.model.Document
 import net.binggl.mydms.features.records.model.OrderBy
 import net.binggl.mydms.features.records.model.PagedDocuments
 import net.binggl.mydms.features.records.model.SortOrder
+import net.binggl.mydms.shared.util.toBase64
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
 import java.util.*
@@ -124,7 +125,7 @@ internal class DocumentSearchImpl : DocumentSearch {
                     amount = it.amount,
                     uploadFileToken = null,
                     senders = it.senders.map { it.name },
-                    previewLink = it.previewLink,
+                    previewLink = it.previewLink ?: it.fileName.toBase64(),
                     fileName = it.fileName
             )}
                 , totalEntries = count as Long)

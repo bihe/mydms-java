@@ -13,7 +13,7 @@
     </appender>
 
     <!-- config for STDOUT and SAVE-TO-FILE -->
-    <springProfile name="rest">
+    <springProfile name="prod">
         <root level="info">
             <appender-ref ref="STDOUT"/>
         </root>
@@ -22,16 +22,8 @@
 
     </springProfile>
 
-
-    <springProfile name="prod">
-        <root level="info">
-            <appender-ref ref="SAVE-TO-FILE"/>
-        </root>
-    </springProfile>
-
-
     <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/log.log</file>
+        <file>${LOG_PATH}/mydms-application.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</Pattern>
         </encoder>
@@ -42,5 +34,13 @@
         </rollingPolicy>
     </appender>
 
+
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="SAVE-TO-FILE"/>
+        </root>
+
+        <logger name="net.binggl.mydms" level="info" />
+    </springProfile>
 
 </configuration>
