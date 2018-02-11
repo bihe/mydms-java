@@ -248,7 +248,7 @@ class DocumentController(
         return outputPath.toFile()
     }
 
-    private fun processTags(tags: List<String>): List<TagEntity> {
+    private fun processTags(tags: List<String>): Set<TagEntity> {
         return if (tags.isNotEmpty()) {
             tags.map {
                 val result = this.tagRepository.findByNameContainingIgnoreCase(it)
@@ -257,13 +257,13 @@ class DocumentController(
                 } else {
                     this.tagRepository.save(TagEntity(name = it))
                 }
-            }
+            }.toSet()
         } else {
-            emptyList()
+            emptySet()
         }
     }
 
-    private fun processSenders(senders: List<String>): List<SenderEntity> {
+    private fun processSenders(senders: List<String>): Set<SenderEntity> {
         return if (senders.isNotEmpty()) {
             senders.map {
                 val result = this.senderRepository.findByNameContainingIgnoreCase(it)
@@ -272,16 +272,16 @@ class DocumentController(
                 } else {
                     this.senderRepository.save(SenderEntity(name = it))
                 }
-            }
+            }.toSet()
         } else {
-            emptyList()
+            emptySet()
         }
     }
 
     private fun newDocumentInstance(documentPayload: Document,
                                     fileName: String,
-                                    tagList: List<TagEntity>,
-                                    senderList: List<SenderEntity>): DocumentEntity {
+                                    tagSet: Set<TagEntity>,
+                                    senderSet: Set<SenderEntity>): DocumentEntity {
         return DocumentEntity(id = UUID.randomUUID().toString(),
                 title = documentPayload.title,
                 alternativeId = RandomStringUtils.random(8, true, true),
@@ -289,11 +289,11 @@ class DocumentController(
                 previewLink = fileName.toBase64(),
                 amount = documentPayload.amount,
                 created = LocalDateTime.now(),
-                senders = senderList,
-                tags = tagList,
+                senders = senderSet,
+                tags = tagSet,
                 modified = null,
-                senderList = senderList.joinToString(";") { it.name },
-                tagList = tagList.joinToString(";") { it.name }
+                senderList = senderSet.joinToString(";") { it.name },
+                tagList = tagSet.joinToString(";") { it.name }
         )
     }
 

@@ -30,8 +30,8 @@ class DocumentRepositoryTest {
                     modified = null,
                     tagList = "",
                     senderList = "",
-                    tags = emptyList(),
-                    senders = emptyList())
+                    tags = emptySet(),
+                    senders = emptySet())
         }
 
     @Test
@@ -76,8 +76,8 @@ class DocumentRepositoryTest {
                     title = "DocumentEntity #$i",
                     alternativeId = UUID.randomUUID().toString(),
                     created = LocalDateTime.now(),
-                    tags = listOf<TagEntity>(TagEntity("tag$i")),
-                    senders = listOf<SenderEntity>(SenderEntity("sender$i"))
+                    tags = setOf(TagEntity("tag$i")),
+                    senders = setOf(SenderEntity("sender$i"))
                 )
             )
             Assert.assertEquals("DocumentEntity #$i", doc.title)

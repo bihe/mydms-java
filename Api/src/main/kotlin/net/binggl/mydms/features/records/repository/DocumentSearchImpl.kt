@@ -127,8 +127,7 @@ internal class DocumentSearchImpl : DocumentSearch {
                     senders = it.senders.map { it.name },
                     previewLink = it.previewLink ?: it.fileName.toBase64(),
                     fileName = it.fileName
-            )}
-                , totalEntries = count as Long)
+            )}, totalEntries = count as Long)
     }
 
 

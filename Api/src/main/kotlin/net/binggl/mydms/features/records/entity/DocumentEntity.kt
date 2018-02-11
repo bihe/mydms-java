@@ -43,15 +43,15 @@ data class DocumentEntity(
         // associations
         // example of ManyToMany credit to: https://hellokoding.com/jpa-many-to-many-relationship-mapping-example-with-spring-boot-maven-and-mysql/
 
-        @ManyToMany(cascade = [CascadeType.ALL])
+        @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
         @JoinTable(name = "DOCUMENTS_TO_TAGS",
                 joinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")],
                 inverseJoinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "id")])
-        val tags: List<TagEntity> = emptyList(),
+        val tags: Set<TagEntity> = emptySet(),
 
-        @ManyToMany(cascade = [CascadeType.ALL])
+        @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
         @JoinTable(name = "DOCUMENTS_TO_SENDERS",
-        joinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "sender_id", referencedColumnName = "id")])
-        val senders: List<SenderEntity> = emptyList()
+                joinColumns = [JoinColumn(name = "document_id", referencedColumnName = "id")],
+                inverseJoinColumns = [JoinColumn(name = "sender_id", referencedColumnName = "id")])
+        val senders: Set<SenderEntity> = emptySet()
 )
