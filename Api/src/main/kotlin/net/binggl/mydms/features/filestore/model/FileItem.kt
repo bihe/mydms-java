@@ -1,4 +1,4 @@
-package net.binggl.mydms.shared.files
+package net.binggl.mydms.features.filestore.model
 
 data class FileItem(val fileName: String, val mimeType: String,
                     val payload: Array<Byte>, val folderName: String) {

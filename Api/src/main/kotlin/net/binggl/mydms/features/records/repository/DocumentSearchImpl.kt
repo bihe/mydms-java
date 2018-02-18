@@ -157,6 +157,10 @@ internal class DocumentSearchImpl : DocumentSearch {
         val count = jpaCountQuery.singleResult // get the total number of results
         val resultIds = jpaIdQuery.resultList
 
+        if (resultIds.isEmpty()) {
+            return PagedDocuments(documents = emptyList(), totalEntries = count as Long)
+        }
+
         // fetch the real document entries for the given ids
         // https://stackoverflow.com/questions/18753245/one-to-many-relationship-gets-duplicate-objects-whithout-using-distinct-why
         val entityQueryString = "select distinct d from DocumentEntity d join fetch d.tags t join fetch d.senders s where d.id in :idList $orderBy"

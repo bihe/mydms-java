@@ -31,6 +31,12 @@ application:
       - image/gif
     uploadPath: ${MYDMS_TMP_PATH:/tmp}
 
+aws:
+  accessKey: ${MYDMS_AWS_ACCESS_KEY:-}
+  secretKey: ${MYDMS_AWS_SECRET_KEY:-}
+  bucketName: ${MYDMS_AWS_BUCKET_NAME:-}
+
+
 google:
   clientId: ${MYDMS_GOOGLE_CLIENT_ID:-}
   clientSecret: ${MYDMS_GOOGLE_CLIENT_SECRET:-}

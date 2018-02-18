@@ -1,6 +1,7 @@
 package net.binggl.mydms.features.records.api
 
-import net.binggl.mydms.features.gdrive.GDriveFileService
+import net.binggl.mydms.features.filestore.FileService
+import net.binggl.mydms.features.filestore.model.FileItem
 import net.binggl.mydms.features.records.entity.DocumentEntity
 import net.binggl.mydms.features.records.entity.SenderEntity
 import net.binggl.mydms.features.records.entity.TagEntity
@@ -16,7 +17,6 @@ import net.binggl.mydms.features.upload.repository.UploadRepository
 import net.binggl.mydms.infrastructure.error.MydmsException
 import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
-import net.binggl.mydms.shared.files.FileItem
 import net.binggl.mydms.shared.models.ActionResult
 import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.SimpleResult
@@ -52,7 +52,7 @@ class DocumentController(
         @Autowired private val tagRepository: TagRepository,
         @Autowired private val senderRepository: SenderRepository,
         @Autowired private val uploadRepository: UploadRepository,
-        @Autowired private val fileService: GDriveFileService): BaseResource() {
+        @Autowired private val fileService: FileService): BaseResource() {
 
     @ApiSecured(requiredRole = Role.User)
     @GetMapping(produces = ["application/json"])
@@ -91,7 +91,7 @@ class DocumentController(
                         amount = document.amount,
                         uploadFileToken = null,
                         senders = document.senders.map { it.name },
-                        previewLink = document.previewLink,
+                        previewLink = document.previewLink ?: document.fileName.toBase64(),
                         fileName = document.fileName)
             )
         }
