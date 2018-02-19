@@ -163,7 +163,7 @@ internal class DocumentSearchImpl : DocumentSearch {
 
         // fetch the real document entries for the given ids
         // https://stackoverflow.com/questions/18753245/one-to-many-relationship-gets-duplicate-objects-whithout-using-distinct-why
-        val entityQueryString = "select distinct d from DocumentEntity d join fetch d.tags t join fetch d.senders s where d.id in :idList $orderBy"
+        val entityQueryString = "select distinct d from DocumentEntity d left join fetch d.tags t left join fetch d.senders s where d.id in :idList $orderBy"
         val jpaEntityQuery = this.entityManager.createQuery(entityQueryString, DocumentEntity::class.java)
         jpaEntityQuery.setParameter("idList", resultIds)
         val result = jpaEntityQuery.resultList
