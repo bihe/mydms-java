@@ -80,7 +80,7 @@ class S3FileService(@Value("\${aws.accessKey}") private val accessKey: String,
 
             var fileUrlPath = filePath
             if (fileUrlPath.startsWith("/")) {
-                fileUrlPath = fileUrlPath.substring(1, fileUrlPath.length - 1)
+                fileUrlPath = fileUrlPath.substring(1, fileUrlPath.length)
             }
 
             val parts = fileUrlPath.split("/")

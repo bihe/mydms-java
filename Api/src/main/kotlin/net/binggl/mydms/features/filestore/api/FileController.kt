@@ -2,6 +2,7 @@ package net.binggl.mydms.features.filestore.api
 
 import net.binggl.mydms.features.filestore.FileService
 import net.binggl.mydms.infrastructure.security.ApiSecured
+import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.Role
 import org.apache.commons.codec.binary.Base64
 import org.slf4j.LoggerFactory
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -18,9 +20,10 @@ import java.nio.charset.StandardCharsets
 
 @RestController
 @RequestMapping("/api/v1/file")
-class FileController(@Autowired private val fileService: FileService) {
+class FileController(@Autowired private val fileService: FileService): BaseResource() {
 
     @ApiSecured(requiredRole = Role.User)
+    @GetMapping
     fun getFile(@RequestParam("path") path: String): ResponseEntity<Any> {
 
         LOG.debug("Supplied path: $path")
@@ -36,14 +39,15 @@ class FileController(@Autowired private val fileService: FileService) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid path suppplied!")
         }
 
-        val filePayload = this.fileService.getFile(decodedPath)
-        if (filePayload.isPresent) {
+        val file = this.fileService.getFile(decodedPath)
+        if (file.isPresent) {
+            val backendFile = file.get()
             return ResponseEntity
                     .ok()
-                    .contentLength(filePayload.get().payload.size.toLong())
-                    .contentType(MediaType.parseMediaType(filePayload.get().mimeType))
-                    .header("content-disposition", "attachment; filename = " + filePayload.get().fileName)
-                    .body(filePayload.get().payload)
+                    .contentLength(backendFile.payload.size.toLong())
+                    .contentType(MediaType.parseMediaType(backendFile.mimeType))
+                    .header("content-disposition", "attachment; filename = " + backendFile.fileName)
+                    .body(backendFile.payload.toByteArray())
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The given path is not available.")
