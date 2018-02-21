@@ -19,7 +19,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { ApplicationState } from './shared/services/app.state';
 import { AppDataService } from './shared/services/app.data.service';
-import { SettingsComponent } from './components/settings/settings.component';
 import { DocumentComponent } from './components/document/document.component';
 import { ConfirmationDialogComponent } from './shared/confirmation/confirmation.component';
 
@@ -37,7 +36,6 @@ export const sharedConfig: NgModule = {
         AppComponent,
         NavbarComponent,
         HomeComponent,
-        SettingsComponent,
         ConfirmationDialogComponent,
         DocumentComponent,
         DateFormatPipe,

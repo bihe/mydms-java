@@ -24,7 +24,6 @@ export class AppDataService extends BaseService {
   private readonly SEARCH_TAGS_URL: string = '/api/v1/tags/search';
   private readonly SAVE_DOCUMENTS_URL: string = '/api/v1/documents/';
   private readonly LOAD_DOCUMENT_URL: string = '/api/v1/documents/%ID%';
-  private readonly GDRIVE_URL: string = '/api/v1/gdrive';
 
   constructor (private http: Http) {
     super();
@@ -61,24 +60,6 @@ export class AppDataService extends BaseService {
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
         return this.extractData<any[]>(res);
-      })
-      .catch(this.handleError);
-  }
-
-  isGDriveLinked(): Observable<boolean> {
-    return this.http.get(this.GDRIVE_URL, this.getRequestOptions())
-      .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
-      .map(res => {
-        return this.extractData<boolean>(res);
-      })
-      .catch(this.handleError);
-  }
-
-  unlinkGDrive(): Observable<Result> {
-    return this.http.delete(this.GDRIVE_URL, this.getRequestOptions())
-      .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
-      .map(res => {
-        return this.extractData<Result>(res);
       })
       .catch(this.handleError);
   }
