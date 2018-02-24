@@ -91,7 +91,7 @@ class DocumentController(
                         amount = document.amount,
                         uploadFileToken = null,
                         senders = document.senders.map { it.name },
-                        previewLink = document.previewLink ?: document.fileName.toBase64(),
+                        previewLink = document.fileName.toBase64(),
                         fileName = document.fileName)
             )
         }

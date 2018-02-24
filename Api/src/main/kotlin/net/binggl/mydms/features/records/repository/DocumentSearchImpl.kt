@@ -179,7 +179,7 @@ internal class DocumentSearchImpl : DocumentSearch {
                     amount = it.amount,
                     uploadFileToken = null,
                     senders = it.senders.map { it.name },
-                    previewLink = it.previewLink ?: it.fileName.toBase64(),
+                    previewLink = it.fileName.toBase64(),
                     fileName = it.fileName
             )}, totalEntries = count as Long)
     }
