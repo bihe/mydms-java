@@ -18,14 +18,12 @@ import { DocumentResult } from '../models/document.result.model';
 
 @Injectable()
 export class AppDataService extends BaseService {
-  private readonly SEARCH_DOCUMENTS: string = '/api/documents/search';
-  private readonly APP_INFO_URL: string = '/api/appinfo';
-  private readonly SEARCH_SENDERS_URL: string = '/api/senders/search';
-  private readonly SEARCH_TAGS_URL: string = '/api/tags/search';
-  private readonly SAVE_DOCUMENTS_URL: string = '/api/documents/';
-  private readonly LOAD_DOCUMENT_URL: string = '/api/documents/%ID%';
-  private readonly GDRIVE_LINKED_URL: string = '/api/gdrive/islinked';
-  private readonly GDRIVE_UNLINK_URL: string = '/api/gdrive';
+  private readonly SEARCH_DOCUMENTS: string = '/api/v1/documents/search';
+  private readonly APP_INFO_URL: string = '/api/v1/appinfo';
+  private readonly SEARCH_SENDERS_URL: string = '/api/v1/senders/search';
+  private readonly SEARCH_TAGS_URL: string = '/api/v1/tags/search';
+  private readonly SAVE_DOCUMENTS_URL: string = '/api/v1/documents/';
+  private readonly LOAD_DOCUMENT_URL: string = '/api/v1/documents/%ID%';
 
   constructor (private http: Http) {
     super();
@@ -62,24 +60,6 @@ export class AppDataService extends BaseService {
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
         return this.extractData<any[]>(res);
-      })
-      .catch(this.handleError);
-  }
-
-  isGDriveLinked(): Observable<boolean> {
-    return this.http.get(this.GDRIVE_LINKED_URL, this.getRequestOptions())
-      .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
-      .map(res => {
-        return this.extractData<boolean>(res);
-      })
-      .catch(this.handleError);
-  }
-
-  unlinkGDrive(): Observable<Result> {
-    return this.http.delete(this.GDRIVE_UNLINK_URL, this.getRequestOptions())
-      .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
-      .map(res => {
-        return this.extractData<Result>(res);
       })
       .catch(this.handleError);
   }

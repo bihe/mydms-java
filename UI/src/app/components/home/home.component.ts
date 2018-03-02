@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdDialog, MdDialogConfig, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { ApplicationState } from '../../shared/services/app.state';
 import { MessageUtils } from '../../shared/utils/message.utils';
 import { AppDataService } from '../../shared/services/app.data.service';
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     private state: ApplicationState,
     private service: AppDataService,
     private router: Router,
-    private snackBar: MdSnackBar) {
+    private snackBar: MatSnackBar) {
 
     this.state.getSearchInput()
       .debounceTime(300)
@@ -64,11 +64,12 @@ export class HomeComponent implements OnInit {
     this.service.searchDocuments(title, this.InitialPageSize, skipEntries)
       .subscribe(
         result => {
+          const returnedResults = result.documents.length;
           this.totalEntries = result.totalEntries;
-          this.shownResults = skipEntries + result.entries;
+          this.shownResults = skipEntries + returnedResults;
 
           const doucmentResult = result.documents;
-          console.log('Result from search: ' + result.entries);
+          console.log('Result from search: ' + returnedResults);
           this.pagedDocuments = new Array<Document>();
           doucmentResult.forEach(a => {
             const doc = new Document();

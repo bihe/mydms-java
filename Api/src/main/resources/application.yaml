@@ -1,0 +1,76 @@
+## jwt security settings
+auth:
+  cookieName: login_token
+  tokenSecret: ${MYDMS_JWT_TOKEN_SECRET:secret}
+  tokenIssuer: login.binggl.net
+  tokenSubject: login.User
+  name: mydms
+  url: https://mydms.binggl.net/
+  loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
+
+application:
+  security:
+    # define the path for CORS - allowed from
+    cors: ${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
+    # secret key for hashing operations
+    secret: 12345678
+    # roles allowed to access swagger-ui
+    swagger: User, Admin
+  # the url used to redirect for /
+  fullUrl: ${MYDMS_BASE_URL:http://devel.binggl.net:8080/}ui/index.html
+  spaForwardUrl: /ui/index.html
+  detailedErrors: ${MYDMS_DETAILED_ERRORS:false}
+  defaultLimit: 20
+  # upload settings
+  upload:
+    maxUploadSize: 512000
+    allowedFileTypes:
+      - application/pdf
+      - image/jpeg
+      - image/png
+      - image/gif
+    uploadPath: ${MYDMS_TMP_PATH:/tmp}
+
+aws:
+  accessKey: ${MYDMS_AWS_ACCESS_KEY:-}
+  secretKey: ${MYDMS_AWS_SECRET_KEY:-}
+  bucketName: ${MYDMS_AWS_BUCKET_NAME:-}
+
+logging:
+  level:
+    root: INFO
+
+---
+spring:
+  profiles: prod
+  application:
+    name: mydms
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${MYDMS_DB_HOST}:${MYDMS_DB_PORT}/${MYDMS_DB_NAME}
+    username: ${MYDMS_DB_USER:mydms}
+    password: ${MYDMS_DB_PASS:mydms}
+
+    hikari:
+      removeAbandoned: true
+      removeAbandonedTimeout: 120
+      # Number of ms to wait before throwing an exception if no connection is available.
+      max-wait: 5000
+      # Maximum number of active connections that can be allocated from this pool at the same time.
+      max-active: 5
+      # Validate the connection before borrowing it from the pool.
+      validationQuery: "select 1"
+      testOnBorrow: true
+      testOnConnect: true

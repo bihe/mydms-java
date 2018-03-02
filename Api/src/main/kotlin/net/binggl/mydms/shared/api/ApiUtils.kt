@@ -1,0 +1,23 @@
+package net.binggl.mydms.shared.api
+
+import javax.servlet.http.HttpServletRequest
+
+object ApiUtils {
+
+    private const val JSON_MEDIA_TYPE = "application/json"
+    private const val XML_MEDIA_TYPE = "text/xml"
+
+    fun isBrowserRequest(request: HttpServletRequest): Boolean {
+
+        var treatAsBrowser = true
+
+        if (request.contentType == JSON_MEDIA_TYPE || request.contentType == XML_MEDIA_TYPE) {
+            treatAsBrowser = false;
+        }
+        if (request.getHeader("User-Agent") == "rest-client") {
+            treatAsBrowser = false;
+        }
+
+        return treatAsBrowser;
+    }
+}

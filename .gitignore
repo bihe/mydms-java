@@ -12,3 +12,6 @@
 hs_err_pid*
 Api/mydms.iml
 Api/.idea/
+/Api/logs/log.log
+/Api/src/main/resources/static/ui/
+/.environment

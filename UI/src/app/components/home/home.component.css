@@ -146,23 +146,12 @@
 
 
 .add {
-    border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
+    
     cursor: pointer;
     position: fixed;
     bottom: 50px;
     right: 30px;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    overflow: hidden;
+    
 }
 
 @media (max-width: 600px) {

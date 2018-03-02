@@ -1,8 +1,8 @@
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 export class MessageUtils {
 
-    public showError(snackBar: MdSnackBar, error: any) {
+    public showError(snackBar: MatSnackBar, error: any) {
         console.error('Got error: ' + error);
         if (error.message) {
             this.showMessage(snackBar, 'Error: ' + error.message, 'error', -1, 'Dismiss!');
@@ -11,11 +11,11 @@ export class MessageUtils {
         }
     }
 
-    public showSuccess(snackBar: MdSnackBar, message) {
+    public showSuccess(snackBar: MatSnackBar, message) {
         this.showMessage(snackBar, message, 'success', 1500, '');
     }
 
-    public showMessage(snackBar: MdSnackBar, message, type: string, duration: number, closeMessage: string) {
+    public showMessage(snackBar: MatSnackBar, message, type: string, duration: number, closeMessage: string) {
         if (duration > 0) {
             const snackBarRef = snackBar.open(message, closeMessage,
                 {

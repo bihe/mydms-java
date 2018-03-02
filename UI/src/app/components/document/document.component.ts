@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApplicationState } from '../../shared/services/app.state';
 import { ApplicationData } from '../../shared/models/application.data';
-import { MdSnackBar, MdDialog, MdDialogConfig } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
 import { MessageUtils } from '../../shared/utils/message.utils';
 import { AppDataService } from '../../shared/services/app.data.service';
 import { Document } from '../../shared/models/document.model';
@@ -11,7 +11,7 @@ import { Tag } from '../../shared/models/tag.model';
 import { ConfirmationDialogComponent } from '../../shared/confirmation/confirmation.component';
 import { AutoCompleteModel, TagType } from '../../shared/models/autocomplete.model';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-import { TagModel } from 'ngx-chips/dist/modules/core';
+// import { TagModel } from 'ngx-chips';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/mergeMap';
@@ -52,9 +52,9 @@ export class DocumentComponent implements OnInit {
   constructor(
     private service: AppDataService,
     private state: ApplicationState,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private router: Router) {
       this.files = []; // local uploading files array
       this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
@@ -168,7 +168,7 @@ export class DocumentComponent implements OnInit {
         .subscribe(
           result => {
             if (result) {
-              if (result.result === 'Created') {
+              if (result.result === 'Created' || result.result === 'Updated') {
                 this.state.setProgress(false);
                 console.log(result.message);
                 this.router.navigate(['/']);
@@ -224,10 +224,8 @@ export class DocumentComponent implements OnInit {
       this.state.setProgress(true);
       const event: UploadInput = {
         type: 'uploadAll',
-        url: '/api/upload/file',
-        method: 'POST',
-        // data: { foo: 'bar' },
-        concurrency: 0
+        url: '/api/v1/upload/file',
+        method: 'POST'
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') { // add file to array when added

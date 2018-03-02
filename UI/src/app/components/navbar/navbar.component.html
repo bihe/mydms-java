@@ -4,11 +4,14 @@
         <div class="navlogo">
             <!-- <a href="/"><img alt="Henrik.Binggl" src="/assets/img/logo.png"></a> -->
             
-            <md-spinner 
+            <mat-progress-spinner
                 *ngIf="showProgress"
+                mode="indeterminate"
                 class="progress" 
-                color="warn">
-            </md-spinner>
+                color="accent"
+                [strokeWidth]="7"
+                [diameter]="40">
+            </mat-progress-spinner>
 
             <span class="header__icon" (click)="toggleMenu(true)">
                 <svg class="" width="24px" height="24px" viewBox="0 0 48 48" fill="#fff">
@@ -20,7 +23,7 @@
 
         <!-- INFO -->
         <div class="navinfo">
-            <span class="hidden-sm hidden-md hidden-xs app-title">mydms.ui application</span>
+            <span class="hidden-sm hidden-md hidden-xs app-title">mydms</span>
             <input type="text" placeholder="Search for documents, senders, tags" class="searchBox" [(ngModel)]="searchText" #search (keyup)="onSearch(search.value)"/>
         </div>
 
@@ -28,7 +31,7 @@
         <div class="navactions">
             <!-- USER -->
             <span *ngIf="A?.appInfo" title="{{ A?.appInfo?.userInfo?.userName }}" class="hidden-xs">
-             <i class="fa fa-sign-out" aria-hidden="true"></i> <a class="link" href="https://login.binggl.net" mdTooltip="{{ A?.appInfo?.userInfo?.userName }} ({{ A?.appInfo?.userInfo?.email }})">{{ A?.appInfo?.userInfo?.displayName }}</a>
+             <i class="fa fa-sign-out" aria-hidden="true"></i> <a class="link" href="https://login.binggl.net" matTooltip="{{ A?.appInfo?.userInfo?.userName }} ({{ A?.appInfo?.userInfo?.email }})">{{ A?.appInfo?.userInfo?.displayName }}</a>
             </span>
 
         </div>
@@ -45,7 +48,6 @@
   </div>
   <ul class="menu__list">
     <li><i class="fa fa-home" aria-hidden="true"></i> <a (click)="navigateTo('')">Home</a></li>
-    <li><i class="fa fa-cogs" aria-hidden="true"></i> <a (click)="navigateTo('settings')">Settings</a></li>
   </ul>
 </div>
 
