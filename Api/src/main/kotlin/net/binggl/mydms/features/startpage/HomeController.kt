@@ -25,7 +25,7 @@ class HomeController(@Value("\${auth.loginUrl}") private val loginUrl: String,
                      @Autowired private val msgIntegrity: MessageIntegrity) {
 
     @ApiSecured(requiredRole = Role.User)
-    @RequestMapping(value = "/**/{[path:[^\\.]*}")
+    @RequestMapping(value = ["/**/{[path:[^\\.]*}"])
     fun redirect(): String {
         return "forward:$spaForwardUrl"
     }

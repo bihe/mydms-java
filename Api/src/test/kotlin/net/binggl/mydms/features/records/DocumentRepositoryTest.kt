@@ -104,7 +104,7 @@ class DocumentRepositoryTest {
                 tag = Optional.empty(),
                 limit = Optional.of(5),
                 skip = Optional.empty(),
-                order = OrderBy("title", SortOrder.Ascending))
+                order = *arrayOf(OrderBy("title", SortOrder.Ascending)))
 
         Assert.assertEquals(10, documentsOffset.totalEntries)
         Assert.assertEquals(5, documentsOffset.documents.size)
@@ -117,7 +117,7 @@ class DocumentRepositoryTest {
                 tag = Optional.empty(),
                 limit = Optional.of(3),
                 skip = Optional.of(10),
-                order = OrderBy("title", SortOrder.Ascending))
+                order = *arrayOf(OrderBy("title", SortOrder.Ascending)))
 
         Assert.assertEquals(10, documentsOffset1.totalEntries)
         Assert.assertEquals(0, documentsOffset1.documents.size)
@@ -129,7 +129,7 @@ class DocumentRepositoryTest {
                 tag = Optional.empty(),
                 limit = Optional.empty(),
                 skip = Optional.of(8),
-                order = OrderBy("title", SortOrder.Ascending))
+                order = *arrayOf(OrderBy("title", SortOrder.Ascending)))
 
         Assert.assertEquals(10, documentsOffset2.totalEntries)
         Assert.assertEquals(2, documentsOffset2.documents.size)
