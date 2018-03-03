@@ -1,4 +1,3 @@
 #!/bin/sh
-
-docker pull anapsix/alpine-java:8
+docker pull openjdk:8-jdk-alpine
 docker build -t mydms .
