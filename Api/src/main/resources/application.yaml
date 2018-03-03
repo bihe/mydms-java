@@ -29,7 +29,7 @@ application:
       - image/jpeg
       - image/png
       - image/gif
-    uploadPath: ${MYDMS_TMP_PATH:/tmp}
+    uploadPath: ${MYDMS_TMP_PATH:./target}
 
 aws:
   accessKey: ${MYDMS_AWS_ACCESS_KEY:-}

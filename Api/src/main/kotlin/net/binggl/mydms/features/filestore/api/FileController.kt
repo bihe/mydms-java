@@ -46,7 +46,8 @@ class FileController(@Autowired private val fileService: FileService): BaseResou
                     .ok()
                     .contentLength(backendFile.payload.size.toLong())
                     .contentType(MediaType.parseMediaType(backendFile.mimeType))
-                    .header("content-disposition", "attachment; filename = " + backendFile.fileName)
+                    .header("content-disposition", "inline")
+                    //.header("content-disposition", "attachment; filename = " + backendFile.fileName)
                     .body(backendFile.payload.toByteArray())
         }
 
