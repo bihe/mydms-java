@@ -1,3 +1,3 @@
 #!/bin/sh
-docker pull openjdk:8-jdk-alpine
+docker pull openjdk:9-slim
 docker build -t mydms .

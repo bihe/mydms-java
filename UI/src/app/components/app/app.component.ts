@@ -12,12 +12,14 @@ export class AppComponent {
   public displayName: string;
   public year: number;
   public build: string;
+  public runtimeVersion: string;
 
   constructor(private state: ApplicationState) {
     this.state.getAppData().subscribe(x => {
       this.displayName = x.appInfo.userInfo.displayName;
       this.version = x.appInfo.versionInfo.version;
       this.build = x.appInfo.versionInfo.buildNumber;
+      this.runtimeVersion = x.appInfo.versionInfo.runtimeVersion;
     });
     this.year = new Date().getFullYear();
   }

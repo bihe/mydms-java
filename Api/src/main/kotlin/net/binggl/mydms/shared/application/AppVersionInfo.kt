@@ -9,7 +9,6 @@ object AppVersionInfo {
 
     val versionInfo: VersionInfo
         get() {
-
             if(!properties.containsKey("artifactId")
                     || !properties.containsKey("build.number")
                     || !properties.containsKey("version")
@@ -19,7 +18,8 @@ object AppVersionInfo {
 
             return VersionInfo(artifactId = artifactId,
                     buildNumber = buildNumber,
-                    version = version)
+                    version = version,
+                    runtimeVersion = javaVersion)
         }
 
     private val artifactId: String
@@ -36,4 +36,10 @@ object AppVersionInfo {
         get() {
             return properties.getProperty("version") ?: "-"
         }
+
+    private val javaVersion: String
+        get() {
+            return "java-${System.getProperty("java.version")}"
+        }
+
 }

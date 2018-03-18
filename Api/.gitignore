@@ -24,3 +24,4 @@ nbdist/
 .nb-gradle/
 /mydms.run.sh
 /application.yaml
+/.env

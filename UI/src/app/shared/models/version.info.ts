@@ -3,4 +3,5 @@ export class VersionInfo {
   public buildNumber: string;
   public version: string;
   public versionString: string;
+  public runtimeVersion: string;
 }
