@@ -1,7 +1,6 @@
 package net.binggl.mydms.features.filestore.api
 
 import net.binggl.mydms.features.filestore.FileService
-import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.Role
 import org.apache.commons.codec.binary.Base64
@@ -22,7 +21,6 @@ import java.nio.charset.StandardCharsets
 @RequestMapping("/api/v1/file")
 class FileController(@Autowired private val fileService: FileService): BaseResource() {
 
-    @ApiSecured(requiredRole = Role.User)
     @GetMapping
     fun getFile(@RequestParam("path") path: String): ResponseEntity<Any> {
 

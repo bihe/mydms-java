@@ -15,6 +15,7 @@ import net.binggl.mydms.infrastructure.error.InvalidAuthorizationException
 import net.binggl.mydms.shared.models.Claim
 import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.User
+import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
@@ -31,6 +32,9 @@ class JwtAuthenticator(@Value("\${auth.tokenIssuer}") private val tokenIssuer: S
 		       .build()
 
     fun authenticate(token: String) : Optional<User> {
+        if (StringUtils.isEmpty(token)) {
+            return Optional.empty()
+        }
         try {
             return userCache.get(this.getKey(token), {
                 this.verifyToken(token)
