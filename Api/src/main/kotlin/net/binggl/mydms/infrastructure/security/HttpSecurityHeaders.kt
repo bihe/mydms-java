@@ -31,7 +31,6 @@ class HttpSecurityHeaders(@Value("\${application.security.cors}") private val co
         // https://www.keycdn.com/blog/http-security-headers/
         private val Headers = mapOf("X-Frame-Options" to "SAMEORIGIN",
                 "X-XSS-Protection" to "1; mode=block",
-                "X-Content-Type-Options" to "nosniff",
                 "Access-Control-Allow-Origin" to "*",
                 "strict-transport-security" to "max-age=31536000; includeSubDomains; preload")
     }

@@ -40,6 +40,24 @@ logging:
   level:
     root: INFO
 
+## spring-boot actuator endpoints
+management:
+  info:
+    git:
+      mode: full
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, httptrace, auditevents
+
+info:
+  # environment variables
+  env:
+    java:
+      vendor: ${java.specification.vendor}
+      vm-name: ${java.vm.name}
+      runtime-version: ${java.runtime.version}
+
 ---
 spring:
   profiles: prod
