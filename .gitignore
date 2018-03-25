@@ -15,3 +15,4 @@ Api/.idea/
 /Api/logs/log.log
 /Api/src/main/resources/static/ui/
 /.environment
+_environment.ps1
