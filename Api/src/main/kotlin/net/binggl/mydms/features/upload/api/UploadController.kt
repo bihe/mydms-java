@@ -5,10 +5,8 @@ import net.binggl.mydms.features.upload.entity.UploadEntity
 import net.binggl.mydms.features.upload.model.UploadResult
 import net.binggl.mydms.features.upload.repository.UploadRepository
 import net.binggl.mydms.infrastructure.error.MydmsException
-import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.ActionResult
-import net.binggl.mydms.shared.models.Role
 import org.apache.commons.io.FilenameUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,7 +24,6 @@ import java.util.*
 class UploadController(@Autowired private val repository: UploadRepository,
                        @Autowired private val config: UploadConfig): BaseResource() {
 
-    @ApiSecured(requiredRole = Role.User)
     @PostMapping("/file")
     fun uploadFile(@RequestParam("file") file: MultipartFile): UploadResult {
         LOG.debug("Got file: $file")

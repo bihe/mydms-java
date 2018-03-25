@@ -1,11 +1,17 @@
+docker network create -d bridge app-network
+
+
 #!/bin/bash
 source ./.environment
 
-docker rmi bihe/mydms
 docker pull bihe/mydms
 
-docker run --restart unless-stopped -d --net=host -p 8080:8080 \
--m 500M -e JAVA_OPTIONS='-Xmx300m' \
+docker run --restart unless-stopped -d -p 127.0.0.1:8080:8080 --user 999 \
+-m 350m \
+--name mydms-app \
+--network=app-network \
+-e JAVA_OPTIONS='-Xms128m -Xmx350m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap' \
+-v /var/www/docker/mydms/uploads:/opt/mydms/uploads \
 --mount source=mydms-store,target=/opt/mydms/store \
 --mount source=mydms-logs,target=/opt/mydms/logs \
 -e MYDMS_BASE_URL \
@@ -23,4 +29,3 @@ docker run --restart unless-stopped -d --net=host -p 8080:8080 \
 -e MYDMS_DETAILED_ERRORS \
 -e SPRING_PROFILES_ACTIVE \
 bihe/mydms
-

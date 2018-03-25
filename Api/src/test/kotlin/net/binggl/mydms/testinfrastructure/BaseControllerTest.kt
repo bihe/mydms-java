@@ -1,6 +1,7 @@
 package net.binggl.mydms.testinfrastructure
 
-import net.binggl.mydms.infrastructure.security.*
+import net.binggl.mydms.infrastructure.security.JwtAuthenticator
+import net.binggl.mydms.infrastructure.security.RoleAuthorizer
 import net.binggl.mydms.shared.util.MessageIntegrity
 import org.springframework.boot.test.mock.mockito.MockBean
 
@@ -11,9 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 abstract class BaseControllerTest {
 
     @MockBean
-    private lateinit var usrSvc: UserService
-
-    @MockBean
     private lateinit var msgInt: MessageIntegrity
 
     @MockBean
@@ -21,10 +19,4 @@ abstract class BaseControllerTest {
 
     @MockBean
     private lateinit var roleAuthorizer: RoleAuthorizer
-
-    @MockBean
-    private lateinit var jwtCookieExtractor: JwtCookieExtractor
-
-    @MockBean
-    private lateinit var jwtHeaderExtractor: JwtHeaderExtractor
 }

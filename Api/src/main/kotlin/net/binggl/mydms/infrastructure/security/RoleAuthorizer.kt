@@ -4,9 +4,6 @@ import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import com.google.common.util.concurrent.UncheckedExecutionException
 import net.binggl.commons.crypto.HashHelper
-import net.binggl.mydms.infrastructure.error.InvalidAuthorizationException
-import net.binggl.mydms.shared.models.Claim
-import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.User
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
@@ -19,29 +16,19 @@ import java.util.concurrent.TimeUnit
 class RoleAuthorizer(@Value("\${auth.url}") private val applicationUrl: String,
                      @Value("\${auth.name}") private val applicationName: String) {
 
-    private val authorizationCache : Cache<String, Boolean> = CacheBuilder.newBuilder()
+    private val authorizationCache : Cache<String, List<String>> = CacheBuilder.newBuilder()
             .maximumSize(10)
             .expireAfterWrite(15, TimeUnit.MINUTES)
             .build()
 
-    /**
-     * authorize a given user
-     * @param user the user object with authorization claims
-     * @param requiredRole the minimum role necessary for the authorization process
-     * @return success/failure (Boolean)
-     * @throws InvalidAuthorizationException if the authorization cannot be done
-     */
-    fun authorize(user: User, requiredRole: Role): Boolean {
+    fun getValidApplicationRoles(user: User): List<String> {
         try {
-            return authorizationCache.get(this.getKey(user, requiredRole), auth@ {
-                val authorized: Claim? = user.claims.find {
-
-                    this.compareUrls(it.url, applicationUrl) &&
-                            it.name == applicationName &&
-                            (it.role.precedence >= requiredRole.precedence)
-
-                } ?: throw InvalidAuthorizationException("Required role for given url not available!")
-                return@auth authorized != null
+            return authorizationCache.get(this.getKey(user), auth@{
+                return@auth user.claims.filter {
+                    this.compareUrls(it.url, applicationUrl) && it.name == applicationName
+                }.map { item ->
+                    item.role.name
+                }
             })
         } catch (ex: UncheckedExecutionException) {
             throw ex.cause ?: ex
@@ -66,8 +53,8 @@ class RoleAuthorizer(@Value("\${auth.url}") private val applicationUrl: String,
         return false
     }
 
-    private fun getKey(user: User, requiredRole: Role): String {
-        return HashHelper.getSHA("${user.userId}__${user.userName}__$requiredRole")
+    private fun getKey(user: User): String {
+        return HashHelper.getSHA("USER_${user.userId}__${user.userName}")
     }
 
     companion object {

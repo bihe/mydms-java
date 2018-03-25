@@ -15,10 +15,8 @@ import net.binggl.mydms.features.records.repository.TagRepository
 import net.binggl.mydms.features.upload.UploadConfig
 import net.binggl.mydms.features.upload.repository.UploadRepository
 import net.binggl.mydms.infrastructure.error.MydmsException
-import net.binggl.mydms.infrastructure.security.ApiSecured
 import net.binggl.mydms.shared.api.BaseResource
 import net.binggl.mydms.shared.models.ActionResult
-import net.binggl.mydms.shared.models.Role
 import net.binggl.mydms.shared.models.SimpleResult
 import net.binggl.mydms.shared.util.toBase64
 import org.apache.commons.io.FileUtils
@@ -54,7 +52,6 @@ class DocumentController(
         @Autowired private val uploadRepository: UploadRepository,
         @Autowired private val fileService: FileService): BaseResource() {
 
-    @ApiSecured(requiredRole = Role.User)
     @GetMapping(produces = ["application/json"])
     @Transactional(readOnly = true) // transaction is needed for the related/lazily loaded collections
     fun getAll(): List<Document> {
@@ -73,7 +70,6 @@ class DocumentController(
         ).documents
     }
 
-    @ApiSecured(requiredRole = Role.User)
     @GetMapping(value = ["/{id}"], produces = ["application/json"])
     @Transactional(readOnly = true)
     fun getDocumentById(@PathVariable id: String): ResponseEntity<*> {
@@ -102,7 +98,6 @@ class DocumentController(
                 .body(this.error("Could not find the document with id '$id'!"))
     }
 
-    @ApiSecured(requiredRole = Role.User)
     @GetMapping(value = ["/search"], produces = ["application/json"])
     @Transactional(readOnly = true)
     fun searchDocuments(@RequestParam("title") title: Optional<String>,
@@ -134,7 +129,6 @@ class DocumentController(
 
     }
 
-    @ApiSecured(requiredRole = Role.User)
     @DeleteMapping(value = ["/{id}"], produces = ["application/json"])
     @Transactional()
     fun deleteDocument(@PathVariable id: String): ResponseEntity<*> {
@@ -158,7 +152,6 @@ class DocumentController(
         }
     }
 
-    @ApiSecured(requiredRole = Role.User)
     @PostMapping(consumes = ["application/json"], produces = ["application/json"])
     @Transactional()
     fun saveDocument(@RequestBody @NotNull @Valid documentPayload: Document): ResponseEntity<SimpleResult> {
