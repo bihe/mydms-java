@@ -26,19 +26,19 @@ class SecurityConfig(@Autowired private val jwtAuthenticator: JwtAuthenticator,
         http.exceptionHandling().authenticationEntryPoint(authEntryPoint)
 
         http.cors().and().csrf().disable().authorizeRequests()
-            .antMatchers("/api/v1/appinfo").hasAuthority("User")
-            .antMatchers("/api/v1/file").hasAuthority("User")
-            .antMatchers("/api/v1/documents").hasAuthority("User")
-            .antMatchers("/api/v1/senders").hasAuthority("User")
-            .antMatchers("/api/v1/tags").hasAuthority("User")
-            .antMatchers("/api/v1/upload/file").hasAuthority("User")
-            .antMatchers("/").hasAuthority("User")
-            .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/api/v1/appinfo").hasAuthority("User")
+                .antMatchers("/api/v1/file").hasAuthority("User")
+                .antMatchers("/api/v1/documents").hasAuthority("User")
+                .antMatchers("/api/v1/senders").hasAuthority("User")
+                .antMatchers("/api/v1/tags").hasAuthority("User")
+                .antMatchers("/api/v1/upload/file").hasAuthority("User")
+                .antMatchers("/").hasAuthority("User")
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
-            .and()
-            .addFilter(JwtAuthorizationFilter(authenticationManager(), roleAuthorizer, jwtAuthenticator, cookieName))
-            // this disables session creation on Spring Security
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(JwtAuthorizationFilter(authenticationManager(), roleAuthorizer, jwtAuthenticator, cookieName))
+                // this disables session creation on Spring Security
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 
     override fun configure(web: WebSecurity) {

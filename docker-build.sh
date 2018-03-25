@@ -1,3 +1,3 @@
 #!/bin/sh
-docker pull openjdk:9-slim
+docker pull openjdk:10-jre-slim
 docker build -t mydms .
