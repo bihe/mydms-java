@@ -7,15 +7,19 @@ import javax.servlet.*
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class HttpSecurityHeaders(@Value("\${application.security.cors}") private val corsUrl: String): Filter {
+class HttpSecurityHeaders(@Value("\${application.security.cors}") private val corsUrl: String,
+                          @Value("\${application.baseUrl}") private val appBaseUrl: String): Filter {
 
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(req: ServletRequest, res: ServletResponse,
                           chain: FilterChain) {
         val response = res as HttpServletResponse
         for ((headerName, headerValue) in Headers) {
-            val value = if(headerName == "Access-Control-Allow-Origin" && corsUrl.isNotEmpty()) corsUrl else headerValue
-            response.setHeader(headerName, value)
+            when (headerName) {
+                "Access-Control-Allow-Origin" -> response.setHeader(headerName, if(headerName == "Access-Control-Allow-Origin" && corsUrl.isNotEmpty()) corsUrl else headerValue)
+                "Content-Security-Policy" -> response.setHeader(headerName, headerValue.replace("APP_BASE_URL", appBaseUrl))
+                else -> response.setHeader(headerName, headerValue)
+            }
         }
         chain.doFilter(req, res)
     }
@@ -29,10 +33,14 @@ class HttpSecurityHeaders(@Value("\${application.security.cors}") private val co
     companion object {
         // best practise headers
         // https://www.keycdn.com/blog/http-security-headers/
+        // https://scotthelme.co.uk/content-security-policy-an-introduction/
+        // https://scotthelme.co.uk/a-new-security-header-referrer-policy/
         private val Headers = mapOf("X-Frame-Options" to "SAMEORIGIN",
                 "X-XSS-Protection" to "1; mode=block",
                 "Access-Control-Allow-Origin" to "*",
-                "strict-transport-security" to "max-age=31536000; includeSubDomains; preload")
+                "Strict-Transport-Security" to "max-age=31536000; includeSubDomains; preload",
+                "Referrer-Policy" to "same-origin",
+                "Content-Security-Policy" to "default-src APP_BASE_URL; script-src APP_BASE_URL 'unsafe-inline'; style-src APP_BASE_URL 'unsafe-inline'")
     }
 
 }

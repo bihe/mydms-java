@@ -9,6 +9,7 @@ auth:
   loginUrl: https://login.binggl.net/auth/flow?~site=mydms&~url=${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
 
 application:
+  baseUrl: ${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
   security:
     # define the path for CORS - allowed from
     cors: ${MYDMS_BASE_URL:http://devel.binggl.net:8080/}
