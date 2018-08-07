@@ -24,7 +24,7 @@ application:
   defaultLimit: 20
   # upload settings
   upload:
-    maxUploadSize: 512000
+    maxUploadSize: ${MYDMS_MAX_UPLOAD_SIZE:2048000}
     allowedFileTypes:
       - application/pdf
       - image/jpeg
@@ -82,15 +82,15 @@ spring:
     username: ${MYDMS_DB_USER:mydms}
     password: ${MYDMS_DB_PASS:mydms}
 
-    hikari:
-      removeAbandoned: true
-      removeAbandonedTimeout: 120
-      # Number of ms to wait before throwing an exception if no connection is available.
-      max-wait: 5000
-      # Maximum number of active connections that can be allocated from this pool at the same time.
-      max-active: 2
-      # Validate the connection before borrowing it from the pool.
-      validationQuery: "select 1"
-      maximum-pool-size: 5
-      testOnBorrow: true
-      testOnConnect: true
+    #hikari:
+    #  removeAbandoned: true
+    #  removeAbandonedTimeout: 120
+    #  # Number of ms to wait before throwing an exception if no connection is available.
+    #  max-wait: 5000
+    #  # Maximum number of active connections that can be allocated from this pool at the same time.
+    #  max-active: 2
+    #  # Validate the connection before borrowing it from the pool.
+    #  validationQuery: "select 1"
+    #  maximum-pool-size: 5
+    #  testOnBorrow: true
+    #  testOnConnect: true
