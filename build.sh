@@ -5,7 +5,7 @@ NC='\033[0m' # No Color
 
 cd ./UI
 echo $PWD
-yarn install
+npm install
 if [ $? -eq 0 ]; then
 	npm run build -- --prod --bh /ui/
 	cd ../

@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { sharedConfig } from './app.module.shared';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app.module.routes';
-
-import 'hammerjs';
-
+import { sharedConfig } from './app.module.shared';
 
 @NgModule({
     bootstrap: sharedConfig.bootstrap,

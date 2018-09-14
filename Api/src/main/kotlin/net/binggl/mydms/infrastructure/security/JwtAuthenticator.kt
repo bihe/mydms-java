@@ -48,7 +48,6 @@ class JwtAuthenticator(@Value("\${auth.tokenIssuer}") private val tokenIssuer: S
         val algorithm: Algorithm = Algorithm.HMAC256(this.tokenSecret)
         val verifier: JWTVerifier = JWT.require(algorithm)
                 .withIssuer(tokenIssuer)
-                .withSubject(tokenSubject)
                 .build() //Reusable verifier instance
 
         val jwt: DecodedJWT

@@ -3,24 +3,24 @@
     <mat-card-header>
         <div mat-card-avatar class="document__icon"><i class="fa fa-file-pdf-o fa-2x" aria-hidden="true"></i></div>
         <mat-card-title>
-            <mat-input-container color="warn" hintLabel="Specify the name of the document">
+            <mat-form-field color="warn" hintLabel="Specify the name of the document">
                 <input matInput placeholder="Document title" [(ngModel)]="documentTitle">
-            </mat-input-container>
+            </mat-form-field>
         </mat-card-title>
-    
+
     </mat-card-header>
     <div class="upload__zone">
             <div class="drop-container" [hidden]="uploadFileName != ''"
-                ngFileDrop 
-                (uploadOutput)="onUploadOutput($event)" 
-                [uploadInput]="uploadInput" 
+                ngFileDrop
+                (uploadOutput)="onUploadOutput($event)"
+                [uploadInput]="uploadInput"
                 [ngClass]="{ 'is-drop-over': dragOver }">
                 <span class="upload__zone_dd_text">Upload Drag &amp; Drop Zone</span>
 
 
                 <div class="upload__file">
                     <input type="file" #fileUpload
-                        ngFileSelect (uploadOutput)="onUploadOutput($event)" 
+                        ngFileSelect (uploadOutput)="onUploadOutput($event)"
                         [uploadInput]="uploadInput" style="display: none;">
                     <span (click)="fileUpload.click()" >or <span style="text-decoration:underline">choose</span> a file</span>
                 </div>
@@ -38,15 +38,15 @@
             </div>
     </div>
 
-    
+
 
     <mat-card-content>
         <div>
 
-            <mat-input-container color="warn" hintLabel="Optional amount">
+            <mat-form-field color="warn" hintLabel="Optional amount">
                 <input type="number" matInput placeholder="Amount" [(ngModel)]="documentAmount">
-            </mat-input-container>
-           
+            </mat-form-field>
+
         </div>
         <div class="tags">
 
@@ -54,21 +54,21 @@
             secondaryPlaceholder="Add a sender"
             placeholder="+senders"
             >
-                <tag-input-dropdown 
+                <tag-input-dropdown
                 [autocompleteObservable]='searchForSenders'></tag-input-dropdown>
-                
+
             </tag-input>
 
             <tag-input [(ngModel)]='selectedTags'
             secondaryPlaceholder="Add a tag"
             placeholder="+tags"
             >
-                <tag-input-dropdown 
+                <tag-input-dropdown
                 [autocompleteObservable]='searchForTags'></tag-input-dropdown>
-                
+
             </tag-input>
 
-           
+
 
         </div>
     </mat-card-content>

@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-
-import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeoutWith';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/observable/throw';
-
-import { ApplicationData } from '../models/application.data';
-import { BaseService } from '../services/_base.service';
+import { Observable } from 'rxjs/Observable';
 import { AppInfo } from '../models/app.info';
-import { Result } from '../models/result.model';
 import { Document } from '../models/document.model';
 import { DocumentResult } from '../models/document.result.model';
+import { Result } from '../models/result.model';
+import { BaseService } from '../services/_base.service';
 
 @Injectable()
 export class AppDataService extends BaseService {
@@ -59,7 +56,7 @@ export class AppDataService extends BaseService {
       .distinctUntilChanged()   // ignore if next search term is same as previous
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
       .map(res => {
-        return this.extractData<any[]>(res);
+        return this.extractData<DocumentResult>(res);
       })
       .catch(this.handleError);
   }
@@ -93,7 +90,9 @@ export class AppDataService extends BaseService {
   saveDocument(document: Document): Observable<Result> {
     return this.http.post(this.SAVE_DOCUMENTS_URL, JSON.stringify(document), this.getRequestOptions())
               .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
-              .map(this.extractData)
+              .map(res => {
+                return this.extractData<Result>(res);
+              })
               .catch(this.handleError);
 
   }
@@ -114,7 +113,9 @@ export class AppDataService extends BaseService {
 
     return this.http.delete(url, this.getRequestOptions())
       .timeoutWith(this.RequestTimeOutDefault, Observable.throw(new Error('Timeout exceeded!')))
-      .map(this.extractData)
+      .map(res => {
+        return this.extractData<Result>(res);
+      })
       .catch(this.handleError);
   }
 }

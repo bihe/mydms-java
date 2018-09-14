@@ -19,13 +19,13 @@ export class MessageUtils {
         if (duration > 0) {
             const snackBarRef = snackBar.open(message, closeMessage,
                 {
-                    duration: duration,
-                    extraClasses: [type]
+                  duration: duration,
+                  panelClass: [type]
                 });
         } else {
             const snackBarRef = snackBar.open(message, closeMessage,
                 {
-                    extraClasses: [type]
+                  panelClass: [type]
                 });
         }
     }

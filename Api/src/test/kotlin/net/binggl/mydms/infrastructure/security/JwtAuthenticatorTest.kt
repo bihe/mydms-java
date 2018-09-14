@@ -26,12 +26,6 @@ class JwtAuthenticatorTest : JwtAuthenticator(tokenIssuer = "login.binggl.net", 
         this.verifyToken(failIssuer)
     }
 
-    @Test(expected = InvalidClaimException::class)
-    fun verifyTokenFailSub() {
-        val failSub = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOWExZTRjY2QwOWE0Y2Y4YWE0YzEzM2U5YjM5NjkyNSIsImlhdCI6MTUxMzk2NTM0NiwiaXNzIjoibG9naW4uYmluZ2dsLm5ldCIsInN1YiI6Ii0iLCJUeXBlIjoibG9naW4uVXNlciIsIlVzZXJOYW1lIjoiYmloZSIsIkVtYWlsIjoiYS5iQGMuZGUiLCJDbGFpbXMiOlsiYXxodHRwczovL2EuYi5kZS98dXNlciJdLCJVc2VySWQiOiIxMjM0IiwiRGlzcGxheU5hbWUiOiJIZW5yaWsgQmluZ2dsIn0.y9LTlAVfmjpxKFUnN3SfgGH7fC9ETM-9vQNgaZVtn78"
-        this.verifyToken(failSub)
-    }
-
     @Test
     fun verifyToken() {
         val user = this.verifyToken(payload)
