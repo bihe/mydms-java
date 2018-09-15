@@ -40,7 +40,7 @@ class HttpSecurityHeaders(@Value("\${application.security.cors}") private val co
                 "Access-Control-Allow-Origin" to "*",
                 "Strict-Transport-Security" to "max-age=31536000; includeSubDomains; preload",
                 "Referrer-Policy" to "same-origin",
-                "Content-Security-Policy" to "default-src APP_BASE_URL; script-src APP_BASE_URL 'unsafe-inline'; style-src APP_BASE_URL 'unsafe-inline'; img-src APP_BASE_URL 'unsafe-inline'; object-src APP_BASE_URL 'unsafe-eval'")
+                "Content-Security-Policy" to "default-src APP_BASE_URL; script-src 'self' APP_BASE_URL 'unsafe-inline'; style-src 'self' APP_BASE_URL 'unsafe-inline'; img-src ‘self’ APP_BASE_URL data:"; object-src 'self APP_BASE_URL 'unsafe-eval'")
     }
 
 }
