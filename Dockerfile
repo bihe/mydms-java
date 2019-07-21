@@ -5,7 +5,7 @@ COPY ./UI .
 RUN npm install -g @angular/cli@latest && npm install && npm run build -- --prod --base-href /ui/
 
 ## backend build-phase
-FROM maven:3.5-jdk-10-slim AS BACKEND-BUILD
+FROM maven:3-jdk-11-slim AS BACKEND-BUILD
 ARG buildtime_variable_build=2.0.0.0
 ARG buildtime_variable_timestamp=YYYYMMDD
 ENV BUILD_TIMESTAMP=${buildtime_variable_timestamp}
@@ -16,7 +16,7 @@ RUN sed -i "s/@timestamp@/$BUILD_TIMESTAMP/" ./src/main/resources/version.proper
 COPY --from=FRONTEND-BUILD /frontend-build/dist  ./src/main/resources/static/ui
 RUN set MYDMS_TMP_PATH=./target && mvn clean package
 
-FROM openjdk:10-jre-slim
+FROM openjdk:11-jre-slim
 LABEL author="henrik@binggl.net"
 WORKDIR /opt/mydms
 RUN mkdir -p /opt/mydms/uploads && mkdir -p /opt/mydms/store 
