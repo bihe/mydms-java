@@ -1,6 +1,12 @@
 {
   "/api": {
-    "target": "http://devel.binggl.net:8080",
-    "secure": false
+    "target": {
+      "host": "mydms.binggl.net",
+      "protocol": "https:",
+      "port": 443
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
   }
 }

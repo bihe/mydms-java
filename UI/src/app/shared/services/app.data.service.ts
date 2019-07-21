@@ -1,7 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
-import { catchError, distinctUntilChanged, map, timeout } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, timeout } from 'rxjs/operators';
 import { AppInfo } from '../models/app.info';
 import { Document } from '../models/document.model';
 import { DocumentResult } from '../models/document.result.model';
@@ -18,17 +18,14 @@ export class AppDataService extends BaseService {
   private readonly SAVE_DOCUMENTS_URL: string = '/api/v1/documents/';
   private readonly LOAD_DOCUMENT_URL: string = '/api/v1/documents/%ID%';
 
-  constructor (private http: Http) {
+  constructor (private http: HttpClient) {
     super();
   }
 
   getApplicationInfo(): Observable<AppInfo> {
-    return this.http.get(this.APP_INFO_URL, this.getRequestOptions())
+    return this.http.get<AppInfo>(this.APP_INFO_URL, this.RequestOptions)
       .pipe(
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<AppInfo>(res);
-        }),
         catchError(this.handleError)
       );
   }
@@ -50,13 +47,10 @@ export class AppDataService extends BaseService {
       url = url.replace('%SKIP%', skipEntries.toString());
     }
 
-    return this.http.get(url, this.getRequestOptions())
+    return this.http.get<DocumentResult>(url, this.RequestOptions)
       .pipe(
         distinctUntilChanged(),
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<DocumentResult>(res);
-        }),
         catchError(this.handleError)
       );
   }
@@ -65,13 +59,10 @@ export class AppDataService extends BaseService {
     const searchUrl = 'name=%NAME%';
     const url = this.SEARCH_SENDERS_URL + '?' + searchUrl.replace('%NAME%', name || '');
 
-    return this.http.get(url, this.getRequestOptions())
+    return this.http.get<any[]>(url, this.RequestOptions)
       .pipe(
         distinctUntilChanged(),
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<any[]>(res);
-        }),
         catchError(this.handleError)
       );
   }
@@ -80,24 +71,18 @@ export class AppDataService extends BaseService {
     const searchUrl = 'name=%NAME%';
     const url = this.SEARCH_TAGS_URL + '?' + searchUrl.replace('%NAME%', name || '');
 
-    return this.http.get(url, this.getRequestOptions())
+    return this.http.get<any[]>(url, this.RequestOptions)
       .pipe(
         distinctUntilChanged(),
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<any[]>(res);
-        }),
         catchError(this.handleError)
       );
   }
 
   saveDocument(document: Document): Observable<Result> {
-    return this.http.post(this.SAVE_DOCUMENTS_URL, JSON.stringify(document), this.getRequestOptions())
+    return this.http.post<Result>(this.SAVE_DOCUMENTS_URL, JSON.stringify(document), this.RequestOptions)
       .pipe(
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<Result>(res);
-        }),
         catchError(this.handleError)
       );
 
@@ -106,12 +91,9 @@ export class AppDataService extends BaseService {
   getDocument(id: string): Observable<Document> {
     const url = this.LOAD_DOCUMENT_URL.replace('%ID%', id || '-1');
 
-    return this.http.get(url, this.getRequestOptions())
+    return this.http.get<Document>(url, this.RequestOptions)
       .pipe(
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<Document>(res);
-        }),
         catchError(this.handleError)
       );
   }
@@ -119,12 +101,9 @@ export class AppDataService extends BaseService {
   deleteDocument(id: string): Observable<Result> {
     const url = this.LOAD_DOCUMENT_URL.replace('%ID%', id || '-1');
 
-    return this.http.delete(url, this.getRequestOptions())
+    return this.http.delete<Result>(url, this.RequestOptions)
       .pipe(
         timeout(this.RequestTimeOutDefault),
-        map(res => {
-          return this.extractData<Result>(res);
-        }),
         catchError(this.handleError)
       );
   }

@@ -1,25 +1,18 @@
-import { Component, OnInit, EventEmitter  } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ApplicationState } from '../../shared/services/app.state';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { humanizeBytes, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ConfirmationDialogComponent } from '../../shared/confirmation/confirmation.component';
 import { ApplicationData } from '../../shared/models/application.data';
-import { MatSnackBar, MatDialog, MatDialogConfig } from '@angular/material';
-import { MessageUtils } from '../../shared/utils/message.utils';
-import { AppDataService } from '../../shared/services/app.data.service';
+import { AutoCompleteModel, TagType } from '../../shared/models/autocomplete.model';
 import { Document } from '../../shared/models/document.model';
 import { Sender } from '../../shared/models/sender.model';
 import { Tag } from '../../shared/models/tag.model';
-import { ConfirmationDialogComponent } from '../../shared/confirmation/confirmation.component';
-import { AutoCompleteModel, TagType } from '../../shared/models/autocomplete.model';
-import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-// import { TagModel } from 'ngx-chips';
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/first';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/of';
+import { AppDataService } from '../../shared/services/app.data.service';
+import { ApplicationState } from '../../shared/services/app.state';
+import { MessageUtils } from '../../shared/utils/message.utils';
 
 @Component({
   selector: 'app-document',
@@ -265,17 +258,17 @@ export class DocumentComponent implements OnInit {
   }
 
   public searchForTags = (text: string): Observable<any[]> => {
-    return this.service.searchTags(text).map(a => {
+    return this.service.searchTags(text).pipe(map(a => {
       // change the type of the array to meet the 'expectations' of ngx-chips
       return this.mapAutocomplete(a, TagType.Tag);
-    });
+    }));
   }
 
   public searchForSenders = (text: string): Observable<any[]> => {
-    return this.service.searchSenders(text).map(a => {
+    return this.service.searchSenders(text).pipe(map(a => {
       // change the type of the array to meet the 'expectations' of ngx-chips
       return this.mapAutocomplete(a, TagType.Sender);
-    });
+    }));
   }
 
   public onClearUploadedFile() {

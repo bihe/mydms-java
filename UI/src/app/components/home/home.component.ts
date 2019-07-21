@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
+import * as moment from 'moment';
+import { debounceTime } from 'rxjs/operators';
+import { Document } from '../../shared/models/document.model';
+import { AppDataService } from '../../shared/services/app.data.service';
 import { ApplicationState } from '../../shared/services/app.state';
 import { MessageUtils } from '../../shared/utils/message.utils';
-import { AppDataService } from '../../shared/services/app.data.service';
-import { Document } from '../../shared/models/document.model';
-
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -29,8 +29,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar) {
 
-    this.state.getSearchInput()
-      .debounceTime(300)
+    this.state.getSearchInput().pipe(
+      debounceTime(300))
       .subscribe(x => {
         console.log('Search for: ' + x);
         this.searchString = x;

@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { ApplicationState } from '../../shared/services/app.state';
-import { ApplicationData } from '../../shared/models/application.data';
 import { MatSnackBar } from '@angular/material';
-import { MessageUtils } from '../../shared/utils/message.utils';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { ApplicationData } from '../../shared/models/application.data';
 import { AppDataService } from '../../shared/services/app.data.service';
-
-import 'rxjs/add/operator/mergeMap';
+import { ApplicationState } from '../../shared/services/app.state';
+import { MessageUtils } from '../../shared/utils/message.utils';
 
 @Component({
   selector: 'app-nav-bar',
